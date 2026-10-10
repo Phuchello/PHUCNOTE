@@ -68,10 +68,10 @@ gantt
 - Enforce AGPL-3.0 notices in headers and license documentation.
 - **Checkpoint:** `CHECKPOINT-02-BASELINE-IMPORT`
 
-#### Step 3.2: Stylus & 144Hz Latency Optimization
+#### Step 3.2: Stylus & Low-Latency Optimization (up to 165Hz)
 - Tune `_ViewportInputCoordinator` to prioritize `PointerDeviceKind.stylus`.
-- Calibrate pressure response curves for the Lenovo AP501U stylus tip.
-- Configure Android surface view flags to ensure 144Hz / 165Hz render loop engagement.
+- Calibrate pressure response curves dynamically for the Lenovo AP501U stylus tip.
+- Configure Android surface view flags to ensure high refresh rate (up to 165Hz) render loop engagement.
 - Map AP501U barrel buttons to instant eraser and lasso selector.
 - **Checkpoint:** `CHECKPOINT-03-STYLUS-TUNING`
 
@@ -106,7 +106,7 @@ gantt
 ### Phase 4 — Validation & Android ARM64 Release Build
 - **Objective:** Rigorous physical testing and release packaging for the Lenovo Legion Y700 Gen 4.
 - **Test Matrix Execution:**
-  - Test handwriting latency and jitter under 144Hz.
+  - Test handwriting latency and jitter under high refresh rate (up to 165Hz).
   - Test palm rejection reliability with active pen on glass.
   - Test split-screen multitasking with YouTube and web browsers.
   - Test large PDF document annotation (50+ pages).
@@ -132,7 +132,7 @@ gantt
   - **M5.3: Research Workspace & Bibliographic Engine:** Paper metadata cards (DOI, BibTeX, authors), literature review notes, and bidirectional PDF coordinate links.
   - **M5.4: Translate Core & Stylus Selection:** Lenovo AP501U stylus highlight selection on canvas text and `pdfrx` text streams; side-by-side and popover translation cards.
   - **M5.5: Scientific Integrity Sanitizer:** Formula, LaTeX, citation (`[1]`), unit, and DOI masking/restoration pipeline.
-  - **M5.6: Dual Translation Engines & Local Glossary:** Google ML Kit on-device translation (100% offline) + optional Gemini academic translation (BYOK); local SQLite scientific glossary editor.
+  - **M5.6: Dual Translation Engines & Local Glossary:** Google ML Kit on-device translation (100% offline) + optional cloud academic translation (BYOK); local SQLite scientific glossary editor.
   - **M5.7: MediaProjection Screen Translation Service:** Permission-gated Android service with system consent, `FLAG_SECURE` enforcement, and memory-only frame processing.
 - **Checkpoint:** `CHECKPOINT-09-ORGANIZER-TRANSLATE-SPECS`
 
@@ -142,10 +142,10 @@ gantt
 > [!IMPORTANT]
 > **Prerequisite Rule:** Phase 6 implementation commences after the core handwriting, organizer, and translation modules pass verification on the Lenovo Legion Y700 Gen 4.
 
-- **Objective:** Implement the decoupled multimodal learning assistant, BYOK Gemini API integration, handwriting lasso Q&A, and notebook study tools.
+- **Objective:** Implement the decoupled multimodal learning assistant, BYOK provider-independent AI integration with dynamic model discovery, handwriting lasso Q&A, and notebook study tools.
 - **Milestones:**
   - **M6.1: Decoupled Module & BYOK Security:** Create `lib/features/phuc_ai` boundary; implement Android KeyStore-backed API key storage with `flutter_secure_storage`.
-  - **M6.2: Multimodal Handwriting Pipeline:** Integrate in-memory lasso selection crop rasterization and Gemini multimodal vision querying.
+  - **M6.2: Multimodal Handwriting Pipeline:** Integrate in-memory lasso selection crop rasterization and multimodal vision querying.
   - **M6.3: Document Retrieval & Citations:** Implement text chunking for active PDF and note pages with structured coordinate citations.
   - **M6.4: Academic Study Tool Actions:** Build 1-tap quick actions (Explain, Summarize, 5-Question Quiz, Flashcards, Insert answer to canvas).
   - **M6.5: Tablet-First UI & Video Coexistence:** Implement floating AI chat window and collapsible dockable side panel optimized for 8.8" display alongside floating video player.

@@ -5,8 +5,8 @@
 - **Official Repository:** [https://github.com/Phuchello/PHUCNOTE](https://github.com/Phuchello/PHUCNOTE)
 - **Base Project:** [Linwood Butterfly](https://github.com/LinwoodDev/Butterfly) (Flutter)
 - **Upstream Tag:** `v2.6.0` (Commit: `1e4c86b`, Latest Stable Release)
-- **Target Hardware:** Lenovo Legion Y700 Gen 4 (8.8-inch 2560×1600 144Hz/165Hz IPS display, Snapdragon 8 Gen 3)
-- **Input Hardware:** Lenovo AP501U Active Stylus (4096 pressure levels, active digitizer, barrel buttons)
+- **Target Hardware:** Lenovo Legion Y700 Gen 4 (8.8-inch 3040×1904 up to 165Hz IPS display, Snapdragon 8 Elite)
+- **Input Hardware:** Lenovo AP501U Active Stylus (Empirical validation via Android MotionEvent/PointerEvent; no unverified pressure/button assumptions)
 - **Target Platform:** Android ARM64 (`android-arm64`)
 - **Development Environment:** Lenovo ThinkPad X250 (Ubuntu Linux 26.04 LTS, 8GB RAM, Intel Core i5-5200U) via Google Antigravity
 - **License:** GNU Affero General Public License v3 (AGPL-3.0)
@@ -15,27 +15,27 @@
 ---
 
 ## Current Status
-- **Current Phase:** Phase 1 — Repository Audit & Architecture Assessment
-- **Status:** Architecture audit, feasibility assessment, licensing compliance review, ThinkPad X250 hardware evaluation, official project documentation, and modules specifications (Core Inking, PHUC AI, PHUC ORGANIZER, PHUC TRANSLATE) completed.
+- **Current Phase:** Phase 1 — Repository Audit & Architecture Assessment (Corrections Applied & Verified)
+- **Status:** Architecture audit, feasibility assessment, licensing compliance review, ThinkPad X250 hardware evaluation, official project documentation, specification corrections (Snapdragon 8 Elite, 3040×1904, empirical stylus validation, provider-independent AI, extended backlog), and baseline preparation complete.
 - **Upstream Source Code Status:** Audited and preserved 100% intact at `/home/vo-trong-phuc/Projects/butterfly-upstream`. No premature code modifications made.
-- **Current Checkpoint:** `CHECKPOINT-03-ORGANIZER-TRANSLATE-SPECS`
+- **Current Checkpoint:** `CHECKPOINT-04-POST-AUDIT-CORRECTIONS`
 
 ---
 
 ## Architecture Summary
 | Subsystem | Upstream Implementation | PhucNote Customization Plan |
 | :--- | :--- | :--- |
-| **Drawing Engine** | `ViewPainter` (baked viewport culling) + `ForegroundPainter` (active strokes) | **Preserve 100%**. Tune input polling and 144Hz vsync pipeline. |
-| **Handwriting & Stroke** | `perfect_freehand` bezier smoothing with pressure & streamline | **Preserve 100%**. Calibrate pressure curve for Lenovo AP501U active stylus. |
-| **Stylus & Palm Rejection** | `_ViewportInputCoordinator` + `EditorInputCubit.effectivePenOnlyInput` | Enforce automatic stylus-only inking; preserve two-finger pan/zoom navigation. |
+| **Drawing Engine** | `ViewPainter` (baked viewport culling) + `ForegroundPainter` (active strokes) | **Preserve 100%**. Tune input polling and up to 165Hz vsync pipeline. |
+| **Handwriting & Stroke** | `perfect_freehand` bezier smoothing with pressure & streamline | **Preserve 100%**. Calibrate pressure curve dynamically for Lenovo AP501U active stylus. |
+| **Stylus & Palm Rejection** | `_ViewportInputCoordinator` + `EditorInputCubit.effectivePenOnlyInput` | Enforce automatic stylus-only inking; preserve two-finger pan/zoom navigation. Empirical testing of AP501U signals. |
 | **Page Management** | Multi-page infinite 2D canvas with `Area` definitions | Add Continuous Vertical Paper mode and Standard A4 Notebook mode. |
 | **PDF Handling** | `pdfrx` vector rasterizer + multi-layer annotation + vector PDF export | Preserve & optimize caching for multi-page PDF documents. |
 | **Storage & Persistence** | `.bfly` ZIP container with JSON pages & SHA-512 hashed assets; `DocumentSaveCubit` autosave | Preserve `.bfly` spec with backward compatibility; add automated snapshot recovery. |
 | **Window & Split-Screen** | Responsive Flutter layout + `android:configChanges` | Explicit `resizeableActivity`, tablet split-screen dynamic toolbar collapse, and floating video PiP. |
 | **Themes & Aesthetics** | `flex_color_scheme` + light/dark texture backgrounds | Modern tablet-first minimalist UI, refined typography, and distraction-free writing mode. |
 | **Academic Organization ("PHUC ORGANIZER")** | Generic file trees in `lw_file_system` | **Academic Workspace Engine**: Hierarchical academic calendar (`Workspace > Year > Semester > Course`), course dashboards, global FTS5 search (<100ms), smart classification with user confirmation, research paper workspace with DOI & BibTeX metadata. |
-| **Scientific Translation ("PHUC TRANSLATE")** | None (New decoupled module) | **Scientific Translation Engine**: English <-> Vietnamese, Google ML Kit on-device engine (100% offline) + optional Gemini academic mode, scientific integrity masking (formulas, LaTeX, citations `[1]`, units, DOIs), local terminology glossary for CS/engineering, and sandboxed MediaProjection screen translation evaluation. |
-| **AI Learning Assistant ("PHUC AI")** | None (New decoupled module planned for Phase 6) | **Decoupled Extension**: Multimodal Gemini 1.5/2.0 API via BYOK encrypted in Android KeyStore; in-memory handwriting crop analysis; source-grounded PDF/notebook Q&A with citations; 1-tap NotebookLM course export bridge; explicit consent gate; 100% offline note core. Conditioned on prior validation of core handwriting. |
+| **Scientific Translation ("PHUC TRANSLATE")** | None (New decoupled module) | **Scientific Translation Engine**: English <-> Vietnamese, Google ML Kit on-device engine (100% offline) + optional cloud academic mode, scientific integrity masking (formulas, LaTeX, citations `[1]`, units, DOIs), local terminology glossary for CS/engineering, and sandboxed MediaProjection screen translation evaluation. |
+| **AI Learning Assistant ("PHUC AI")** | None (New decoupled module planned for Phase 6) | **Decoupled Extension**: Provider-independent multimodal AI with dynamic model discovery via BYOK encrypted in Android KeyStore; in-memory handwriting crop analysis; source-grounded PDF/notebook Q&A with citations; 1-tap NotebookLM course export bridge; explicit consent gate; 100% offline note core. Conditioned on prior validation of core handwriting. |
 
 ---
 

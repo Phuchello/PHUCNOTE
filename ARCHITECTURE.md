@@ -2,8 +2,8 @@
 
 **Project:** PhucNote  
 **Repository:** [https://github.com/Phuchello/PHUCNOTE](https://github.com/Phuchello/PHUCNOTE)  
-**Target Hardware:** Lenovo Legion Y700 Gen 4 (Snapdragon 8 Gen 3, 144Hz/165Hz, Android ARM64)  
-**Input Hardware:** Lenovo AP501U Active Stylus (4096 pressure levels, active digitizer)  
+**Target Hardware:** Lenovo Legion Y700 Gen 4 (Snapdragon 8 Elite, up to 165Hz, Android ARM64)  
+**Input Hardware:** Lenovo AP501U Active Stylus (Empirical MotionEvent/PointerEvent validation)  
 **Development Host:** Lenovo ThinkPad X250 (Ubuntu Linux, 8GB RAM, Core i5-5200U)  
 
 ---
@@ -15,9 +15,9 @@ PhucNote is built on Flutter with a layered, reactive BLoC/Cubit architecture. I
 ```mermaid
 flowchart TD
     subgraph Hardware_Layer["Hardware & OS Layer (Android ARM64 / Legion Y700)"]
-        HW1[Qualcomm Snapdragon 8 Gen 3 / Adreno 750]
-        HW2[Lenovo AP501U Active Stylus\n4096 Pressure Levels + Barrel Buttons]
-        HW3[144Hz / 165Hz 2.5K IPS Screen]
+        HW1[Qualcomm Snapdragon 8 Elite / Adreno 830]
+        HW2[Lenovo AP501U Active Stylus\nEmpirical Android MotionEvent Capture]
+        HW3[Up to 165Hz 3040x1904 IPS Screen]
         HW4[Android 14+ WindowManager\nSplit-Screen & Freeform]
     end
 
@@ -128,11 +128,12 @@ The development host is a **Lenovo ThinkPad X250** running Ubuntu Linux:
   - Outlines are joined with quadratic Bezier curves and filled with `Paint(isAntiAlias: true)`.
 - **Viewport Baking:** Once the stylus lifts (`onPointerUp`), after a debounce timer, strokes are baked into an off-screen bitmap tile (`cameraViewport.image`). During subsequent panning or zooming, only the lightweight raster tile is transformed until high-res settling occurs.
 
-### 4.2 Stylus & Palm Rejection (Lenovo AP501U)
-- The AP501U active digitizer transmits distinct hardware signals:
-  - Stylus proximity triggers hover events before the tip touches the glass.
-  - The digitizer reports `PointerDeviceKind.stylus` with hardware pressure (0 to 4096).
-  - Barrel buttons report button bitmasks (`kSecondaryMouseButton`, etc.).
+### 4.2 Stylus & Palm Rejection (Lenovo AP501U Empirical Evaluation)
+- Stylus capabilities are verified empirically via Android `MotionEvent` and Flutter `PointerEvent` logging on physical hardware:
+  - Pressure reporting: Dynamic normalization using `event.pressure` / `event.pressureMin` / `event.pressureMax` rather than hardcoding assumed 4096 levels.
+  - Barrel buttons: Inspected dynamically via `event.buttons` bitmask (`kSecondaryMouseButton`, etc.) with fallback if unmapped by driver.
+  - Hover detection: Monitored via `onPointerHover` when stylus tip is within digitizer range.
+  - Palm rejection: Enforced at the gesture layer when `PointerDeviceKind.stylus` is active:
 - **Rejection Logic:**
   ```dart
   if (penOnlyInputActive && event.kind == PointerDeviceKind.touch) {
@@ -201,11 +202,11 @@ flowchart TD
     subgraph Security_BYOK["Security & Hardware Keystore"]
         K1[flutter_secure_storage]
         K2[Android Hardware KeyStore]
-        K3[User-Supplied Gemini API Key]
+        K3[User-Supplied AI Provider Key]
     end
 
     subgraph Cloud_AI["Official AI Integrations"]
-        G1[Google AI Studio / Gemini API\nGemini 1.5/2.0 Flash & Pro]
+        G1[Google AI Studio / Gemini API\nProvider-Independent with Dynamic Discovery]
         G2[Gemini Notebook Enterprise API\nOptional Cloud Project Adapter]
         G3[1-Tap NotebookLM Export Bridge\nMarkdown / PDF Course Sync]
     end
@@ -228,12 +229,12 @@ flowchart TD
 #### 4.6.1 Module Decoupling Strategy
 - The extension resides in a dedicated package boundary (`lib/features/phuc_ai`).
 - State is managed via `PhucAiBloc` and `ChatCubit`, keeping AI conversation history, streaming tokens, and prompt context completely isolated from `DocumentBloc` and `TransformCubit`.
-- **Zero Impact on Inking:** Network I/O and streaming token decodes run asynchronously on background event loops; the inking thread on `ForegroundPainter` continues rendering at native 144Hz without frame drops.
+- **Zero Impact on Inking:** Network I/O and streaming token decodes run asynchronously on background event loops; the inking thread on `ForegroundPainter` continues rendering at up to 165Hz without frame drops.
 
 #### 4.6.2 Multimodal Handwriting Pipeline
 1. When the student makes a lasso selection, the selection handler calculates the AABB rectangle ($[x_{\min}, y_{\min}, x_{\max}, y_{\max}]$) of selected `PenElement` paths.
 2. `SelectionRasterizer` renders only the selected stroke paths to an in-memory `ui.Image` with transparent padding and encodes it as a PNG byte buffer (`Uint8List`).
-3. The image is passed directly into Gemini's multimodal vision API (`google_generative_ai` `Content.data('image/png', bytes)`) with prompts such as:
+3. The image is passed directly into the configured AI provider's multimodal vision API (`Content.data('image/png', bytes)`) with prompts such as:
    - *"Transcribe and explain this handwritten derivation step-by-step."*
    - *"Check this handwritten formula or proof for mathematical errors."*
 4. No temporary image files are written to disk.
@@ -242,12 +243,12 @@ flowchart TD
 - For course-wide and document Q&A:
   - Text from typed text elements, markdown blocks, and PDF text streams is extracted into lightweight text chunks tagged with source coordinates:
     `[Source: Lecture_04.pdf | Page: 7 | Section: Theorem 2.1]`
-  - Chunks are assembled into Gemini's multi-million token context window or indexed via local cosine similarity embeddings.
+  - Chunks are assembled into the AI provider's context window or indexed via local cosine similarity embeddings.
   - Responses return structured markdown citations with clickable jumping links to navigate the canvas directly to the cited page.
 
 #### 4.6.4 Security, Consent & BYOK (Bring Your Own Key) Architecture
 - **No Shared API Secrets:** The application binary contains zero hardcoded API keys.
-- **BYOK Configuration:** Students provide their personal Google AI Studio API key. The key is written directly to `flutter_secure_storage`, which utilizes the **Android KeyStore** (hardware-backed TEE/StrongBox).
+- **BYOK Configuration:** Students provide their personal API key (e.g. Google AI Studio, custom OpenAI-compatible endpoint). The key is written directly to `flutter_secure_storage`, which utilizes the **Android KeyStore** (hardware-backed TEE/StrongBox).
 - **Explicit Consent Dialog:** PhucNote displays an informative modal detailing the exact payload (image preview, text excerpt) before sending data to the API.
 
 #### 4.6.5 Gemini Notebook / NotebookLM Integration Strategy
@@ -256,7 +257,7 @@ Following an empirical investigation into Google's services:
    - *PhucNote Solution:* A native **"Export to NotebookLM"** bridge that bundles course notes, extracted PDF highlights, and flashcard summaries into formatted Markdown/PDF packages suitable for 1-tap Google Drive / NotebookLM import.
 2. **Gemini Notebook Enterprise API:** Supported on Google Cloud for enterprise/academic domains.
    - *PhucNote Solution:* Provide an optional Enterprise Cloud Connector setting for university environments requiring managed Google Cloud project endpoints and OAuth2 credentials.
-3. **Direct Gemini 1.5 / 2.0 API:** Acts as the primary in-app engine, delivering low-latency multimodal reasoning, citation generation, and canvas interaction.
+3. **Provider-Independent Cloud AI with Dynamic Model Discovery:** Acts as the primary in-app engine, querying the provider's model catalog dynamically at runtime (avoiding hardcoded or obsolete model identifiers) to deliver low-latency multimodal reasoning, citation generation, and canvas interaction.
 
 #### 4.6.6 Tablet Ergonomics (Lenovo Legion Y700 Gen 4)
 - **Floating Chat Window:** Compact 360×480dp draggable card with transparency controls.
@@ -341,9 +342,9 @@ flowchart TD
     subgraph Translation_Engine["Provider-Independent Translation Pipeline"]
         M_TEXT --> ROUTE{Provider Selector}
         ROUTE -->|Offline Default| MLKIT[Google ML Kit On-Device Translation\nEN <-> VI Models]
-        ROUTE -->|Optional Cloud| GEMINI[Gemini 1.5/2.0 Academic Translation\nContext-Aware Prompt]
+        ROUTE -->|Optional Cloud| CLOUD_LLM[Provider-Independent Cloud Translation\nContext-Aware Prompt]
         MLKIT --> GLOSS[Scientific Terminology Glossary Enforcer]
-        GEMINI --> GLOSS
+        CLOUD_LLM --> GLOSS
         GLOSS --> UNMASK[Placeholder Restoration Engine]
         P_TOKENS --> UNMASK
     end
@@ -367,7 +368,7 @@ Standard translation engines corrupt scientific papers by altering mathematical 
 
 #### 4.8.2 Dual Translation Providers
 - **On-Device Offline Engine (Primary):** `google_mlkit_translation` provides local on-device translation models (~30MB for EN-VI). Translates within 300-600ms with zero network access and complete privacy.
-- **Optional Academic Cloud Engine:** Powered by Google Gemini API using BYOK credentials. Invokes a specialized system prompt for complex scientific passages:
+- **Optional Academic Cloud Engine:** Powered by configured cloud LLM provider using BYOK credentials. Invokes a specialized system prompt for complex scientific passages:
   *"Translate the following academic computer science text into professional academic Vietnamese. Strictly preserve all placeholders and mathematical formatting."*
 
 #### 4.8.3 Local Scientific Glossary
@@ -393,12 +394,12 @@ Standard translation engines corrupt scientific papers by altering mathematical 
 
 ### 4.9 Hardware Harmony & Multi-Tasking UX (Lenovo Legion Y700 Gen 4)
 
-The 8.8" 16:10 display (2560×1600) on the Legion Y700 requires disciplined screen-space management when multitasking:
+The 8.8" 16:10 display (3040×1904, up to 165Hz) on the Legion Y700 requires disciplined screen-space management when multitasking:
 
 | Active Modes | Screen Allocation Strategy | Stylus Ergonomics |
 | :--- | :--- | :--- |
 | **PDF Reading + Note Writing** | Vertical 50/50 split (PDF on left, PhucNote canvas on right) | Stylus writes freely on canvas; tap text on PDF to translate. |
-| **Lecture Video + Notes + Translate** | Video player floating in top corner (16:9); note canvas occupying remaining area; translation popup appearing as non-intrusive bottom sheet. | Stylus inking maintains full 144Hz priority; floating video touches do not capture canvas pen input. |
+| **Lecture Video + Notes + Translate** | Video player floating in top corner (16:9); note canvas occupying remaining area; translation popup appearing as non-intrusive bottom sheet. | Stylus inking maintains full 165Hz priority; floating video touches do not capture canvas pen input. |
 | **PDF Reading + AI Chat Panel** | 70% PDF reading view; 30% collapsible Phuc AI side panel docked right. | Seamlessly drag translated text or lassoed handwriting directly into AI prompt box. |
 
 

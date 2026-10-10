@@ -39,7 +39,7 @@
 - [ ] **Step 3.2: Stylus & Low-Latency Tuning**
   - [ ] Verify active stylus event priority and palm rejection defaults for Lenovo AP501U stylus.
   - [ ] Calibrate pressure sensitivity presets for active styluses.
-  - [ ] Optimize 144Hz screen refresh rate handling on Android.
+  - [ ] Optimize up to 165Hz screen refresh rate handling on Android.
 - [ ] **Step 3.3: Notebook & Continuous Vertical Paper Modes**
   - [ ] Implement Continuous Vertical Paper view (seamless vertical scrolling across pages).
   - [ ] Implement Standard A4 Notebook mode with bounded page boundaries.
@@ -81,7 +81,7 @@
 - [ ] Implement stylus highlight selection on canvas text and `pdfrx` PDF text streams.
 - [ ] Implement Scientific Integrity Sanitizer (protecting `$math$`, `[citations]`, units, DOIs).
 - [ ] Integrate Google ML Kit on-device translation (`google_mlkit_translation`, 100% offline).
-- [ ] Integrate optional Gemini academic translation provider with BYOK KeyStore credentials.
+- [ ] Integrate optional cloud academic translation provider with BYOK KeyStore credentials.
 - [ ] Implement local SQLite scientific glossary editor (Networking, OS, Algorithms, DB, AI, Digital Twin).
 - [ ] Build bilingual UI modes: side-by-side split view, interlinear cards, and 1-tap margin export.
 - [ ] Build sandboxed Android MediaProjection screen translation service with system permission gating.
@@ -97,6 +97,16 @@
 - [ ] Build Floating AI Chat Window and Collapsible Side Panel optimized for 8.8" tablet.
 - [ ] Build 1-tap "Export to NotebookLM" course bridge and optional Gemini Notebook Enterprise adapter.
 - [ ] Implement prominent User Consent Dialog and payload inspection before network transmission.
-- [ ] Verify zero latency impact on 144Hz background inking thread during active AI streaming.
+- [ ] Verify zero latency impact on 165Hz background inking thread during active AI streaming.
+
+## Extended Feature Backlog (Post-Phase 6)
+- [ ] **Handwriting Search:** Stroke recognition and local full-text search across handwritten notes.
+- [ ] **Quick Capture:** Fast-launch scratchpad widget directly from Android quick settings.
+- [ ] **Mistake Notebook:** Dedicated categorization workflow for isolating and re-solving missed homework/exam problems.
+- [ ] **Spaced Repetition:** Flashcard scheduling derived from marked note blocks and study cards.
+- [ ] **Source-Linked Notes:** Deep bi-directional hyperlinks between canvas bounding boxes and source PDF coordinates.
+- [ ] **Knowledge Graph:** Semantic node graph connecting notes, concepts, courses, and literature.
+- [ ] **Research Comparison Matrix:** Multi-column analytical matrix comparing methodologies and results across academic papers.
+
 
 

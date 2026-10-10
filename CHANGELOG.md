@@ -31,9 +31,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Semester Archiving (read-only freeze) and Soft Delete (30-day trash bin).
 - PHUC TRANSLATE Scientific & Academic Translation module specification and architecture:
   - English <-> Vietnamese academic translation with Google ML Kit on-device engine (100% offline).
-  - Optional Gemini academic cloud translation with BYOK hardware KeyStore credentials.
+  - Optional cloud academic translation with BYOK hardware KeyStore credentials.
   - Scientific integrity protection engine: masking formulas, LaTeX, citations `[1]`, units, and DOIs.
   - Local SQLite scientific glossary editor for Computer Networks, OS, Algorithms, DB, AI, and Digital Twins.
   - Sandboxed Android MediaProjection screen translation evaluation with strict privacy guardrails.
+
+### Changed
+- Corrected Lenovo Legion Y700 Gen 4 target hardware specifications across all documentation:
+  - SoC: Qualcomm Snapdragon 8 Elite (ARM64-v8a).
+  - Display: 3040 × 1904 resolution (16:10 aspect ratio), up to 165Hz refresh rate, 8.8 inches.
+- Replaced speculative stylus specs with empirical validation requirement: Lenovo AP501U pressure resolution, barrel buttons, hover, and palm rejection dynamics will be verified via Android `MotionEvent` and Flutter `PointerEvent` diagnostic testing on physical hardware.
+- Decoupled AI architecture from fixed model identifiers: replaced deprecated Gemini 1.5/2.0 references with a provider-independent `AiProvider` architecture featuring dynamic model discovery at runtime.
+- Formalized implementation status taxonomy across docs: explicitly distinguishing FOUNDATION IMPORT, PLANNED, IMPLEMENTED, TESTED, and VERIFIED ON DEVICE.
+- Documented extended feature backlog: Handwriting search, Quick Capture, Mistake Notebook, Spaced Repetition, Source-linked Notes, Knowledge Graph, and Research Comparison Matrix.
+- Checkpoint: `CHECKPOINT-04-POST-AUDIT-CORRECTIONS`.
+
 
 
