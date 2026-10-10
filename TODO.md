@@ -63,3 +63,17 @@
 - [ ] Test large PDF import, annotation, and export fidelity.
 - [ ] Test autosave resilience against crash, kill, and low-memory scenarios.
 - [ ] Verify 100% offline functionality without network dependencies.
+
+## Phase 5 — PHUC AI Learning Assistant Extension (Post-Core Validation)
+- [x] Investigate and document official Gemini Notebook / NotebookLM API capabilities and constraints (`PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`).
+- [ ] Create decoupled module structure (`lib/features/phuc_ai`).
+- [ ] Implement BYOK (Bring Your Own Key) secure storage via `flutter_secure_storage` with Android KeyStore backing.
+- [ ] Implement in-memory lasso selection crop rasterizer for multimodal handwriting vision queries.
+- [ ] Implement document & PDF text retrieval engine with structured page and line citations.
+- [ ] Build 1-tap study actions: Summarize Page, Explain Concept, Generate Quiz, Create Flashcards.
+- [ ] Implement 1-tap "Insert AI Answer to Canvas" as Markdown/vector element.
+- [ ] Build Floating AI Chat Window and Collapsible Side Panel optimized for 8.8" tablet.
+- [ ] Build 1-tap "Export to NotebookLM" course bridge and optional Gemini Notebook Enterprise adapter.
+- [ ] Implement prominent User Consent Dialog and payload inspection before network transmission.
+- [ ] Verify zero latency impact on 144Hz background inking thread during active AI streaming.
+

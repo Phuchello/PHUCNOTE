@@ -16,3 +16,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Feasibility Assessment for Lenovo Legion Y700 Gen 4 target hardware.
 - Implementation Plan and Risk Register.
 - Initial project tracking framework (`PROJECT_STATE.md`, `TODO.md`, `TEST_REPORT.md`, `CHANGELOG.md`).
+- PHUC AI Learning Assistant Extension specifications and architecture design:
+  - Multimodal Gemini 1.5/2.0 API integration with in-memory handwriting lasso crop analysis.
+  - Source-grounded notebook & active PDF Q&A with coordinate citations.
+  - BYOK (Bring Your Own Key) security via hardware-backed Android KeyStore.
+  - Explicit user privacy consent gate; 100% offline core note-taking preservation.
+  - Official investigation of Gemini Notebook Enterprise vs. Consumer NotebookLM API.
+  - Floating AI chat window and collapsible dockable side panel optimized for 8.8" display.
+

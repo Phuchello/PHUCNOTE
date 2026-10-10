@@ -101,6 +101,8 @@ gantt
 
 ---
 
+---
+
 ### Phase 4 — Validation & Android ARM64 Release Build
 - **Objective:** Rigorous physical testing and release packaging for the Lenovo Legion Y700 Gen 4.
 - **Test Matrix Execution:**
@@ -119,6 +121,22 @@ gantt
 
 ---
 
+### Phase 5 — PHUC AI Learning Assistant Extension (Post-Core Validation)
+> [!IMPORTANT]
+> **Prerequisite Rule:** In accordance with the project engineering charter, Phase 5 implementation will **only** commence after Phase 4 core handwriting and data safety validation is successfully verified and signed off on the Lenovo Legion Y700 Gen 4.
+
+- **Objective:** Implement the decoupled multimodal learning assistant, BYOK Gemini API integration, handwriting lasso Q&A, and notebook study tools.
+- **Milestones:**
+  - **M5.1: Decoupled Module & BYOK Security:** Create `lib/features/phuc_ai` boundary; implement Android KeyStore-backed API key storage with `flutter_secure_storage`.
+  - **M5.2: Multimodal Handwriting Pipeline:** Integrate in-memory lasso selection crop rasterization and Gemini multimodal vision querying.
+  - **M5.3: Document Retrieval & Citations:** Implement text chunking for active PDF and note pages with structured coordinate citations.
+  - **M5.4: Academic Study Tool Actions:** Build 1-tap quick actions (Explain, Summarize, 5-Question Quiz, Flashcards, Insert answer to canvas).
+  - **M5.5: Tablet-First UI & Video Coexistence:** Implement floating AI chat window and collapsible dockable side panel optimized for 8.8" display alongside floating video player.
+  - **M5.6: Gemini Notebook Bridge:** Build the 1-tap NotebookLM course export bridge and optional Gemini Notebook Enterprise connector.
+- **Checkpoint:** `CHECKPOINT-09-PHUCAI-INTEGRATED`
+
+---
+
 ## 3. Git Workflow & Branching Discipline
 
 1. **`main` Branch:** Protected production-ready branch. Every merge must have a passing test record.
@@ -129,4 +147,5 @@ gantt
    - `feat/vertical-paper`
    - `feat/video-overlay`
    - `feat/tablet-ui`
+   - `feat/phuc-ai-assistant` (conditioned on Phase 4 passing)
 4. **Pull Requests:** Substantial changes will be bundled into pull requests with automated commit checkpoints and changelog updates.

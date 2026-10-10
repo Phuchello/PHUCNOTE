@@ -177,3 +177,89 @@ The development host is a **Lenovo ThinkPad X250** running Ubuntu Linux:
   - `pages/0.page.json`, `pages/1.page.json`: Layer hierarchy and vector stroke arrays.
   - `assets/` (`images/`, `pdf/`, `textures/`): Stored by SHA-512 content hash to deduplicate binary assets.
 - Persistence is handled by `DocumentSaveCubit` wrapping all writes in a mutex `savingLock.synchronized()` to prevent corruption.
+
+### 4.6 PHUC AI — Learning Assistant Extension Architecture
+
+Phuc AI is designed as a completely decoupled, modular extension. It layers non-intrusively above the note canvas without coupling to the low-level rendering or serializer internals.
+
+```mermaid
+flowchart TD
+    subgraph UI_Surface["Editor Overlay Stack"]
+        U1[Canvas Inking Surface]
+        U2[Lasso Selection Context Menu]
+        U3[Floating AI Chat Window]
+        U4[Collapsible AI Side Panel]
+    end
+
+    subgraph PhucAI_Module["Phuc AI Core Engine (lib/features/phuc_ai)"]
+        AI1[PhucAiBloc & ChatCubit]
+        AI2[SelectionRasterizer\nIn-Memory Bounding Crop]
+        AI3[NoteDocumentRetriever\nText Chunking & Citations]
+        AI4[Consent & Privacy Gate]
+    end
+
+    subgraph Security_BYOK["Security & Hardware Keystore"]
+        K1[flutter_secure_storage]
+        K2[Android Hardware KeyStore]
+        K3[User-Supplied Gemini API Key]
+    end
+
+    subgraph Cloud_AI["Official AI Integrations"]
+        G1[Google AI Studio / Gemini API\nGemini 1.5/2.0 Flash & Pro]
+        G2[Gemini Notebook Enterprise API\nOptional Cloud Project Adapter]
+        G3[1-Tap NotebookLM Export Bridge\nMarkdown / PDF Course Sync]
+    end
+
+    U2 -->|Lasso Crop| AI2
+    U3 --> AI1
+    U4 --> AI1
+    AI2 --> AI1
+    U1 -->|Active PDF / Note Text| AI3
+    AI3 --> AI1
+    K3 --> K1 --> K2
+    K1 --> AI1
+    AI1 --> AI4
+    AI4 -->|Explicit Consent| G1
+    AI4 -.->|Optional Enterprise| G2
+    AI1 -->|Insert to Note| U1
+    AI3 -->|Course Export| G3
+```
+
+#### 4.6.1 Module Decoupling Strategy
+- The extension resides in a dedicated package boundary (`lib/features/phuc_ai`).
+- State is managed via `PhucAiBloc` and `ChatCubit`, keeping AI conversation history, streaming tokens, and prompt context completely isolated from `DocumentBloc` and `TransformCubit`.
+- **Zero Impact on Inking:** Network I/O and streaming token decodes run asynchronously on background event loops; the inking thread on `ForegroundPainter` continues rendering at native 144Hz without frame drops.
+
+#### 4.6.2 Multimodal Handwriting Pipeline
+1. When the student makes a lasso selection, the selection handler calculates the AABB rectangle ($[x_{\min}, y_{\min}, x_{\max}, y_{\max}]$) of selected `PenElement` paths.
+2. `SelectionRasterizer` renders only the selected stroke paths to an in-memory `ui.Image` with transparent padding and encodes it as a PNG byte buffer (`Uint8List`).
+3. The image is passed directly into Gemini's multimodal vision API (`google_generative_ai` `Content.data('image/png', bytes)`) with prompts such as:
+   - *"Transcribe and explain this handwritten derivation step-by-step."*
+   - *"Check this handwritten formula or proof for mathematical errors."*
+4. No temporary image files are written to disk.
+
+#### 4.6.3 Document Retrieval & Source Citations
+- For course-wide and document Q&A:
+  - Text from typed text elements, markdown blocks, and PDF text streams is extracted into lightweight text chunks tagged with source coordinates:
+    `[Source: Lecture_04.pdf | Page: 7 | Section: Theorem 2.1]`
+  - Chunks are assembled into Gemini's multi-million token context window or indexed via local cosine similarity embeddings.
+  - Responses return structured markdown citations with clickable jumping links to navigate the canvas directly to the cited page.
+
+#### 4.6.4 Security, Consent & BYOK (Bring Your Own Key) Architecture
+- **No Shared API Secrets:** The application binary contains zero hardcoded API keys.
+- **BYOK Configuration:** Students provide their personal Google AI Studio API key. The key is written directly to `flutter_secure_storage`, which utilizes the **Android KeyStore** (hardware-backed TEE/StrongBox).
+- **Explicit Consent Dialog:** PhucNote displays an informative modal detailing the exact payload (image preview, text excerpt) before sending data to the API.
+
+#### 4.6.5 Gemini Notebook / NotebookLM Integration Strategy
+Following an empirical investigation into Google's services:
+1. **Consumer NotebookLM (gemini.google.com/notebooklm):** Has **no public developer API**. Reverse-engineered scraping scripts rely on transient cookie sessions and violate Google's Terms of Service.
+   - *PhucNote Solution:* A native **"Export to NotebookLM"** bridge that bundles course notes, extracted PDF highlights, and flashcard summaries into formatted Markdown/PDF packages suitable for 1-tap Google Drive / NotebookLM import.
+2. **Gemini Notebook Enterprise API:** Supported on Google Cloud for enterprise/academic domains.
+   - *PhucNote Solution:* Provide an optional Enterprise Cloud Connector setting for university environments requiring managed Google Cloud project endpoints and OAuth2 credentials.
+3. **Direct Gemini 1.5 / 2.0 API:** Acts as the primary in-app engine, delivering low-latency multimodal reasoning, citation generation, and canvas interaction.
+
+#### 4.6.6 Tablet Ergonomics (Lenovo Legion Y700 Gen 4)
+- **Floating Chat Window:** Compact 360×480dp draggable card with transparency controls.
+- **Collapsible Side Panel:** Docks smoothly along the right edge (or left for left-handed writers) with 30/70 and 50/50 split ratios.
+- **Coexistence with Floating Video:** In lecture study mode, the floating video player, canvas, and AI chat panel occupy non-overlapping layout zones in landscape orientation.
+

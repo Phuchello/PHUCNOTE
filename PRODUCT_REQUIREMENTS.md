@@ -94,6 +94,38 @@ PhucNote is built to deliver a premium, distraction-free digital paper experienc
 - **FR-DAT-03 (Crash Recovery):** In-memory stroke journal flushed to persistent storage before application lifecycle pauses or terminates.
 - **FR-DAT-04 (File Portability):** Documents saved in open, standard `.bfly` ZIP container with human-readable JSON page specifications.
 
+### 3.7 PHUC AI — AI Learning Assistant Extension (Planned Module)
+- **FR-AI-01 (Floating AI Chat Window):** Draggable, compact AI chat bubble/window that floats above the canvas, allowing students to converse with the AI tutor without switching applications or losing handwriting state.
+- **FR-AI-02 (Resizable AI Side Panel):** Dockable side panel (dockable to right or left screen edge) supporting flexible split ratios (30/70, 50/50) on the 8.8" Legion Y700 display for in-depth reading, study summaries, and prompt dialogues alongside the note canvas.
+- **FR-AI-03 (Handwriting Selection Q&A via Multimodal AI):**
+  - Lasso-selected handwriting strokes can be captured directly via a context menu action ("Ask Phuc AI", "Solve Equation", "Explain Step").
+  - The cropped handwriting vector bounding box is rasterized into an in-memory PNG and forwarded to multimodal Gemini models (e.g. Gemini 1.5/2.0 Flash) with zero disk leakage.
+- **FR-AI-04 (Active PDF Q&A):** Query questions directly against the currently loaded PDF textbook/slides; the system extracts the relevant page text and vector visual context to answer student questions.
+- **FR-AI-05 (Source-Grounded Notebook Q&A with Citations):**
+  - Enable students to query across entire notebook collections or course materials.
+  - Answers must provide clear source citations referencing specific notebook pages or PDF page numbers.
+- **FR-AI-06 (Prebuilt Academic Study Actions):**
+  - 1-tap quick actions: **Summarize Page**, **Explain Concept**, **Generate 5-Question Quiz**, **Create Flashcard Deck**, and **Extract Action Items**.
+- **FR-AI-07 (Insert AI Responses to Canvas):**
+  - 1-tap action to paste formatted AI answers, diagrams, or quiz questions directly into the note canvas as a Markdown text element, editable vector text, or sticky note.
+- **FR-AI-08 (Gemini API Integration & BYOK Security):**
+  - Direct integration with Google AI Studio / Gemini API (`google_generative_ai`).
+  - **BYOK (Bring Your Own Key):** Users configure their own Google AI Studio API key. Keys are saved exclusively in encrypted Android hardware-backed storage (`flutter_secure_storage` via Android KeyStore).
+  - **Zero Shared Secrets:** No master or bundled API keys are ever compiled into the APK.
+- **FR-AI-09 (Investigation of External Gemini Notebook / NotebookLM Integration):**
+  - *Investigation Finding:* Consumer NotebookLM does **not** provide a public developer API; third-party scraping scripts violate Google ToS and break unexpectedly. However, Google provides an official **Gemini Notebook Enterprise API** for Google Cloud/Workspace organizations.
+  - *PhucNote Integration Strategy:*
+    1. **Primary Integration:** Direct Gemini 1.5/2.0 API with multimodal vision and large context window grounding.
+    2. **Consumer NotebookLM Bridge:** Formatted 1-tap export of clean course notes and extracted sources optimized for manual upload to NotebookLM or synced via Google Drive.
+    3. **Enterprise Gemini Notebook Option:** Support optional Google Cloud Project credentials and OAuth2 service tokens for academic institutions with Gemini Enterprise licenses.
+- **FR-AI-10 (Privacy, Consent & Offline Sovereignty):**
+  - All core note-taking features remain 100% offline. AI is strictly opt-in.
+  - A prominent, clear Consent Modal must be acknowledged before any note content, handwriting image, or PDF excerpt is transmitted over the network.
+  - Granular privacy settings: allow users to inspect the exact prompt, text, or image payload before submission.
+- **FR-AI-11 (Tablet Ergonomics & Video Study Coexistence):**
+  - Compatible with the floating video study overlay: the AI chat panel and video player can dock side-by-side or stack ergonomically in both landscape and portrait orientations on the 8.8" tablet.
+- **FR-AI-12 (Staged Rollout Constraint):** AI features must remain decoupled and will only be activated after the core inking engine, palm rejection, and `.bfly` file safety pass physical validation on the Legion Y700.
+
 ---
 
 ## 4. Non-Functional Requirements (NFR)
@@ -101,4 +133,5 @@ PhucNote is built to deliver a premium, distraction-free digital paper experienc
 - **NFR-PERF-01 (Touch-to-Ink Latency):** Sub-15ms perceived latency when running on Snapdragon 8 Gen 3 at 144Hz.
 - **NFR-PERF-02 (Memory Overhead):** Baseline idle memory under 180MB RAM; large 100-page PDF documents capped under 450MB RAM via aggressive off-screen tile eviction.
 - **NFR-SEC-01 (Data Integrity):** File saves must be atomic (write to temporary cache then swap) to eliminate file corruption during abrupt shutdowns.
+- **NFR-SEC-02 (AI Privacy & Secret Safety):** Zero client telemetry; no shared API secrets compiled into the client APK; all user API keys encrypted with Android KeyStore; explicit user consent per transmission.
 - **NFR-LEGAL-01 (License Compliance):** 100% AGPL-3.0 compliant source distribution; complete decoupling from Linwood Butterfly trademarks.
