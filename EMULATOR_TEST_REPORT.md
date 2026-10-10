@@ -31,7 +31,7 @@ All **14 test cases passed (14/14, 100%)**. Zero application crashes or unhandle
 | **Android SDK / Build-Tools** | API 35/36 • Build-Tools 36.0.0 • NDK 27.0.12077973 |
 | **Java JDK** | OpenJDK 17.0.20.1+1 |
 | **Gradle** | Gradle 9.3.1 (Pre-cached offline dependencies in local cache) |
-| **Build Artifacts** | Debug APK (`app-debug.apk`), Release APK (`app-release.apk`, 18.7 MB) |
+| **Build Artifacts** | Debug APK (`app-debug.apk`), Release APK (x86_64 emulator build: `app-release.apk`, 18.7 MB; not ARM64 physical release) |
 
 ---
 
@@ -66,7 +66,7 @@ Execution time: ~58 seconds
 
 ## 4. Crash & Diagnostic Findings
 
-- **Application Process (`com.example.phucnote`):**
+- **Application Process (`com.phucnote.phucnote`):**
   - Fatal Exceptions: 0
   - Application Not Responding (ANR) Events: 0
   - Low-Memory Kills (LMK): 0
