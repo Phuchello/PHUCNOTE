@@ -4,13 +4,14 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../drawing/canvas_controller.dart';
 import '../drawing/foreground_painter.dart';
 import '../drawing/view_painter.dart';
 
 /// The handwriting canvas widget with dual-layer RepaintBoundary architecture,
-/// configurable stylus-only gating, and seamless touch pan navigation.
-class CanvasView extends StatelessWidget {
+/// configurable stylus-only gating, two-finger pinch zoom, and continuous vertical navigation.
+class CanvasView extends StatefulWidget {
   final CanvasController controller;
   final Color paperColor;
 
@@ -21,36 +22,157 @@ class CanvasView extends StatelessWidget {
   });
 
   @override
+  State<CanvasView> createState() => _CanvasViewState();
+}
+
+class _CanvasViewState extends State<CanvasView> {
+  final Map<int, Offset> _activeTouchPointers = {};
+  Offset? _prevFocalPoint;
+  double? _prevDistance;
+  bool _isPinching = false;
+
+  bool _isStylus(PointerEvent event) {
+    return event.kind == PointerDeviceKind.stylus ||
+        event.kind == PointerDeviceKind.invertedStylus;
+  }
+
+  void _onPointerDown(PointerDownEvent event) {
+    if (_isStylus(event)) {
+      widget.controller.handlePointerDown(event);
+      return;
+    }
+
+    // Touch pointer (finger / mouse)
+    if (widget.controller.isStylusActive) {
+      // Software palm rejection: stylus is actively down, reject touch
+      return;
+    }
+
+    _activeTouchPointers[event.pointer] = event.localPosition;
+
+    if (_activeTouchPointers.length == 1) {
+      if (!widget.controller.stylusOnlyMode) {
+        widget.controller.handlePointerDown(event);
+      }
+    } else if (_activeTouchPointers.length >= 2) {
+      _isPinching = true;
+      if (!widget.controller.stylusOnlyMode) {
+        widget.controller.cancelActivePoints();
+      }
+      final pts = _activeTouchPointers.values.toList();
+      _prevFocalPoint = (pts[0] + pts[1]) / 2;
+      _prevDistance = (pts[0] - pts[1]).distance;
+    }
+  }
+
+  void _onPointerMove(PointerMoveEvent event) {
+    if (_isStylus(event)) {
+      widget.controller.handlePointerMove(event);
+      return;
+    }
+
+    if (widget.controller.isStylusActive) {
+      return;
+    }
+
+    if (!_activeTouchPointers.containsKey(event.pointer)) {
+      return;
+    }
+    _activeTouchPointers[event.pointer] = event.localPosition;
+
+    if (_activeTouchPointers.length >= 2) {
+      // Two-finger pinch zoom and navigation
+      final pts = _activeTouchPointers.values.toList();
+      final currentFocalPoint = (pts[0] + pts[1]) / 2;
+      final currentDistance = (pts[0] - pts[1]).distance;
+
+      if (_prevFocalPoint != null &&
+          _prevDistance != null &&
+          _prevDistance! > 1.0 &&
+          currentDistance > 1.0) {
+        final scaleDelta = currentDistance / _prevDistance!;
+        widget.controller.applyTransform(
+          focalPoint: currentFocalPoint,
+          prevFocalPoint: _prevFocalPoint!,
+          scaleDelta: scaleDelta,
+        );
+      }
+      _prevFocalPoint = currentFocalPoint;
+      _prevDistance = currentDistance;
+    } else if (_activeTouchPointers.length == 1 && !_isPinching) {
+      if (widget.controller.stylusOnlyMode) {
+        widget.controller.panViewport(event.delta);
+      } else {
+        widget.controller.handlePointerMove(event);
+      }
+    }
+  }
+
+  void _onPointerUp(PointerUpEvent event) {
+    if (_isStylus(event)) {
+      widget.controller.handlePointerUp(event);
+      return;
+    }
+
+    _activeTouchPointers.remove(event.pointer);
+
+    if (_activeTouchPointers.length < 2) {
+      _isPinching = false;
+      _prevFocalPoint = null;
+      _prevDistance = null;
+    }
+
+    if (_activeTouchPointers.isEmpty) {
+      if (!widget.controller.stylusOnlyMode) {
+        widget.controller.handlePointerUp(event);
+      }
+    }
+  }
+
+  void _onPointerCancel(PointerCancelEvent event) {
+    if (_isStylus(event)) {
+      widget.controller.handlePointerCancel(event);
+      return;
+    }
+
+    _activeTouchPointers.remove(event.pointer);
+
+    if (_activeTouchPointers.length < 2) {
+      _isPinching = false;
+      _prevFocalPoint = null;
+      _prevDistance = null;
+    }
+
+    if (_activeTouchPointers.isEmpty) {
+      if (!widget.controller.stylusOnlyMode) {
+        widget.controller.handlePointerCancel(event);
+      }
+    }
+  }
+
+  void _onPointerSignal(PointerSignalEvent event) {
+    if (event is PointerScrollEvent) {
+      if (HardwareKeyboard.instance.isControlPressed) {
+        final scaleFactor = event.scrollDelta.dy < 0 ? 1.1 : 0.9;
+        widget.controller.zoomAt(event.localPosition, scaleFactor);
+      } else {
+        widget.controller.panViewport(-event.scrollDelta);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: controller,
+      listenable: widget.controller,
       builder: (context, _) {
         return ClipRect(
           child: Listener(
-            onPointerDown: (event) {
-              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
-                // In stylus-only mode, touch is dedicated for panning/navigation
-                return;
-              }
-              controller.handlePointerDown(event);
-            },
-            onPointerMove: (event) {
-              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
-                // Pan viewport smoothly with finger dragging
-                controller.panViewport(event.delta);
-                return;
-              }
-              controller.handlePointerMove(event);
-            },
-            onPointerUp: (event) {
-              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
-                return;
-              }
-              controller.handlePointerUp(event);
-            },
-            onPointerCancel: (event) {
-              controller.handlePointerCancel(event);
-            },
+            onPointerDown: _onPointerDown,
+            onPointerMove: _onPointerMove,
+            onPointerUp: _onPointerUp,
+            onPointerCancel: _onPointerCancel,
+            onPointerSignal: _onPointerSignal,
             behavior: HitTestBehavior.opaque,
             child: Stack(
               fit: StackFit.expand,
@@ -60,10 +182,11 @@ class CanvasView extends StatelessWidget {
                   child: CustomPaint(
                     size: Size.infinite,
                     painter: PhucNoteViewPainter(
-                      document: controller.document,
-                      backgroundColor: paperColor,
-                      repaintCounter: controller.repaintCounter,
-                      viewportOffset: controller.viewportOffset,
+                      document: widget.controller.document,
+                      backgroundColor: widget.paperColor,
+                      repaintCounter: widget.controller.repaintCounter,
+                      viewportOffset: widget.controller.viewportOffset,
+                      zoomScale: widget.controller.zoomScale,
                     ),
                     isComplex: true,
                   ),
@@ -74,11 +197,12 @@ class CanvasView extends StatelessWidget {
                   child: CustomPaint(
                     size: Size.infinite,
                     painter: PhucNoteForegroundPainter(
-                      activePoints: controller.activePoints,
-                      property: controller.currentProperty,
-                      eraserPosition: controller.eraserPosition,
-                      eraserRadius: controller.eraserRadius,
-                      viewportOffset: controller.viewportOffset,
+                      activePoints: widget.controller.activePoints,
+                      property: widget.controller.currentProperty,
+                      eraserPosition: widget.controller.eraserPosition,
+                      eraserRadius: widget.controller.eraserRadius,
+                      viewportOffset: widget.controller.viewportOffset,
+                      zoomScale: widget.controller.zoomScale,
                     ),
                     willChange: true,
                   ),

@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:phucnote/core/models/note_document.dart';
 import 'package:phucnote/core/storage/note_storage.dart';
 import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/main.dart';
@@ -486,6 +485,86 @@ void main() {
       await touch2.up();
       await tester.pumpAndSettle();
       expect(controller.document.strokes.length, equals(2));
+    });
+
+    // TC-15: Continuous vertical paper downward navigation and persistence
+    testWidgets('TC-15: Continuous vertical paper downward navigation and persistence', (tester) async {
+      await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
+      await tester.pumpAndSettle();
+
+      final controller = getController(tester);
+      controller.renameDocument('Continuous Paper Note');
+
+      // Draw stroke near the top
+      final canvasCenter = tester.getCenter(find.byType(CanvasView));
+      final g1 = await tester.startGesture(canvasCenter);
+      await g1.moveBy(const Offset(30, 30));
+      await g1.up();
+      await tester.pumpAndSettle();
+      expect(controller.document.strokes.length, equals(1));
+      final topStrokeY = controller.document.strokes.first.points.first.y;
+
+      // Navigate down continuously by 3,000 pixels
+      controller.panViewport(const Offset(0, -3000));
+      await tester.pumpAndSettle();
+      expect(controller.viewportOffset.dy, equals(-3000.0));
+
+      // Draw stroke further down in continuous paper
+      final g2 = await tester.startGesture(canvasCenter);
+      await g2.moveBy(const Offset(40, 40));
+      await g2.up();
+      await tester.pumpAndSettle();
+      expect(controller.document.strokes.length, equals(2));
+      final bottomStrokeY = controller.document.strokes.last.points.first.y;
+
+      // Bottom stroke Y should be approx topStrokeY + 3000
+      expect(bottomStrokeY, greaterThan(topStrokeY + 2500));
+
+      // Save document
+      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      await tester.tap(saveBtn);
+      await tester.pumpAndSettle();
+
+      final savedFiles = await noteStorage.listSavedNotes();
+      expect(savedFiles.isNotEmpty, isTrue);
+
+      final reloaded = await noteStorage.loadNote(savedFiles.first);
+      expect(reloaded.strokes.length, equals(2));
+      expect(reloaded.strokes.first.points.first.y, equals(topStrokeY));
+      expect(reloaded.strokes.last.points.first.y, equals(bottomStrokeY));
+    });
+
+    // TC-16: Two-finger pinch zoom adjusts scale and resets cleanly
+    testWidgets('TC-16: Two-finger pinch zoom adjusts scale and resets cleanly', (tester) async {
+      await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
+      await tester.pumpAndSettle();
+
+      final controller = getController(tester);
+      final canvasCenter = tester.getCenter(find.byType(CanvasView));
+
+      // Simulate 2-finger pinch gesture
+      final f1 = await tester.startGesture(canvasCenter - const Offset(60, 0), kind: PointerDeviceKind.touch);
+      final f2 = await tester.startGesture(canvasCenter + const Offset(60, 0), kind: PointerDeviceKind.touch);
+      await tester.pump(const Duration(milliseconds: 16));
+
+      // Pinch out from 120px to 240px
+      await f1.moveBy(const Offset(-60, 0));
+      await f2.moveBy(const Offset(60, 0));
+      await tester.pump(const Duration(milliseconds: 16));
+
+      await f1.up();
+      await f2.up();
+      await tester.pumpAndSettle();
+
+      expect(controller.zoomScale, greaterThan(1.5));
+      expect(find.byTooltip('Reset View'), findsOneWidget);
+
+      // Tap Reset View
+      await tester.tap(find.byTooltip('Reset View'));
+      await tester.pumpAndSettle();
+
+      expect(controller.zoomScale, equals(1.0));
+      expect(controller.viewportOffset, equals(Offset.zero));
     });
   });
 }

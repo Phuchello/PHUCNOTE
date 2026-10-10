@@ -93,6 +93,24 @@ class ToolbarWidget extends StatelessWidget {
                   onPressed: () => controller.setStylusOnlyMode(!controller.stylusOnlyMode),
                 ),
 
+                // Reset Zoom & View button (visible when transformed)
+                if (controller.zoomScale != 1.0 || controller.viewportOffset != Offset.zero)
+                  IconButton(
+                    icon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.zoom_in_map, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${(controller.zoomScale * 100).round()}%',
+                          style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    tooltip: 'Reset View',
+                    onPressed: controller.resetViewport,
+                  ),
+
                 // Paper Template Popup
                 PopupMenuButton<PaperTemplate>(
                   tooltip: 'Paper Template',

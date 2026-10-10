@@ -43,8 +43,13 @@ class CanvasController extends ChangeNotifier {
   bool _stylusOnlyMode = false;
   bool _isStylusActive = false;
 
-  // Viewport navigation offset
+  // Viewport navigation offset and zoom
   Offset _viewportOffset = Offset.zero;
+  double _zoomScale = 1.0;
+
+  static const double minZoom = 0.5;
+  static const double maxZoom = 4.0;
+  static const double maxTopOverscroll = 80.0;
 
   int _repaintCounter = 0;
   int _revision = 0;
@@ -68,6 +73,7 @@ class CanvasController extends ChangeNotifier {
   bool get stylusOnlyMode => _stylusOnlyMode;
   bool get isStylusActive => _isStylusActive;
   Offset get viewportOffset => _viewportOffset;
+  double get zoomScale => _zoomScale;
 
   StrokeProperty get currentProperty => StrokeProperty(
         colorValue: _color.toARGB32(),
@@ -89,6 +95,7 @@ class CanvasController extends ChangeNotifier {
     _sessionErasedIndices.clear();
     _sessionStrokeIndices.clear();
     _viewportOffset = Offset.zero;
+    _zoomScale = 1.0;
     _repaintCounter++;
     _revision++;
     _savedRevision = _revision;
@@ -147,15 +154,79 @@ class CanvasController extends ChangeNotifier {
   }
 
   void panViewport(Offset delta) {
-    _viewportOffset += delta;
+    final newDx = _viewportOffset.dx + delta.dx;
+    final newDy = (_viewportOffset.dy + delta.dy).clamp(double.negativeInfinity, maxTopOverscroll);
+    _viewportOffset = Offset(newDx, newDy);
+    _repaintCounter++;
+    notifyListeners();
+  }
+
+  void zoomAt(Offset focalPoint, double scaleFactor) {
+    final oldZoom = _zoomScale;
+    final newZoom = (oldZoom * scaleFactor).clamp(minZoom, maxZoom);
+    if (newZoom == oldZoom) return;
+
+    final actualRatio = newZoom / oldZoom;
+    final newDx = focalPoint.dx - (focalPoint.dx - _viewportOffset.dx) * actualRatio;
+    final newDy = (focalPoint.dy - (focalPoint.dy - _viewportOffset.dy) * actualRatio)
+        .clamp(double.negativeInfinity, maxTopOverscroll);
+
+    _zoomScale = newZoom;
+    _viewportOffset = Offset(newDx, newDy);
+    _repaintCounter++;
+    notifyListeners();
+  }
+
+  void applyTransform({
+    required Offset focalPoint,
+    required Offset prevFocalPoint,
+    required double scaleDelta,
+  }) {
+    final oldZoom = _zoomScale;
+    final newZoom = (oldZoom * scaleDelta).clamp(minZoom, maxZoom);
+    final actualRatio = newZoom / oldZoom;
+
+    // Stable focal point transform formula:
+    final newDx = focalPoint.dx - (prevFocalPoint.dx - _viewportOffset.dx) * actualRatio;
+    final newDy = (focalPoint.dy - (prevFocalPoint.dy - _viewportOffset.dy) * actualRatio)
+        .clamp(double.negativeInfinity, maxTopOverscroll);
+
+    _zoomScale = newZoom;
+    _viewportOffset = Offset(newDx, newDy);
     _repaintCounter++;
     notifyListeners();
   }
 
   void resetViewport() {
     _viewportOffset = Offset.zero;
+    _zoomScale = 1.0;
     _repaintCounter++;
     notifyListeners();
+  }
+
+  void cancelActivePoints() {
+    if (_activePoints.isNotEmpty) {
+      _activePoints.clear();
+      _repaintCounter++;
+      notifyListeners();
+    }
+  }
+
+  /// Converts a screen local position to document/canvas coordinates.
+  Offset screenToCanvas(Offset screenPos) {
+    return (screenPos - _viewportOffset) / _zoomScale;
+  }
+
+  /// Converts a document/canvas coordinate to screen local position.
+  Offset canvasToScreen(Offset canvasPos) {
+    return canvasPos * _zoomScale + _viewportOffset;
+  }
+
+  /// Returns the bounding box of the visible canvas rectangle given screen viewport dimensions.
+  Rect getVisibleCanvasRect(Size viewportSize) {
+    final topLeft = screenToCanvas(Offset.zero);
+    final bottomRight = screenToCanvas(Offset(viewportSize.width, viewportSize.height));
+    return Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
   }
 
   /// Evaluates whether an incoming pointer event should be accepted for inking.
@@ -189,7 +260,7 @@ class CanvasController extends ChangeNotifier {
   }
 
   Offset _canvasCoordinates(Offset localPosition) {
-    return localPosition - _viewportOffset;
+    return screenToCanvas(localPosition);
   }
 
   void handlePointerDown(PointerDownEvent event) {

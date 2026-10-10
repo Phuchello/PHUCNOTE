@@ -2,56 +2,64 @@
 // Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
 
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../core/models/note_document.dart';
 import '../core/models/stroke_element.dart';
 import 'stroke_geometry.dart';
 
 /// CustomPainter responsible for rendering the static canvas background,
-/// paper ruling/grid patterns, and committed vector strokes.
+/// paper ruling/grid patterns, and committed vector strokes for continuous vertical paper.
 class PhucNoteViewPainter extends CustomPainter {
   final NoteDocument document;
   final Color backgroundColor;
   final int repaintCounter;
   final Offset viewportOffset;
+  final double zoomScale;
 
   PhucNoteViewPainter({
     required this.document,
     required this.backgroundColor,
     required this.repaintCounter,
     this.viewportOffset = Offset.zero,
+    this.zoomScale = 1.0,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Draw paper background color across the visible viewport
+    // 1. Draw paper background color across the visible screen viewport
     final bgPaint = Paint()..color = backgroundColor;
     canvas.drawRect(Offset.zero & size, bgPaint);
 
     canvas.save();
     canvas.translate(viewportOffset.dx, viewportOffset.dy);
+    canvas.scale(zoomScale);
 
-    // 2. Draw paper template pattern relative to canvas coordinates
-    _drawPaperPattern(canvas, size);
+    // Compute visible bounds in document/canvas coordinates
+    final visibleLeft = (-viewportOffset.dx) / zoomScale;
+    final visibleTop = (-viewportOffset.dy) / zoomScale;
+    final visibleRight = (size.width - viewportOffset.dx) / zoomScale;
+    final visibleBottom = (size.height - viewportOffset.dy) / zoomScale;
+    final visibleCanvasRect = Rect.fromLTRB(visibleLeft, visibleTop, visibleRight, visibleBottom);
 
-    // 3. Draw all committed strokes
+    // 2. Draw paper template pattern strictly for visible canvas bounds
+    _drawPaperPattern(canvas, visibleCanvasRect);
+
+    // 3. Draw committed strokes with offscreen viewport culling
     for (final stroke in document.strokes) {
+      if (stroke.points.isNotEmpty && !visibleCanvasRect.overlaps(stroke.boundingBox)) {
+        continue;
+      }
       _drawStroke(canvas, stroke);
     }
 
     canvas.restore();
   }
 
-  void _drawPaperPattern(Canvas canvas, Size size) {
+  void _drawPaperPattern(Canvas canvas, Rect visibleRect) {
     final linePaint = Paint()
       ..color = Colors.blueGrey.withValues(alpha: 0.18)
       ..strokeWidth = 1.0;
-
-    // Extend pattern beyond viewport size to support smooth panning
-    final canvasWidth = size.width + 4000.0;
-    final canvasHeight = size.height + 8000.0;
-    final startX = -2000.0;
-    final startY = -2000.0;
 
     switch (document.paperTemplate) {
       case PaperTemplate.blank:
@@ -60,25 +68,45 @@ class PhucNoteViewPainter extends CustomPainter {
       case PaperTemplate.ruled:
         const lineHeight = 36.0;
         const topMargin = 50.0;
-        for (double y = topMargin; y < canvasHeight; y += lineHeight) {
-          canvas.drawLine(Offset(startX, y), Offset(canvasWidth, y), linePaint);
+        final startLine = max(0, ((visibleRect.top - topMargin) / lineHeight).floor());
+        final endLine = max(startLine, ((visibleRect.bottom - topMargin) / lineHeight).ceil());
+
+        for (int i = startLine; i <= endLine; i++) {
+          final y = topMargin + i * lineHeight;
+          canvas.drawLine(Offset(visibleRect.left, y), Offset(visibleRect.right, y), linePaint);
         }
-        // Red vertical margin rule
+
+        // Red vertical margin rule at x = 64
         final marginPaint = Paint()
           ..color = Colors.red.withValues(alpha: 0.20)
           ..strokeWidth = 1.2;
-        canvas.drawLine(Offset(64, startY), Offset(64, canvasHeight), marginPaint);
+        final marginTop = max(0.0, visibleRect.top);
+        final marginBottom = max(marginTop, visibleRect.bottom);
+        canvas.drawLine(Offset(64, marginTop), Offset(64, marginBottom), marginPaint);
         break;
 
       case PaperTemplate.grid:
         const gridSize = 28.0;
-        for (double x = startX; x < canvasWidth; x += gridSize) {
-          canvas.drawLine(Offset(x, startY), Offset(x, canvasHeight), linePaint);
+        final startX = (visibleRect.left / gridSize).floor() * gridSize;
+        final endX = (visibleRect.right / gridSize).ceil() * gridSize;
+        final startY = max(0.0, (visibleRect.top / gridSize).floor() * gridSize);
+        final endY = (visibleRect.bottom / gridSize).ceil() * gridSize;
+
+        for (double x = startX; x <= endX; x += gridSize) {
+          canvas.drawLine(Offset(x, startY), Offset(x, endY), linePaint);
         }
-        for (double y = startY; y < canvasHeight; y += gridSize) {
-          canvas.drawLine(Offset(startX, y), Offset(canvasWidth, y), linePaint);
+        for (double y = startY; y <= endY; y += gridSize) {
+          canvas.drawLine(Offset(visibleRect.left, y), Offset(visibleRect.right, y), linePaint);
         }
         break;
+    }
+
+    // Top paper boundary at y = 0 if scrolled down
+    if (visibleRect.top < 0.0 && visibleRect.bottom > 0.0) {
+      final boundaryPaint = Paint()
+        ..color = Colors.black.withValues(alpha: 0.10)
+        ..strokeWidth = 1.0;
+      canvas.drawLine(Offset(visibleRect.left, 0.0), Offset(visibleRect.right, 0.0), boundaryPaint);
     }
   }
 
@@ -100,6 +128,7 @@ class PhucNoteViewPainter extends CustomPainter {
     return oldDelegate.repaintCounter != repaintCounter ||
         oldDelegate.document != document ||
         oldDelegate.backgroundColor != backgroundColor ||
-        oldDelegate.viewportOffset != viewportOffset;
+        oldDelegate.viewportOffset != viewportOffset ||
+        oldDelegate.zoomScale != zoomScale;
   }
 }
