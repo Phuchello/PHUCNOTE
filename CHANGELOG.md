@@ -3,7 +3,20 @@
 All notable changes to the PhucNote project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.1.0] - 2026-10-10
+### Added
+- First executable PHUCNOTE Android application baseline foundation:
+  - Audited core drawing smoothing engine preserved (`perfect_freehand` with quadratic bezier interpolation).
+  - High-performance dual `RepaintBoundary` rendering (`PhucNoteViewPainter` for rasterized canvas + `PhucNoteForegroundPainter` for 120-165Hz active inking).
+  - Linwood Butterfly `.bfly` ZIP archive container format serializer (`BflySerializer`) with full round-trip fidelity.
+  - Local document persistence engine (`NoteStorage`) supporting note creation, storage, reopening, and deletion.
+  - Tablet-first handwriting UI (`HomeScreen`, `CanvasView`, `ToolbarWidget`) with Pen, Highlighter, Eraser, color palette, stroke widths, and paper templates.
+  - Android ARM64 (`android-arm64`) configuration with hardware acceleration, split-screen multitasking (`resizeableActivity`), and ThinkPad X250 host memory limits.
+  - Passing test suites across models, `.bfly` serialization, inking logic, undo/redo, eraser, and widget smoke tests (10/10 passed).
+  - Successfully compiled and verified debug APK (`build/app/outputs/flutter-apk/app-debug.apk`, 78MB, `arm64-v8a`).
+- Checkpoint: `CHECKPOINT-05-FOUNDATION-BASELINE`.
+
+## [0.0.1] - 2026-10-10
 ### Added
 - Phase 1 Upstream Repository Audit completed for Linwood Butterfly v2.6.0.
 - Comprehensive Architectural Audit Report covering:

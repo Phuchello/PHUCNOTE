@@ -15,10 +15,11 @@
 ---
 
 ## Current Status
-- **Current Phase:** Phase 1 — Repository Audit & Architecture Assessment (Corrections Applied & Verified)
-- **Status:** Architecture audit, feasibility assessment, licensing compliance review, ThinkPad X250 hardware evaluation, official project documentation, specification corrections (Snapdragon 8 Elite, 3040×1904, empirical stylus validation, provider-independent AI, extended backlog), and baseline preparation complete.
-- **Upstream Source Code Status:** Audited and preserved 100% intact at `/home/vo-trong-phuc/Projects/butterfly-upstream`. No premature code modifications made.
-- **Current Checkpoint:** `CHECKPOINT-04-POST-AUDIT-CORRECTIONS`
+- **Current Phase:** Phase 3 — Baseline Foundation Implementation (Executable Android Baseline Established)
+- **Status:** Baseline Flutter application foundation imported, audited drawing engine preserved, `.bfly` ZIP serialization implemented and verified, full create/write/save/reopen lifecycle operational, Android ARM64 configured and successfully compiled into debug APK, all tests passing.
+- **Upstream Source Code Status:** Audited and preserved 100% intact at `/home/vo-trong-phuc/Projects/butterfly-upstream`.
+- **Current Checkpoint:** `CHECKPOINT-05-FOUNDATION-BASELINE`
+- **Next Checkpoint:** `CHECKPOINT-06-STYLUS-TUNING`
 
 ---
 

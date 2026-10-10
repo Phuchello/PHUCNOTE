@@ -32,10 +32,13 @@
 - [ ] Define high-contrast and eye-care dark and light themes.
 
 ## Phase 3 — Incremental Implementation
-- [ ] **Step 3.1: Clean Baseline Import & Branding Decoupling**
-  - [ ] Set up clean PhucNote fork/working branch.
-  - [ ] Replace Linwood Butterfly branding, app name, and asset icons with PhucNote branding.
-  - [ ] Maintain AGPL-3.0 attribution headers, upstream contributor credits, and source-code availability notices.
+- [x] **Step 3.1: Clean Baseline Import & Branding Decoupling** (`CHECKPOINT-05-FOUNDATION-BASELINE`)
+  - [x] Set up clean PhucNote develop branch.
+  - [x] Establish independent Flutter foundation preserving audited Butterfly drawing pipeline and `.bfly` ZIP container format.
+  - [x] Replace Linwood Butterfly branding, app name (`PhucNote`), and package identifier (`com.phucnote.app`).
+  - [x] Maintain AGPL-3.0 attribution headers, upstream contributor credits, and source-code availability notices.
+  - [x] Configure Android ARM64 target and host-constrained Gradle heap settings.
+  - [x] Implement basic note lifecycle (create, write, save, reopen) with passing test suite and clean analysis.
 - [ ] **Step 3.2: Stylus & Low-Latency Tuning**
   - [ ] Verify active stylus event priority and palm rejection defaults for Lenovo AP501U stylus.
   - [ ] Calibrate pressure sensitivity presets for active styluses.
