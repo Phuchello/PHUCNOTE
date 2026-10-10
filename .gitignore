@@ -1,0 +1,26 @@
+# Flutter & Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android
+.gradle/
+local.properties
+**/android/app/build/
+**/android/.gradle/
+*.keystore
+
+# IDE & OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Temporary artifacts
+scratch/
+butterfly-upstream/

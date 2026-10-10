@@ -1,0 +1,65 @@
+# PhucNote — Task Backlog (TODO)
+
+## Phase 1 — Repository Audit & Architecture Assessment
+- [x] Clone and inspect latest stable Linwood Butterfly release (`v2.6.0`, commit `1e4c86b`).
+- [x] Audit drawing engine, canvas culling, and stroke rendering (`perfect_freehand`, `ViewPainter`, `ForegroundPainter`).
+- [x] Audit page management, areas, and paper background systems (`DocumentPage`, `Area`, `SurfaceTexture`).
+- [x] Audit PDF import (`pdfrx`), rendering, multi-layer annotation, and PDF export (`PdfExportAction`).
+- [x] Audit storage engine, `.bfly` archive specification, autosave, and session state.
+- [x] Assess Android split-screen configuration (`AndroidManifest.xml`, responsive Flutter views).
+- [x] Audit stylus detection, pressure curve, barrel buttons, and palm rejection logic.
+- [x] Review AGPL-3.0 compliance rules and Linwood branding separation requirements (`LICENSE_AUDIT.md`).
+- [x] Evaluate Lenovo ThinkPad X250 hardware constraints (Core i5-5200U, 8GB RAM) and establish build mitigations.
+- [x] Compare forking upstream vs. importing and maintaining source independently (`ARCHITECTURE.md`).
+- [x] Design target PHUCNOTE system architecture and subsystem boundaries (`ARCHITECTURE.md`).
+- [x] Initialize official PHUCNOTE deliverables:
+  - [x] `README.md`
+  - [x] `PRODUCT_REQUIREMENTS.md`
+  - [x] `ARCHITECTURE.md`
+  - [x] `DEVELOPMENT_ROADMAP.md`
+  - [x] `LICENSE_AUDIT.md`
+  - [x] `PROJECT_STATE.md`
+  - [x] `TODO.md`
+  - [x] `LICENSE` (AGPL-3.0)
+
+## Phase 2 — Product Design & UI/UX Blueprint
+- [ ] Design modern tablet-first UI for compact 8.8" 16:10 / 16:9 displays (Lenovo Legion Y700 Gen 4).
+- [ ] Design floating pill pen palette and auto-docking gestures.
+- [ ] Define distraction-free Zen writing mode with collapsible floating tools.
+- [ ] Design continuous vertical paper mode and A4 notebook layout specifications.
+- [ ] Specify custom paper template library (Ruled, Quad Grid, Cornell, Dotted, Blank in Light & Dark).
+- [ ] Design floating video study overlay widget (YouTube / local video lecture player).
+- [ ] Define high-contrast and eye-care dark and light themes.
+
+## Phase 3 — Incremental Implementation
+- [ ] **Step 3.1: Clean Baseline Import & Branding Decoupling**
+  - [ ] Set up clean PhucNote fork/working branch.
+  - [ ] Replace Linwood Butterfly branding, app name, and asset icons with PhucNote branding.
+  - [ ] Maintain AGPL-3.0 attribution headers, upstream contributor credits, and source-code availability notices.
+- [ ] **Step 3.2: Stylus & Low-Latency Tuning**
+  - [ ] Verify active stylus event priority and palm rejection defaults for Lenovo AP501U stylus.
+  - [ ] Calibrate pressure sensitivity presets for active styluses.
+  - [ ] Optimize 144Hz screen refresh rate handling on Android.
+- [ ] **Step 3.3: Notebook & Continuous Vertical Paper Modes**
+  - [ ] Implement Continuous Vertical Paper view (seamless vertical scrolling across pages).
+  - [ ] Implement Standard A4 Notebook mode with bounded page boundaries.
+  - [ ] Add custom paper template presets (Cornell, Engineering Grid, Lined Dark/Light).
+- [ ] **Step 3.4: Tablet UI & Distraction-Free Experience**
+  - [ ] Implement Zen/Distraction-Free mode (single tap to hide all toolbars, full-screen canvas).
+  - [ ] Optimize responsive layouts for split-screen multi-tasking (portrait and landscape split).
+- [ ] **Step 3.5: Floating Video Study Workflow**
+  - [ ] Implement floating draggable video player overlay for lecture study.
+  - [ ] Ensure simultaneous video playback and uninterrupted stylus note-taking.
+- [ ] **Step 3.6: PDF Import & Export Enhancements**
+  - [ ] Streamline PDF document import as background pages or continuous notebook.
+  - [ ] Optimize memory caching for large multi-page PDF documents.
+  - [ ] Ensure faithful PDF export with high-resolution vector strokes.
+
+## Phase 4 — Validation & Build Verification
+- [ ] Configure Flutter / Android ARM64 build environment (`flutter build apk --target-platform android-arm64`).
+- [ ] Test handwriting responsiveness and stroke latency.
+- [ ] Test palm rejection behavior with Lenovo AP501U active stylus vs finger input.
+- [ ] Test split-screen layout transitions (50/50 split with browser / video app).
+- [ ] Test large PDF import, annotation, and export fidelity.
+- [ ] Test autosave resilience against crash, kill, and low-memory scenarios.
+- [ ] Verify 100% offline functionality without network dependencies.
