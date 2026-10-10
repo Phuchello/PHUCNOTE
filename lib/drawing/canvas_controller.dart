@@ -88,12 +88,28 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setShowA4Guides(bool enabled) {
+  void setShowA4Guides(bool enabled, {bool fitWidth = false, double? viewportWidth}) {
     if (_showA4Guides != enabled) {
       _showA4Guides = enabled;
       _repaintCounter++;
       notifyListeners();
     }
+    if (enabled && fitWidth && viewportWidth != null) {
+      fitToWidth(viewportWidth);
+    }
+  }
+
+  /// Fits the A4 page preview to the specified viewport width, adjusting
+  /// zoom and horizontal offset so the entire A4 width is visible and centered.
+  void fitToWidth(double viewportWidth) {
+    if (viewportWidth <= 0) return;
+    _showA4Guides = true;
+    final newZoom = (viewportWidth / a4Width).clamp(minZoom, maxZoom);
+    final newDx = (viewportWidth - a4Width * newZoom) / 2.0;
+    _zoomScale = newZoom;
+    _viewportOffset = Offset(newDx, _viewportOffset.dy);
+    _repaintCounter++;
+    notifyListeners();
   }
 
   StrokeProperty get currentProperty => StrokeProperty(

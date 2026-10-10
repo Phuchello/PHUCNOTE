@@ -43,25 +43,40 @@ void main() {
   }
 
   group('PHUCNOTE A4 Portrait Visual Acceptance (V-03, V-04)', () {
-    testWidgets('V-03: Portrait at 1.0x', (tester) async {
+    testWidgets('V-03: Portrait with fit-to-width', (tester) async {
       await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
       await tester.pumpAndSettle();
 
       final controller = getController(tester);
       controller.setShowA4Guides(true);
       controller.resetViewport();
+      await tester.pumpAndSettle();
 
-      // Draw handwriting aligned with A4 page
+      // Find and tap the Fit to Width button on toolbar
+      final fitBtn = find.byTooltip('Fit to Width');
+      expect(fitBtn, findsOneWidget);
+      await tester.tap(fitBtn);
+      await tester.pumpAndSettle();
+
+      // Draw handwriting aligned with fitted A4 page
       controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400)));
       controller.handlePointerMove(const PointerMoveEvent(position: Offset(450, 400)));
       controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 400)));
-
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
-      expect(controller.zoomScale, equals(1.0));
+      expect(controller.zoomScale, closeTo(800.0 / 840.0, 1e-4));
       expect(find.byType(ToolbarWidget), findsOneWidget);
       expect(find.byType(CanvasView), findsOneWidget);
+
+      // Verify page boundaries on 800px wide screen
+      final pageLeft = controller.canvasToScreen(const Offset(0, 0)).dx;
+      final pageRight = controller.canvasToScreen(const Offset(CanvasController.a4Width, 0)).dx;
+      final footerRight = controller.canvasToScreen(const Offset(CanvasController.a4Width - 24.0, 0)).dx;
+
+      expect(pageLeft, greaterThanOrEqualTo(0.0));
+      expect(pageRight, lessThanOrEqualTo(800.01));
+      expect(footerRight, lessThanOrEqualTo(800.0));
       expect(tester.takeException(), isNull);
 
       await capture(tester, '03_portrait_1x');

@@ -124,6 +124,14 @@ class ToolbarWidget extends StatelessWidget {
                   onPressed: controller.toggleA4Guides,
                 ),
 
+                // Fit to Width (visible when A4 guides are active)
+                if (controller.showA4Guides)
+                  IconButton(
+                    icon: const Icon(Icons.fit_screen, size: 20),
+                    tooltip: 'Fit to Width',
+                    onPressed: () => controller.fitToWidth(MediaQuery.sizeOf(context).width),
+                  ),
+
                 // Paper Template Popup
                 PopupMenuButton<PaperTemplate>(
                   tooltip: 'Paper Template',
