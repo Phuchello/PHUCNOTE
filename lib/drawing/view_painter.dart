@@ -47,7 +47,7 @@ class PhucNoteViewPainter extends CustomPainter {
 
     // 3. Draw committed strokes with offscreen viewport culling
     for (final stroke in document.strokes) {
-      if (stroke.points.isNotEmpty && !visibleCanvasRect.overlaps(stroke.boundingBox)) {
+      if (stroke.points.isEmpty || !visibleCanvasRect.overlaps(stroke.boundingBox)) {
         continue;
       }
       _drawStroke(canvas, stroke);

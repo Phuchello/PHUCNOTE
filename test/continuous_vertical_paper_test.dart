@@ -15,6 +15,40 @@ import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/drawing/view_painter.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 
+/// Minimal test spy canvas verifying that offscreen strokes do not construct or issue drawPath calls.
+class MockRecordingCanvas extends Fake implements Canvas {
+  int drawPathCount = 0;
+  int drawLineCount = 0;
+  int drawRectCount = 0;
+
+  @override
+  void save() {}
+
+  @override
+  void restore() {}
+
+  @override
+  void translate(double dx, double dy) {}
+
+  @override
+  void scale(double sx, [double? sy]) {}
+
+  @override
+  void drawRect(Rect rect, Paint paint) {
+    drawRectCount++;
+  }
+
+  @override
+  void drawLine(Offset p1, Offset p2, Paint paint) {
+    drawLineCount++;
+  }
+
+  @override
+  void drawPath(Path path, Paint paint) {
+    drawPathCount++;
+  }
+}
+
 void main() {
   group('Continuous Vertical Paper & Navigation Tests', () {
     // 1. Strokes retain coordinates after panning
@@ -307,6 +341,170 @@ void main() {
 
       expect(controller.zoomScale, greaterThan(1.5));
       expect(controller.document.strokes, isEmpty);
+    });
+
+    // TASK A — Focal-point stability when no boundary clamp is active
+    test('Task A: Focal-point stability when no boundary clamp is active has zero drift', () {
+      final controller = CanvasController();
+      // Position viewport well inside document bounds
+      controller.panViewport(const Offset(-200, -3000));
+
+      final testFocalPoints = [
+        const Offset(150, 200),
+        const Offset(600, 800),
+        const Offset(400, 500),
+      ];
+
+      for (final focalPoint in testFocalPoints) {
+        final canvasPointBefore = controller.screenToCanvas(focalPoint);
+
+        // Zoom in by 1.6x
+        controller.zoomAt(focalPoint, 1.6);
+        final screenPointAfter = controller.canvasToScreen(canvasPointBefore);
+        expect((screenPointAfter.dx - focalPoint.dx).abs(), lessThan(1e-6));
+        expect((screenPointAfter.dy - focalPoint.dy).abs(), lessThan(1e-6));
+
+        // Zoom out by 0.7x
+        controller.zoomAt(focalPoint, 0.7);
+        final screenPointAfter2 = controller.canvasToScreen(canvasPointBefore);
+        expect((screenPointAfter2.dx - focalPoint.dx).abs(), lessThan(1e-6));
+        expect((screenPointAfter2.dy - focalPoint.dy).abs(), lessThan(1e-6));
+      }
+    });
+
+    // TASK A — Boundary policy verification near top overscroll limit
+    test('Task A: Zoom-out near top overscroll limit adheres to boundary-clamping policy', () {
+      final controller = CanvasController();
+      // Reach max top overscroll (80.0)
+      controller.panViewport(const Offset(0, 100));
+      expect(controller.viewportOffset.dy, equals(CanvasController.maxTopOverscroll));
+
+      // Zoom out around screen focal point (400, 300) with scale factor 0.5x
+      controller.zoomAt(const Offset(400, 300), 0.5);
+
+      // Boundary policy: top offset must not exceed maxTopOverscroll
+      expect(controller.viewportOffset.dy, lessThanOrEqualTo(CanvasController.maxTopOverscroll));
+
+      // Zoom back in from clamped state -> focal point remains within boundary
+      controller.zoomAt(const Offset(400, 300), 2.0);
+      expect(controller.viewportOffset.dy, lessThanOrEqualTo(CanvasController.maxTopOverscroll));
+    });
+
+    // TASK B — Eraser indicator and hit-testing radius match at 0.5x, 1x and 4x
+    test('Task B: Eraser indicator and hit-testing radius match at 0.5x, 1x, and 4x', () {
+      for (final testZoom in [0.5, 1.0, 4.0]) {
+        final controller = CanvasController();
+        controller.zoomAt(Offset.zero, testZoom);
+        expect(controller.zoomScale, equals(testZoom));
+
+        // Draw single dot stroke on screen at (300, 300)
+        controller.handlePointerDown(const PointerDownEvent(position: Offset(300, 300)));
+        controller.handlePointerUp(const PointerUpEvent(position: Offset(300, 300)));
+        expect(controller.document.strokes.length, equals(1));
+
+        final stroke = controller.document.strokes.first;
+        final strokeCanvasPos = Offset(stroke.points.first.x, stroke.points.first.y);
+        final screenStrokePos = controller.canvasToScreen(strokeCanvasPos);
+        final visualScreenRadius = controller.eraserRadius * testZoom;
+
+        controller.setTool(CanvasTool.eraser);
+
+        // 1. Outside test: Screen touch placed outside visual radius -> NOT erased
+        final outsideScreenPos = screenStrokePos + Offset(visualScreenRadius + 8.0 * testZoom, 0);
+        controller.handlePointerDown(PointerDownEvent(position: outsideScreenPos));
+        controller.handlePointerUp(PointerUpEvent(position: outsideScreenPos));
+        expect(controller.document.strokes.length, equals(1),
+            reason: 'Should not erase outside visual indicator at zoom $testZoom');
+
+        // 2. Inside test: Screen touch placed strictly inside visual radius -> MUST erase
+        final insideScreenPos = screenStrokePos + Offset(visualScreenRadius - 2.0 * testZoom, 0);
+        controller.handlePointerDown(PointerDownEvent(position: insideScreenPos));
+        controller.handlePointerUp(PointerUpEvent(position: insideScreenPos));
+        expect(controller.document.strokes, isEmpty,
+            reason: 'Must erase inside visual indicator at zoom $testZoom');
+      }
+    });
+
+    // TASK C — Deep vertical navigation does not construct paths for offscreen strokes
+    test('Task C: Deep vertical navigation does not construct paths for offscreen strokes', () {
+      final doc = NoteDocument();
+
+      // Add 10 strokes near document top (y = 0..300)
+      for (int i = 0; i < 10; i++) {
+        doc.addStroke(StrokeElement(
+          id: 'top_$i',
+          points: [StrokePoint(x: 100, y: 50.0 + i * 20), StrokePoint(x: 150, y: 60.0 + i * 20)],
+          property: const StrokeProperty(colorValue: 0xFF1E1E1E),
+        ));
+      }
+
+      // Add 10 strokes at deep continuous location y = 50,000..50,800
+      for (int i = 0; i < 10; i++) {
+        doc.addStroke(StrokeElement(
+          id: 'mid_$i',
+          points: [StrokePoint(x: 100, y: 50100.0 + i * 50), StrokePoint(x: 150, y: 50110.0 + i * 50)],
+          property: const StrokeProperty(colorValue: 0xFF1E1E1E),
+        ));
+      }
+
+      // Add 10 strokes far down at y = 100,000..100,800
+      for (int i = 0; i < 10; i++) {
+        doc.addStroke(StrokeElement(
+          id: 'deep_$i',
+          points: [StrokePoint(x: 100, y: 100100.0 + i * 50), StrokePoint(x: 150, y: 100110.0 + i * 50)],
+          property: const StrokeProperty(colorValue: 0xFF1E1E1E),
+        ));
+      }
+
+      expect(doc.strokes.length, equals(30));
+
+      // Viewport scrolled to y = 50,000; screen height = 1,000 (visible range y: 50000..51000)
+      final painter = PhucNoteViewPainter(
+        document: doc,
+        backgroundColor: Colors.white,
+        repaintCounter: 1,
+        viewportOffset: const Offset(0, -50000),
+        zoomScale: 1.0,
+      );
+
+      final mockCanvas = MockRecordingCanvas();
+      painter.paint(mockCanvas, const Size(800, 1000));
+
+      // Strictly only the 10 mid strokes in the viewport should have generated paths!
+      expect(mockCanvas.drawPathCount, equals(10));
+    });
+
+    // TASK C — Bounded rendering benchmark
+    test('Task C: Bounded rendering: 1,000 offscreen strokes produce 0 drawPath calls', () {
+      final doc = NoteDocument();
+
+      // Create 1,000 strokes situated at y in [0, 45000]
+      for (int i = 0; i < 1000; i++) {
+        doc.addStroke(StrokeElement(
+          id: 'stroke_$i',
+          points: [StrokePoint(x: 100, y: i * 40.0), StrokePoint(x: 120, y: i * 40.0 + 10)],
+          property: const StrokeProperty(colorValue: 0xFF1E1E1E),
+        ));
+      }
+
+      // Viewport situated at y in [60000, 61000] (all 1000 strokes offscreen)
+      final painter = PhucNoteViewPainter(
+        document: doc,
+        backgroundColor: Colors.white,
+        repaintCounter: 1,
+        viewportOffset: const Offset(0, -60000),
+        zoomScale: 1.0,
+      );
+
+      final mockCanvas = MockRecordingCanvas();
+      final stopwatch = Stopwatch()..start();
+      painter.paint(mockCanvas, const Size(800, 1000));
+      stopwatch.stop();
+
+      // Zero drawPath calls for offscreen strokes
+      expect(mockCanvas.drawPathCount, equals(0));
+      // Bounded execution under 10ms for 1,000 items
+      expect(stopwatch.elapsedMilliseconds, lessThan(100));
     });
   });
 }

@@ -20,7 +20,7 @@ class PhucNoteForegroundPainter extends CustomPainter {
     required this.activePoints,
     required this.property,
     this.eraserPosition,
-    this.eraserRadius = 16.0,
+    this.eraserRadius = 20.0,
     this.viewportOffset = Offset.zero,
     this.zoomScale = 1.0,
   });
@@ -53,7 +53,7 @@ class PhucNoteForegroundPainter extends CustomPainter {
       final borderPaint = Paint()
         ..color = Colors.red.withValues(alpha: 0.70)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5;
+        ..strokeWidth = 1.5 / zoomScale;
 
       canvas.drawCircle(eraserPosition!, eraserRadius, circlePaint);
       canvas.drawCircle(eraserPosition!, eraserRadius, borderPaint);
