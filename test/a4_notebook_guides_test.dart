@@ -13,6 +13,7 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 /// Test spy canvas tracking drawRect and drawPath invocations.
 class A4SpyCanvas extends Fake implements Canvas {
   final List<Rect> drawnRects = [];
+  final List<Rect> paragraphBounds = [];
   int drawPathCount = 0;
   int drawLineCount = 0;
 
@@ -44,7 +45,9 @@ class A4SpyCanvas extends Fake implements Canvas {
   }
 
   @override
-  void drawParagraph(Paragraph paragraph, Offset offset) {}
+  void drawParagraph(Paragraph paragraph, Offset offset) {
+    paragraphBounds.add(offset & Size(paragraph.longestLine, paragraph.height));
+  }
 }
 
 void main() {
@@ -151,6 +154,29 @@ void main() {
       // Should only contain the visible page(s) around 50,000, never Page 1
       expect(pageRectsDeep.every((r) => r.top > 40000), isTrue);
       expect(pageRectsDeep.any((r) => r.top == 0.0), isFalse);
+    });
+
+    test('Page numbers retain readable size and footer alignment when zoomed out', () {
+      final doc = NoteDocument(paperTemplate: PaperTemplate.blank);
+
+      Rect pageNumberAt(double zoom) {
+        final canvas = A4SpyCanvas();
+        PhucNoteViewPainter(
+          document: doc,
+          backgroundColor: Colors.white,
+          repaintCounter: 0,
+          zoomScale: zoom,
+          showA4Guides: true,
+        ).paint(canvas, Size(900 * zoom, 1250 * zoom));
+        return canvas.paragraphBounds.single;
+      }
+
+      final normal = pageNumberAt(1);
+      final zoomedOut = pageNumberAt(CanvasController.minZoom);
+      expect(zoomedOut.height * CanvasController.minZoom, closeTo(normal.height, 0.01));
+      expect(zoomedOut.width * CanvasController.minZoom, closeTo(normal.width, 0.01));
+      expect(zoomedOut.right, closeTo(CanvasController.a4Width - 24, 0.01));
+      expect(zoomedOut.bottom, closeTo(CanvasController.a4Height - 12, 0.01));
     });
 
     // 4. No changed stroke coordinates when A4 guides are toggled

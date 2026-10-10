@@ -169,14 +169,16 @@ class PhucNoteViewPainter extends CustomPainter {
 
       // 3. Subtle page number indicator at bottom-right
       if (bottomY - 40 < visibleRect.bottom && bottomY > visibleRect.top) {
+        // Keep footer text readable when the page is zoomed out.
+        final labelScale = min(zoomScale, 1.0);
         final textPainter = TextPainter(
           text: TextSpan(
             text: 'Page $k',
-            style: const TextStyle(
-              color: Color(0xFF78909C),
-              fontSize: 12.0,
+            style: TextStyle(
+              color: const Color(0xFF78909C),
+              fontSize: 12.0 / labelScale,
               fontWeight: FontWeight.w600,
-              letterSpacing: 0.5,
+              letterSpacing: 0.5 / labelScale,
             ),
           ),
           textDirection: TextDirection.ltr,
