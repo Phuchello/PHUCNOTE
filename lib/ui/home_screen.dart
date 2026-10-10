@@ -29,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late final CanvasController _controller;
   bool _isSaving = false;
+  Future<void>? _saveFuture;
   Timer? _autosaveTimer;
   DateTime? _lastSavedAt;
 
@@ -55,18 +56,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         state == AppLifecycleState.inactive ||
         state == AppLifecycleState.detached ||
         state == AppLifecycleState.hidden) {
-      if (_controller.isModified && !_isSaving) {
+      if (_controller.isModified) {
         _saveNote(silent: true);
       }
     }
   }
 
   void _onCanvasChanged() {
+    _autosaveTimer?.cancel();
     if (_controller.isModified) {
-      _autosaveTimer?.cancel();
       // Debounce autosave: trigger after 1500ms of inking inactivity
       _autosaveTimer = Timer(const Duration(milliseconds: 1500), () {
-        if (mounted && _controller.isModified && !_isSaving) {
+        if (mounted && _controller.isModified) {
           _saveNote(silent: true);
         }
       });
@@ -74,21 +75,32 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _saveNote({bool silent = false}) async {
-    if (_isSaving) return;
+    if (_saveFuture != null) return _saveFuture!;
+    final completion = Completer<void>();
+    _saveFuture = completion.future;
+    _autosaveTimer?.cancel();
     setState(() => _isSaving = true);
     try {
-      final file = await widget.noteStorage.saveNote(_controller.document);
-      _controller.markSaved();
-      _lastSavedAt = DateTime.now();
-      if (mounted && !silent) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Saved to: ${file.path.split('/').last}'),
-            backgroundColor: Colors.green.shade800,
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      }
+      do {
+        final document = _controller.document;
+        final revision = _controller.revision;
+        final snapshot = NoteDocument.fromJson(document.toJson());
+        final file = await widget.noteStorage.saveNote(snapshot);
+        if (!mounted) return;
+        _controller.markSaved(document: document, revision: revision);
+        if (identical(document, _controller.document)) {
+          _lastSavedAt = DateTime.now();
+          if (!silent && !_controller.isModified) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Saved to: ${file.path.split('/').last}'),
+                backgroundColor: Colors.green.shade800,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
+        }
+      } while (_controller.isModified);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -99,7 +111,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         );
       }
     } finally {
-      if (mounted) setState(() => _isSaving = false);
+      _saveFuture = null;
+      if (mounted) {
+        setState(() => _isSaving = false);
+        if (_controller.isModified) _onCanvasChanged();
+      }
+      completion.complete();
     }
   }
 
@@ -336,9 +353,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             onPressed: () {
               final newTitle = titleController.text.trim();
               if (newTitle.isNotEmpty) {
-                setState(() {
-                  _controller.document.title = newTitle;
-                });
+                _controller.renameDocument(newTitle);
               }
               Navigator.pop(ctx);
             },

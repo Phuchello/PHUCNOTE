@@ -123,8 +123,8 @@ void main() {
 
       final list = await storage.listSavedNotes();
       expect(list.length, 2);
-      expect(list.first.path, file2.path);
-      expect(list.last.path, file1.path);
+      expect(list.first.absolute.uri, file2.absolute.uri);
+      expect(list.last.absolute.uri, file1.absolute.uri);
     });
 
     test('deleteNote removes both .bfly and its .bak backup', () async {

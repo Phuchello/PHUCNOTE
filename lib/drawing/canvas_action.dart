@@ -60,8 +60,10 @@ class EraseStrokesAction implements CanvasAction {
 
   @override
   void undo(NoteDocument document) {
-    // Restore strokes at their original indices if possible, or append
-    for (int i = 0; i < erasedStrokes.length; i++) {
+    // Earlier indices must be restored first, regardless of eraser hit order.
+    final restorationOrder = List.generate(erasedStrokes.length, (i) => i)
+      ..sort((a, b) => originalIndices[a].compareTo(originalIndices[b]));
+    for (final i in restorationOrder) {
       final stroke = erasedStrokes[i];
       final targetIndex = originalIndices[i];
       if (targetIndex >= 0 && targetIndex <= document.strokes.length) {

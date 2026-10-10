@@ -16,9 +16,9 @@
 
 ## Current Status
 - **Current Phase:** Phase 3 — Baseline Foundation Implementation (Executable Android Baseline Established)
-- **Status:** Baseline Flutter application foundation imported, audited drawing engine preserved, `.bfly` ZIP serialization implemented and verified, full create/write/save/reopen lifecycle operational, Android ARM64 configured and successfully compiled into debug APK, all tests passing.
+- **Status:** P0 autosave consistency and undo/redo correctness repaired from baseline `71d7d999c3685e9b7f154f11adb1c761a70d8ce4`. Ten regression failures reproduced before repair; 14 focused regressions now pass. Validated with Flutter 3.47.7 / Dart 3.13.5: `flutter analyze` clean, `flutter test` 43 passing, and `flutter build apk --debug --target-platform android-arm64` successful. No remaining blockers.
 - **Upstream Source Code Status:** Audited and preserved 100% intact at `/home/vo-trong-phuc/Projects/butterfly-upstream`.
-- **Current Checkpoint:** `CHECKPOINT-05-FOUNDATION-BASELINE`
+- **Current Checkpoint:** `CHECKPOINT-05-P0-CORRECTNESS-REPAIR`
 - **Next Checkpoint:** `CHECKPOINT-06-STYLUS-TUNING`
 
 ---

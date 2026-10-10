@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import '../models/note_document.dart';
 import 'bfly_serializer.dart';
@@ -11,6 +12,7 @@ import 'bfly_serializer.dart';
 /// implementing atomic writes, crash recovery, and directory isolation.
 class NoteStorage {
   static const String notesDirectoryName = 'phucnote_notes';
+  static final Map<String, Future<void>> _pendingWrites = {};
   final Directory? customRootDirectory;
 
   NoteStorage({this.customRootDirectory});
@@ -49,16 +51,34 @@ class NoteStorage {
   /// 3. The temporary file is atomically renamed to the target filename.
   /// 4. An optional `.bak` backup of the previous version is kept for disaster recovery.
   Future<File> saveNote(NoteDocument document) async {
-    final dir = await getNotesDirectory();
+    // Capture bytes and the filename before yielding to any edits or queued saves.
+    final bytes = BflySerializer.encode(document);
     final sanitizedTitle = document.title
         .replaceAll(RegExp(r'[\\/:*?"<>|]'), '_')
         .trim();
     final filename = '${sanitizedTitle}_${document.id.substring(0, 8)}.bfly';
+    final previous = _pendingWrites[document.id] ?? Future<void>.value();
+    final result = previous.then((_) => _writeNote(filename, bytes));
+    // A failed write must not poison subsequent requests for this document.
+    final tail = result.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    _pendingWrites[document.id] = tail;
+    tail.then((_) {
+      if (identical(_pendingWrites[document.id], tail)) {
+        _pendingWrites.remove(document.id);
+      }
+    });
+    return result;
+  }
+
+  Future<File> _writeNote(String filename, Uint8List bytes) async {
+    final dir = await getNotesDirectory();
     final targetFile = File('${dir.path}/$filename');
     final tmpFile = File('${targetFile.path}.tmp_${DateTime.now().microsecondsSinceEpoch}');
 
     try {
-      final bytes = BflySerializer.encode(document);
       // Flush bytes to ensure all buffers are written to the physical block device
       await tmpFile.writeAsBytes(bytes, flush: true);
 

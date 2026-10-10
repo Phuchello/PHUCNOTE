@@ -37,6 +37,7 @@ class CanvasController extends ChangeNotifier {
   // Temporary buffers during an in-flight eraser gesture
   final List<StrokeElement> _sessionErasedStrokes = [];
   final List<int> _sessionErasedIndices = [];
+  final Map<StrokeElement, int> _sessionStrokeIndices = {};
 
   // Stylus and Palm Rejection Settings
   bool _stylusOnlyMode = false;
@@ -46,7 +47,8 @@ class CanvasController extends ChangeNotifier {
   Offset _viewportOffset = Offset.zero;
 
   int _repaintCounter = 0;
-  bool _isModified = false;
+  int _revision = 0;
+  int _savedRevision = 0;
 
   CanvasController({NoteDocument? document})
       : _document = document ?? NoteDocument();
@@ -61,7 +63,8 @@ class CanvasController extends ChangeNotifier {
   int get repaintCounter => _repaintCounter;
   bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
-  bool get isModified => _isModified;
+  int get revision => _revision;
+  bool get isModified => _revision != _savedRevision;
   bool get stylusOnlyMode => _stylusOnlyMode;
   bool get isStylusActive => _isStylusActive;
   Offset get viewportOffset => _viewportOffset;
@@ -84,14 +87,17 @@ class CanvasController extends ChangeNotifier {
     _redoStack.clear();
     _sessionErasedStrokes.clear();
     _sessionErasedIndices.clear();
+    _sessionStrokeIndices.clear();
     _viewportOffset = Offset.zero;
     _repaintCounter++;
-    _isModified = false;
+    _revision++;
+    _savedRevision = _revision;
     notifyListeners();
   }
 
   void setTool(CanvasTool newTool) {
     if (_tool != newTool) {
+      _finishEraseSession();
       _tool = newTool;
       notifyListeners();
     }
@@ -101,6 +107,7 @@ class CanvasController extends ChangeNotifier {
     if (_color != newColor) {
       _color = newColor;
       if (_tool == CanvasTool.eraser) {
+        _finishEraseSession();
         _tool = CanvasTool.pen;
       }
       notifyListeners();
@@ -117,8 +124,17 @@ class CanvasController extends ChangeNotifier {
   void setPaperTemplate(PaperTemplate template) {
     if (_document.paperTemplate != template) {
       _document.paperTemplate = template;
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
+      notifyListeners();
+    }
+  }
+
+  void renameDocument(String title) {
+    if (_document.title != title) {
+      _document.title = title;
+      _document.updatedAt = DateTime.now();
+      _revision++;
       notifyListeners();
     }
   }
@@ -187,6 +203,7 @@ class CanvasController extends ChangeNotifier {
       return;
     }
 
+    _finishEraseSession();
     final canvasPos = _canvasCoordinates(event.localPosition);
     final pressure = event.pressure.clamp(0.1, 1.0);
 
@@ -198,6 +215,10 @@ class CanvasController extends ChangeNotifier {
     if (effectiveTool == CanvasTool.eraser) {
       _sessionErasedStrokes.clear();
       _sessionErasedIndices.clear();
+      _sessionStrokeIndices.addAll({
+        for (var i = 0; i < _document.strokes.length; i++)
+          _document.strokes[i]: i,
+      });
       _eraserPosition = canvasPos;
       _eraseAt(canvasPos);
       notifyListeners();
@@ -227,6 +248,7 @@ class CanvasController extends ChangeNotifier {
         : _tool;
 
     if (effectiveTool == CanvasTool.eraser) {
+      if (_eraserPosition == null) return;
       _eraserPosition = canvasPos;
       _eraseAt(canvasPos);
       notifyListeners();
@@ -255,24 +277,8 @@ class CanvasController extends ChangeNotifier {
       return;
     }
 
-    final effectiveTool = (event.kind == PointerDeviceKind.invertedStylus)
-        ? CanvasTool.eraser
-        : _tool;
-
-    if (effectiveTool == CanvasTool.eraser) {
-      _eraserPosition = null;
-      if (_sessionErasedStrokes.isNotEmpty) {
-        final action = EraseStrokesAction(
-          erasedStrokes: List.from(_sessionErasedStrokes),
-          originalIndices: List.from(_sessionErasedIndices),
-        );
-        _undoStack.add(action);
-        _redoStack.clear();
-        _sessionErasedStrokes.clear();
-        _sessionErasedIndices.clear();
-        _isModified = true;
-        _repaintCounter++;
-      }
+    if (_eraserPosition != null) {
+      _finishEraseSession();
       notifyListeners();
       return;
     }
@@ -287,7 +293,7 @@ class CanvasController extends ChangeNotifier {
       action.execute(_document);
       _undoStack.add(action);
       _redoStack.clear();
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
     }
 
@@ -298,10 +304,25 @@ class CanvasController extends ChangeNotifier {
   void handlePointerCancel(PointerCancelEvent event) {
     _isStylusActive = false;
     _activePoints.clear();
+    // Erasures already changed the document; cancellation still needs history.
+    _finishEraseSession();
+    notifyListeners();
+  }
+
+  void _finishEraseSession() {
+    if (_sessionErasedStrokes.isNotEmpty) {
+      _undoStack.add(
+        EraseStrokesAction(
+          erasedStrokes: _sessionErasedStrokes,
+          originalIndices: _sessionErasedIndices,
+        ),
+      );
+      _redoStack.clear();
+    }
     _eraserPosition = null;
     _sessionErasedStrokes.clear();
     _sessionErasedIndices.clear();
-    notifyListeners();
+    _sessionStrokeIndices.clear();
   }
 
   void _eraseAt(Offset pos) {
@@ -312,7 +333,7 @@ class CanvasController extends ChangeNotifier {
       final stroke = _document.strokes[i];
       if (stroke.hitTest(pos, eraserRadius)) {
         newlyErased.add(stroke);
-        newlyErasedIndices.add(i);
+        newlyErasedIndices.add(_sessionStrokeIndices[stroke]!);
       }
     }
 
@@ -324,18 +345,19 @@ class CanvasController extends ChangeNotifier {
         _sessionErasedStrokes.add(s);
         _sessionErasedIndices.add(originalIdx);
       }
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
     }
   }
 
   /// Undoes the last action in the action-history stack.
   void undo() {
+    _finishEraseSession();
     if (_undoStack.isNotEmpty) {
       final action = _undoStack.removeLast();
       action.undo(_document);
       _redoStack.add(action);
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
       notifyListeners();
     }
@@ -343,11 +365,12 @@ class CanvasController extends ChangeNotifier {
 
   /// Redoes the last reverted action from the redo stack.
   void redo() {
+    _finishEraseSession();
     if (_redoStack.isNotEmpty) {
       final action = _redoStack.removeLast();
       action.redo(_document);
       _undoStack.add(action);
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
       notifyListeners();
     }
@@ -355,19 +378,22 @@ class CanvasController extends ChangeNotifier {
 
   /// Clears all strokes on the canvas and logs a ClearCanvasAction to undo stack.
   void clearCanvas() {
+    _finishEraseSession();
     if (_document.strokes.isNotEmpty) {
       final action = ClearCanvasAction(_document.strokes);
       action.execute(_document);
       _undoStack.add(action);
       _redoStack.clear();
-      _isModified = true;
+      _revision++;
       _repaintCounter++;
       notifyListeners();
     }
   }
 
-  void markSaved() {
-    _isModified = false;
-    notifyListeners();
+  void markSaved({required NoteDocument document, required int revision}) {
+    if (identical(document, _document) && revision == _revision) {
+      _savedRevision = revision;
+      notifyListeners();
+    }
   }
 }
