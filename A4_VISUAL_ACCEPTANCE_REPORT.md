@@ -1,0 +1,80 @@
+# PHUCNOTE — A4 Visual Acceptance Final Report
+
+**Date:** 2026-10-10  
+**Target Repository:** `Phuchello/PHUCNOTE`  
+**Branch:** `develop`  
+**Baseline Commit:** `b9645874b7512955ebf4792fef7c769150494904`  
+
+---
+
+## 1. Test Environment
+
+- **Host Platform:** Windows 11
+- **Flutter Version:** 3.29.3 (Channel stable)
+- **Dart Version:** 3.7.2
+- **Android Target Device:** `emulator-5554` (AVD `medium_tablet`)
+- **Android OS / API:** Android 15 (VanillaIceCream) / API Level 35
+- **ABI / System Image:** `x86_64` (Google APIs, hardware accelerated)
+- **Display Resolution:** 2560 × 1600 physical pixels (320 dpi, devicePixelRatio 2.0)
+- **Orientations Validated:**
+  - Landscape (`user_rotation 0`, 2560 × 1600)
+  - Portrait (`user_rotation 1`, 1600 × 2560)
+
+---
+
+## 2. Visual Acceptance Checklist (V-01 through V-06)
+
+| Test ID | Test Scenario | Orientation / Zoom | Verification Criteria | Status |
+|---|---|---|---|---|
+| **V-01** | Landscape at 1.0× | Landscape / 1.0× | 210:297 A4 outline rendered at $x = 840.0$; header toolbar controls visible and unobstructed; ruled lines and handwriting aligned. | **PASS** |
+| **V-02** | Landscape at 0.5× | Landscape / 0.5× | Dynamic text scaling preserves readable "Page 1" label; inter-page gap line and Page 2 header visible; toolbar 50% pill active; no clipping or layout overflow. | **PASS** |
+| **V-03** | Portrait at 1.0× | Portrait / 1.0× | A4 outline centered to portrait width; top toolbar cleanly accessible without truncation; handwriting aligned with paper rules; no distortion. | **PASS** |
+| **V-04** | Portrait at 0.5× | Portrait / 0.5× | "Page 1" label legible; inter-page separator visible; Page 2 outline visible with bottom-right label; no layout overflow. | **PASS** |
+| **V-05** | Page 2 & Deep Scrolling | Landscape / 1.0× | Viewport navigated downward past Page 1; inter-page divider bar clearly rendered; Page 2 handwriting properly registered and aligned. | **PASS** |
+| **V-06** | Handwriting Integrity | Landscape / 1.0× & 1.5× | Full cycle verified: stroke drawing, pan/zoom transformation, eraser hit-testing with Undo/Redo, and storage save/reload with unchanged logical coordinates. | **PASS** |
+
+---
+
+## 3. Screenshot Evidence Artifacts
+
+All screenshots were captured directly on Android Emulator `emulator-5554` and extracted without compression or transcoding into `artifacts/a4-visual-validation/`:
+
+| Artifact File | Size | MD5 / Description |
+|---|---|---|
+| `artifacts/a4-visual-validation/01_landscape_1x.png` | 62,845 bytes | Landscape 1.0× view with A4 page outline, margin rule, and handwriting |
+| `artifacts/a4-visual-validation/02_landscape_0_5x.png` | 68,258 bytes | Landscape 0.5× view showing scaled A4 outline, "Page 1", and inter-page separator |
+| `artifacts/a4-visual-validation/03_portrait_1x.png` | 64,691 bytes | Portrait 1.0× layout with centered A4 boundaries and accessible toolbar |
+| `artifacts/a4-visual-validation/04_portrait_0_5x.png` | 72,451 bytes | Portrait 0.5× layout showing Page 1, separator, Page 2 outline, and zoom pill |
+| `artifacts/a4-visual-validation/05_page_2.png` | 65,754 bytes | Viewport scrolled to Page 2 showing separator and Page 2 handwriting |
+| `artifacts/a4-visual-validation/06_handwriting.png` | 63,965 bytes | Post-reload canvas verifying geometric coordinates after pan/zoom/erase/undo |
+
+---
+
+## 4. Test Suite Execution Summary
+
+- **Static Analysis (`flutter analyze`):**
+  - Result: 0 issues found.
+- **Unit & Widget Test Suites (`flutter test`):**
+  - Total: 63 tests
+  - Passed: 63
+  - Failed: 0
+- **Android Integration Suites (`integration_test/`):**
+  - `app_test.dart` (TC-01 to TC-17): 17 passed, 0 failed
+  - `landscape_visual_test.dart` (V-05, V-06): 2 passed, 0 failed
+  - `portrait_visual_test.dart` (V-03, V-04): 2 passed, 0 failed
+  - Total Integration Tests Passed: 21 / 21
+- **Logcat Diagnostic Check (`com.phucnote.phucnote`):**
+  - 0 unhandled exceptions, 0 crashes, 0 ANRs.
+
+---
+
+## 5. Defect Analysis & Fixes
+
+- **Confirmed Defects:** None.
+- **Status:** Baseline implementation `b9645874b7512955ebf4792fef7c769150494904` satisfies all visual acceptance criteria without requiring any production Dart modifications.
+
+---
+
+## 6. Known Limitations
+
+- **Nonpersistent Visual Layout:** A4 Notebook Guides is intentionally an in-memory UI preview toggle. Continuous vertical paper and the existing `.bfly` document schema remain canonical. No schema migration or toggle state persistence was introduced, per checkpoint specification.
