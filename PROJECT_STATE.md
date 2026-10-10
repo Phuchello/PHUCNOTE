@@ -26,12 +26,13 @@
 ## Architecture Summary
 | Subsystem | Upstream Implementation | PhucNote Customization Plan |
 | :--- | :--- | :--- |
-| **Drawing Engine** | `ViewPainter` (baked viewport culling) + `ForegroundPainter` (active strokes) | **Preserve 100%**. Tune input polling and up to 165Hz vsync pipeline. |
-| **Handwriting & Stroke** | `perfect_freehand` bezier smoothing with pressure & streamline | **Preserve 100%**. Calibrate pressure curve dynamically for Lenovo AP501U active stylus. |
-| **Stylus & Palm Rejection** | `_ViewportInputCoordinator` + `EditorInputCubit.effectivePenOnlyInput` | Enforce automatic stylus-only inking; preserve two-finger pan/zoom navigation. Empirical testing of AP501U signals. |
+| **Drawing Engine** | `ViewPainter` (baked viewport culling) + `ForegroundPainter` (active strokes) | **Independent custom Flutter implementation** faithfully reproducing Butterfly inking mathematics (`perfect_freehand` + quadratic bezier interpolation) without monorepo dependencies. |
+| **Handwriting & Stroke** | `perfect_freehand` bezier smoothing with pressure & streamline | Replicated using identical smoothing & streamline parameters; anti-aliased fill path generation. |
+| **Stylus & Palm Rejection** | `_ViewportInputCoordinator` + `EditorInputCubit.effectivePenOnlyInput` | **Software discrimination & gating**: `PointerDeviceKind.stylus` vs touch; configurable stylus-only inking with finger touch panning; software palm contact area rejection. Hardware validation disclaimed until on-device test. |
+| **Undo / Redo** | `_undoStack` popping | **Action-History Engine**: Full Command pattern (`AddStrokeAction`, `EraseStrokesAction`, `ClearCanvasAction`) with z-order preservation on undo. |
 | **Page Management** | Multi-page infinite 2D canvas with `Area` definitions | Add Continuous Vertical Paper mode and Standard A4 Notebook mode. |
 | **PDF Handling** | `pdfrx` vector rasterizer + multi-layer annotation + vector PDF export | Preserve & optimize caching for multi-page PDF documents. |
-| **Storage & Persistence** | `.bfly` ZIP container with JSON pages & SHA-512 hashed assets; `DocumentSaveCubit` autosave | Preserve `.bfly` spec with backward compatibility; add automated snapshot recovery. |
+| **Storage & Persistence** | `.bfly` ZIP container with JSON pages & SHA-512 hashed assets; `DocumentSaveCubit` autosave | **Atomic file writing** (.tmp + rename), crash backup recovery (.bak), reliable debounced & lifecycle autosave, switch guards; verified with upstream `document_v1.bfly` and `study.tbfly`. |
 | **Window & Split-Screen** | Responsive Flutter layout + `android:configChanges` | Explicit `resizeableActivity`, tablet split-screen dynamic toolbar collapse, and floating video PiP. |
 | **Themes & Aesthetics** | `flex_color_scheme` + light/dark texture backgrounds | Modern tablet-first minimalist UI, refined typography, and distraction-free writing mode. |
 | **Academic Organization ("PHUC ORGANIZER")** | Generic file trees in `lw_file_system` | **Academic Workspace Engine**: Hierarchical academic calendar (`Workspace > Year > Semester > Course`), course dashboards, global FTS5 search (<100ms), smart classification with user confirmation, research paper workspace with DOI & BibTeX metadata. |

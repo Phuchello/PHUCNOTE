@@ -39,6 +39,28 @@
   - [x] Maintain AGPL-3.0 attribution headers, upstream contributor credits, and source-code availability notices.
   - [x] Configure Android ARM64 target and host-constrained Gradle heap settings.
   - [x] Implement basic note lifecycle (create, write, save, reopen) with passing test suite and clean analysis.
+  - [x] **P0 Data Safety Remediation:**
+    - [x] Implement atomic file saving (`.tmp_<timestamp>` write + buffer flush + atomic rename).
+    - [x] Implement crash recovery with `.bak` backup copy retention and fallback load.
+    - [x] Implement reliable 1500ms debounced autosave upon stroke completion.
+    - [x] Implement `WidgetsBindingObserver` lifecycle flush on pause/inactive/detached.
+    - [x] Implement document switch guards, unsaved modification warnings, and `PopScope` exit protection.
+    - [x] Verify on real files with `test/note_storage_data_safety_test.dart`.
+  - [x] **P0 Stylus Input Remediation:**
+    - [x] Implement framework-level `PointerDeviceKind.stylus` discrimination and configurable stylus-only inking.
+    - [x] Gate touch input away from inking in stylus-only mode while preserving smooth finger viewport panning.
+    - [x] Add software palm rejection heuristics (active pen contact rejection + contact area filtering).
+    - [x] Add automatic eraser routing for inverted stylus tip events (`PointerDeviceKind.invertedStylus`).
+    - [x] Verify with `test/stylus_input_test.dart` and disclaim hardware palm rejection until physical-device test.
+  - [x] **P0 Undo/Redo Remediation:**
+    - [x] Implement Command-pattern action-history engine (`CanvasAction`, `AddStrokeAction`, `EraseStrokesAction`, `ClearCanvasAction`).
+    - [x] Verify mixed action sequences and original z-order index restoration with `test/canvas_action_history_test.dart`.
+  - [x] **P0 Linwood Butterfly Compatibility Remediation:**
+    - [x] Audit real Butterfly v2.6.0 document schema and fixture structure.
+    - [x] Verify interoperability against actual upstream fixtures (`document_v1.bfly` and `study.tbfly`).
+    - [x] Verify `.bfly` ZIP export hierarchy against Butterfly specification (`test/butterfly_interop_test.dart`).
+  - [x] **Architecture Accuracy Remediation:**
+    - [x] Document that drawing engine is an independent, lightweight custom implementation reproducing Butterfly's inking mathematics (`perfect_freehand` + bezier interpolation).
 - [ ] **Step 3.2: Stylus & Low-Latency Tuning**
   - [ ] Verify active stylus event priority and palm rejection defaults for Lenovo AP501U stylus.
   - [ ] Calibrate pressure sensitivity presets for active styluses.

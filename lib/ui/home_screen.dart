@@ -2,6 +2,7 @@
 // Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../core/models/note_document.dart';
@@ -11,7 +12,8 @@ import 'canvas_view.dart';
 import 'toolbar_widget.dart';
 
 /// Main workspace screen for PhucNote, integrating handwriting canvas,
-/// floating tool palette, and note persistence lifecycle (Create / Save / Reopen).
+/// floating tool palette, and data safety guarantees (atomic autosave,
+/// unsaved change warnings, and switch guards).
 class HomeScreen extends StatefulWidget {
   final NoteStorage noteStorage;
 
@@ -24,23 +26,128 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late final CanvasController _controller;
   bool _isSaving = false;
+  Timer? _autosaveTimer;
+  DateTime? _lastSavedAt;
 
   @override
   void initState() {
     super.initState();
     _controller = CanvasController();
+    _controller.addListener(_onCanvasChanged);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _autosaveTimer?.cancel();
+    _controller.removeListener(_onCanvasChanged);
     _controller.dispose();
     super.dispose();
   }
 
-  void _createNewNote() {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.hidden) {
+      if (_controller.isModified && !_isSaving) {
+        _saveNote(silent: true);
+      }
+    }
+  }
+
+  void _onCanvasChanged() {
+    if (_controller.isModified) {
+      _autosaveTimer?.cancel();
+      // Debounce autosave: trigger after 1500ms of inking inactivity
+      _autosaveTimer = Timer(const Duration(milliseconds: 1500), () {
+        if (mounted && _controller.isModified && !_isSaving) {
+          _saveNote(silent: true);
+        }
+      });
+    }
+  }
+
+  Future<void> _saveNote({bool silent = false}) async {
+    if (_isSaving) return;
+    setState(() => _isSaving = true);
+    try {
+      final file = await widget.noteStorage.saveNote(_controller.document);
+      _controller.markSaved();
+      _lastSavedAt = DateTime.now();
+      if (mounted && !silent) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Saved to: ${file.path.split('/').last}'),
+            backgroundColor: Colors.green.shade800,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save note: $e'),
+            backgroundColor: Colors.red.shade800,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
+  }
+
+  /// Guards against data loss: prompts or auto-saves when current document has unsaved modifications.
+  Future<bool> _ensureSavedBeforeAction(String actionDescription) async {
+    if (!_controller.isModified) return true;
+
+    // Prompt user on what to do with unsaved modifications
+    final result = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Unsaved Modifications'),
+        content: Text(
+          'Note "${_controller.document.title}" has unsaved changes.\n'
+          'What would you like to do before $actionDescription?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, 'discard'),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Discard Changes'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(ctx, 'save'),
+            child: const Text('Save & Proceed'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == 'save') {
+      await _saveNote(silent: false);
+      return !_controller.isModified;
+    } else if (result == 'discard') {
+      return true;
+    }
+    return false; // Cancelled
+  }
+
+  Future<void> _createNewNote() async {
+    final canProceed = await _ensureSavedBeforeAction('creating a new note');
+    if (!canProceed || !mounted) return;
+
     final titleController = TextEditingController(
       text: 'Note ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now())}',
     );
@@ -104,33 +211,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _saveNote() async {
-    setState(() => _isSaving = true);
-    try {
-      final file = await widget.noteStorage.saveNote(_controller.document);
-      _controller.markSaved();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Saved to: ${file.path.split('/').last}'),
-            backgroundColor: Colors.green.shade800,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to save note: $e'),
-            backgroundColor: Colors.red.shade800,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSaving = false);
-    }
   }
 
   Future<void> _showOpenNoteDialog() async {
@@ -204,11 +284,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                           onTap: () async {
+                            Navigator.pop(ctx);
+                            final canProceed = await _ensureSavedBeforeAction('opening another note');
+                            if (!canProceed || !context.mounted) return;
+
                             try {
                               final loaded = await widget.noteStorage.loadNote(file);
                               _controller.setDocument(loaded);
                               if (context.mounted) {
-                                Navigator.pop(ctx);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Loaded: "${loaded.title}"')),
                                 );
@@ -272,92 +355,115 @@ class _HomeScreenState extends State<HomeScreen> {
       listenable: _controller,
       builder: (context, _) {
         final doc = _controller.document;
-        return Scaffold(
-          appBar: AppBar(
-            titleSpacing: 8,
-            title: InkWell(
-              borderRadius: BorderRadius.circular(8),
-              onTap: _renameNote,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        doc.title,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    const Icon(Icons.edit, size: 16, color: Colors.grey),
-                    if (_controller.isModified) ...[
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.amber.shade200,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text(
-                          'Unsaved',
-                          style: TextStyle(fontSize: 10, color: Colors.brown, fontWeight: FontWeight.bold),
+        return PopScope(
+          canPop: !_controller.isModified,
+          onPopInvokedWithResult: (didPop, _) async {
+            if (didPop) return;
+            final canProceed = await _ensureSavedBeforeAction('exiting the application');
+            if (canProceed && context.mounted) {
+              Navigator.pop(context);
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              titleSpacing: 8,
+              title: InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: _renameNote,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          doc.title,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         ),
                       ),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.edit, size: 16, color: Colors.grey),
+                      if (_controller.isModified) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.shade200,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'Unsaved',
+                            style: TextStyle(fontSize: 10, color: Colors.brown, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ] else if (_lastSavedAt != null) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'Saved',
+                            style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
+              actions: [
+                // New Note
+                IconButton(
+                  icon: const Icon(Icons.note_add_outlined),
+                  tooltip: 'New Note',
+                  onPressed: _createNewNote,
+                ),
+                // Open Notes
+                IconButton(
+                  icon: const Icon(Icons.folder_open_outlined),
+                  tooltip: 'Open Notes',
+                  onPressed: _showOpenNoteDialog,
+                ),
+                // Save Note
+                FilledButton.icon(
+                  icon: _isSaving
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Icon(Icons.save_outlined, size: 18),
+                  label: const Text('Save'),
+                  onPressed: _isSaving ? null : () => _saveNote(silent: false),
+                ),
+                const SizedBox(width: 8),
+              ],
             ),
-            actions: [
-              // New Note
-              IconButton(
-                icon: const Icon(Icons.note_add_outlined),
-                tooltip: 'New Note',
-                onPressed: _createNewNote,
-              ),
-              // Open Notes
-              IconButton(
-                icon: const Icon(Icons.folder_open_outlined),
-                tooltip: 'Open Notes',
-                onPressed: _showOpenNoteDialog,
-              ),
-              // Save Note
-              FilledButton.icon(
-                icon: _isSaving
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                      )
-                    : const Icon(Icons.save_outlined, size: 18),
-                label: const Text('Save'),
-                onPressed: _isSaving ? null : _saveNote,
-              ),
-              const SizedBox(width: 8),
-            ],
-          ),
-          body: Stack(
-            children: [
-              // Canvas View
-              Positioned.fill(
-                child: CanvasView(
-                  controller: _controller,
-                  paperColor: const Color(0xFFFBFBF9), // Warm Paper Ivory
+            body: Stack(
+              children: [
+                // Canvas View
+                Positioned.fill(
+                  child: CanvasView(
+                    controller: _controller,
+                    paperColor: const Color(0xFFFBFBF9), // Warm Paper Ivory
+                  ),
                 ),
-              ),
 
-              // Floating Ergonomic Toolbar
-              Positioned(
-                top: 12,
-                left: 16,
-                right: 16,
-                child: Center(
-                  child: ToolbarWidget(controller: _controller),
+                // Floating Ergonomic Toolbar
+                Positioned(
+                  top: 12,
+                  left: 16,
+                  right: 16,
+                  child: Center(
+                    child: ToolbarWidget(controller: _controller),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

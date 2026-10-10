@@ -2,12 +2,14 @@
 // Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../drawing/canvas_controller.dart';
 import '../drawing/foreground_painter.dart';
 import '../drawing/view_painter.dart';
 
-/// The handwriting canvas widget with dual-layer RepaintBoundary architecture.
+/// The handwriting canvas widget with dual-layer RepaintBoundary architecture,
+/// configurable stylus-only gating, and seamless touch pan navigation.
 class CanvasView extends StatelessWidget {
   final CanvasController controller;
   final Color paperColor;
@@ -25,10 +27,30 @@ class CanvasView extends StatelessWidget {
       builder: (context, _) {
         return ClipRect(
           child: Listener(
-            onPointerDown: controller.handlePointerDown,
-            onPointerMove: controller.handlePointerMove,
-            onPointerUp: controller.handlePointerUp,
-            onPointerCancel: controller.handlePointerCancel,
+            onPointerDown: (event) {
+              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
+                // In stylus-only mode, touch is dedicated for panning/navigation
+                return;
+              }
+              controller.handlePointerDown(event);
+            },
+            onPointerMove: (event) {
+              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
+                // Pan viewport smoothly with finger dragging
+                controller.panViewport(event.delta);
+                return;
+              }
+              controller.handlePointerMove(event);
+            },
+            onPointerUp: (event) {
+              if (controller.stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
+                return;
+              }
+              controller.handlePointerUp(event);
+            },
+            onPointerCancel: (event) {
+              controller.handlePointerCancel(event);
+            },
             behavior: HitTestBehavior.opaque,
             child: Stack(
               fit: StackFit.expand,
@@ -41,6 +63,7 @@ class CanvasView extends StatelessWidget {
                       document: controller.document,
                       backgroundColor: paperColor,
                       repaintCounter: controller.repaintCounter,
+                      viewportOffset: controller.viewportOffset,
                     ),
                     isComplex: true,
                   ),
@@ -55,6 +78,7 @@ class CanvasView extends StatelessWidget {
                       property: controller.currentProperty,
                       eraserPosition: controller.eraserPosition,
                       eraserRadius: controller.eraserRadius,
+                      viewportOffset: controller.viewportOffset,
                     ),
                     willChange: true,
                   ),

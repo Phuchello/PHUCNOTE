@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import '../core/models/note_document.dart';
 import '../drawing/canvas_controller.dart';
 
-/// Ergonomic tablet-first floating toolbar for inking tools, colors, widths, and templates.
+/// Ergonomic tablet-first floating toolbar for inking tools, colors, widths, templates,
+/// and stylus-only inking mode.
 class ToolbarWidget extends StatelessWidget {
   final CanvasController controller;
 
@@ -78,6 +79,19 @@ class ToolbarWidget extends StatelessWidget {
                 _buildWidthChip(6.0, label: 'Bold'),
 
                 const SizedBox(height: 24, child: VerticalDivider(width: 16)),
+
+                // Stylus-only inking toggle
+                IconButton(
+                  icon: Icon(
+                    controller.stylusOnlyMode ? Icons.draw : Icons.touch_app,
+                    size: 20,
+                    color: controller.stylusOnlyMode ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                  ),
+                  tooltip: controller.stylusOnlyMode
+                      ? 'Stylus-Only Active (Fingers Pan Canvas)'
+                      : 'Finger Inking Allowed (Tap to enable Stylus-Only)',
+                  onPressed: () => controller.setStylusOnlyMode(!controller.stylusOnlyMode),
+                ),
 
                 // Paper Template Popup
                 PopupMenuButton<PaperTemplate>(

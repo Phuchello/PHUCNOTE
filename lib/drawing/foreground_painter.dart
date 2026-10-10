@@ -13,16 +13,21 @@ class PhucNoteForegroundPainter extends CustomPainter {
   final StrokeProperty property;
   final Offset? eraserPosition;
   final double eraserRadius;
+  final Offset viewportOffset;
 
   PhucNoteForegroundPainter({
     required this.activePoints,
     required this.property,
     this.eraserPosition,
     this.eraserRadius = 16.0,
+    this.viewportOffset = Offset.zero,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.translate(viewportOffset.dx, viewportOffset.dy);
+
     // 1. Draw active stroke if points exist
     if (activePoints.isNotEmpty) {
       final path = StrokeGeometry.generatePath(activePoints, property);
@@ -50,6 +55,8 @@ class PhucNoteForegroundPainter extends CustomPainter {
       canvas.drawCircle(eraserPosition!, eraserRadius, circlePaint);
       canvas.drawCircle(eraserPosition!, eraserRadius, borderPaint);
     }
+
+    canvas.restore();
   }
 
   @override

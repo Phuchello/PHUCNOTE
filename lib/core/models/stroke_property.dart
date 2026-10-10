@@ -34,17 +34,45 @@ class StrokeProperty {
         'streamline': streamline,
         'isHighlighter': isHighlighter,
         'opacity': opacity,
+        'type': 'pen',
       };
 
-  factory StrokeProperty.fromJson(Map<String, dynamic> json) => StrokeProperty(
-        colorValue: json['color'] as int? ?? 0xFF1E1E1E,
-        strokeWidth: (json['strokeWidth'] as num?)?.toDouble() ?? 3.0,
-        thinning: (json['thinning'] as num?)?.toDouble() ?? 0.5,
-        smoothing: (json['smoothing'] as num?)?.toDouble() ?? 0.5,
-        streamline: (json['streamline'] as num?)?.toDouble() ?? 0.5,
-        isHighlighter: json['isHighlighter'] as bool? ?? false,
-        opacity: (json['opacity'] as num?)?.toDouble() ?? 1.0,
-      );
+  static int _extractColorValue(Map<String, dynamic> json) {
+    if (json.containsKey('color')) {
+      final c = json['color'];
+      if (c is int) return c;
+      if (c is String) {
+        final sanitized = c.replaceFirst('#', '');
+        final parsed = int.tryParse(sanitized, radix: 16);
+        if (parsed != null) {
+          return (parsed <= 0xFFFFFF) ? (0xFF000000 | parsed) : parsed;
+        }
+      }
+    }
+    if (json.containsKey('paint') && json['paint'] is Map<String, dynamic>) {
+      final paint = json['paint'] as Map<String, dynamic>;
+      final c = paint['color'];
+      if (c is int) return c;
+      if (c is Map && c['value'] is int) return c['value'] as int;
+    }
+    return 0xFF1E1E1E;
+  }
+
+  factory StrokeProperty.fromJson(Map<String, dynamic> json) {
+    final parsedColor = _extractColorValue(json);
+    final width = (json['strokeWidth'] as num?)?.toDouble() ?? 3.0;
+    final isHigh = (json['isHighlighter'] as bool?) ?? (json['type'] == 'highlighter');
+
+    return StrokeProperty(
+      colorValue: parsedColor,
+      strokeWidth: width,
+      thinning: (json['thinning'] as num?)?.toDouble() ?? 0.5,
+      smoothing: (json['smoothing'] as num?)?.toDouble() ?? 0.5,
+      streamline: (json['streamline'] as num?)?.toDouble() ?? 0.5,
+      isHighlighter: isHigh,
+      opacity: (json['opacity'] as num?)?.toDouble() ?? (isHigh ? 0.35 : 1.0),
+    );
+  }
 
   StrokeProperty copyWith({
     int? colorValue,

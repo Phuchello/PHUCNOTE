@@ -4,6 +4,7 @@
 
 import 'dart:math';
 import 'dart:ui';
+import 'package:uuid/uuid.dart';
 import 'stroke_point.dart';
 import 'stroke_property.dart';
 
@@ -58,23 +59,43 @@ class StrokeElement {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'type': 'stroke',
+        'type': 'pen',
         'points': points.map((p) => p.toJson()).toList(),
         'property': property.toJson(),
         'createdAt': createdAt.toIso8601String(),
       };
 
-  factory StrokeElement.fromJson(Map<String, dynamic> json) => StrokeElement(
-        id: json['id'] as String? ?? '',
-        points: (json['points'] as List<dynamic>?)
-                ?.map((e) => StrokePoint.fromJson(e as Map<String, dynamic>))
-                .toList() ??
-            [],
-        property: json['property'] != null
-            ? StrokeProperty.fromJson(json['property'] as Map<String, dynamic>)
-            : const StrokeProperty(colorValue: 0xFF1E1E1E),
-        createdAt: json['createdAt'] != null
-            ? DateTime.tryParse(json['createdAt'] as String) ?? DateTime.now()
-            : DateTime.now(),
-      );
+  factory StrokeElement.fromJson(Map<String, dynamic> json) {
+    final rawId = json['id'] as String?;
+    final id = (rawId != null && rawId.isNotEmpty) ? rawId : const Uuid().v4();
+
+    final rawPoints = json['points'] as List<dynamic>? ?? [];
+    final points = <StrokePoint>[];
+    for (final pt in rawPoints) {
+      if (pt is Map<String, dynamic>) {
+        try {
+          points.add(StrokePoint.fromJson(pt));
+        } catch (_) {}
+      }
+    }
+
+    final property = json['property'] != null && json['property'] is Map<String, dynamic>
+        ? StrokeProperty.fromJson(json['property'] as Map<String, dynamic>)
+        : const StrokeProperty(colorValue: 0xFF1E1E1E);
+
+    final rawDate = json['createdAt'];
+    DateTime createdAt = DateTime.now();
+    if (rawDate is String) {
+      createdAt = DateTime.tryParse(rawDate) ?? DateTime.now();
+    } else if (rawDate is int) {
+      createdAt = DateTime.fromMillisecondsSinceEpoch(rawDate);
+    }
+
+    return StrokeElement(
+      id: id,
+      points: points,
+      property: property,
+      createdAt: createdAt,
+    );
+  }
 }

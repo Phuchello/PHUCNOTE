@@ -2,12 +2,15 @@
 // Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
 
+import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../core/models/note_document.dart';
 import '../core/models/stroke_element.dart';
 import '../core/models/stroke_point.dart';
 import '../core/models/stroke_property.dart';
+import 'canvas_action.dart';
 
 enum CanvasTool {
   pen,
@@ -15,8 +18,8 @@ enum CanvasTool {
   eraser,
 }
 
-/// Controller coordinating input events, in-flight strokes, eraser collisions,
-/// and document undo/redo stacks.
+/// Controller coordinating input events, stylus-only gating, active strokes,
+/// eraser collisions, viewport panning, and the full action-history undo/redo engine.
 class CanvasController extends ChangeNotifier {
   NoteDocument _document;
   CanvasTool _tool = CanvasTool.pen;
@@ -27,8 +30,20 @@ class CanvasController extends ChangeNotifier {
   Offset? _eraserPosition;
   final double eraserRadius = 20.0;
 
-  final List<StrokeElement> _undoStack = [];
-  final List<StrokeElement> _redoStack = [];
+  // Action-History Undo / Redo Stacks
+  final List<CanvasAction> _undoStack = [];
+  final List<CanvasAction> _redoStack = [];
+
+  // Temporary buffers during an in-flight eraser gesture
+  final List<StrokeElement> _sessionErasedStrokes = [];
+  final List<int> _sessionErasedIndices = [];
+
+  // Stylus and Palm Rejection Settings
+  bool _stylusOnlyMode = false;
+  bool _isStylusActive = false;
+
+  // Viewport navigation offset
+  Offset _viewportOffset = Offset.zero;
 
   int _repaintCounter = 0;
   bool _isModified = false;
@@ -44,9 +59,12 @@ class CanvasController extends ChangeNotifier {
   List<StrokePoint> get activePoints => List.unmodifiable(_activePoints);
   Offset? get eraserPosition => _eraserPosition;
   int get repaintCounter => _repaintCounter;
-  bool get canUndo => _undoStack.isNotEmpty || _document.strokes.isNotEmpty;
+  bool get canUndo => _undoStack.isNotEmpty;
   bool get canRedo => _redoStack.isNotEmpty;
   bool get isModified => _isModified;
+  bool get stylusOnlyMode => _stylusOnlyMode;
+  bool get isStylusActive => _isStylusActive;
+  Offset get viewportOffset => _viewportOffset;
 
   StrokeProperty get currentProperty => StrokeProperty(
         colorValue: _color.toARGB32(),
@@ -64,6 +82,9 @@ class CanvasController extends ChangeNotifier {
     _eraserPosition = null;
     _undoStack.clear();
     _redoStack.clear();
+    _sessionErasedStrokes.clear();
+    _sessionErasedIndices.clear();
+    _viewportOffset = Offset.zero;
     _repaintCounter++;
     _isModified = false;
     notifyListeners();
@@ -102,21 +123,91 @@ class CanvasController extends ChangeNotifier {
     }
   }
 
+  void setStylusOnlyMode(bool enabled) {
+    if (_stylusOnlyMode != enabled) {
+      _stylusOnlyMode = enabled;
+      notifyListeners();
+    }
+  }
+
+  void panViewport(Offset delta) {
+    _viewportOffset += delta;
+    _repaintCounter++;
+    notifyListeners();
+  }
+
+  void resetViewport() {
+    _viewportOffset = Offset.zero;
+    _repaintCounter++;
+    notifyListeners();
+  }
+
+  /// Evaluates whether an incoming pointer event should be accepted for inking.
+  bool shouldAcceptPointerForInking(PointerEvent event) {
+    final isStylus = event.kind == PointerDeviceKind.stylus ||
+        event.kind == PointerDeviceKind.invertedStylus;
+
+    if (isStylus) {
+      return true;
+    }
+
+    // In stylus-only mode, completely reject touch events from inking
+    if (_stylusOnlyMode && event.kind == PointerDeviceKind.touch) {
+      return false;
+    }
+
+    // Software palm rejection: reject touch if active stylus is down
+    if (_isStylusActive && event.kind == PointerDeviceKind.touch) {
+      return false;
+    }
+
+    // Software palm rejection: reject touch with large contact area
+    if (event.kind == PointerDeviceKind.touch) {
+      if (event.size > 0.5 || (event.radiusMajor > 35 && event.radiusMinor > 25)) {
+        return false;
+      }
+    }
+
+    // Allow mouse (desktop/testing) or standard touch when stylus-only mode is off
+    return true;
+  }
+
+  Offset _canvasCoordinates(Offset localPosition) {
+    return localPosition - _viewportOffset;
+  }
+
   void handlePointerDown(PointerDownEvent event) {
-    final pos = event.localPosition;
+    final isStylus = event.kind == PointerDeviceKind.stylus ||
+        event.kind == PointerDeviceKind.invertedStylus;
+    if (isStylus) {
+      _isStylusActive = true;
+    }
+
+    if (!shouldAcceptPointerForInking(event)) {
+      return;
+    }
+
+    final canvasPos = _canvasCoordinates(event.localPosition);
     final pressure = event.pressure.clamp(0.1, 1.0);
 
-    if (_tool == CanvasTool.eraser) {
-      _eraserPosition = pos;
-      _eraseAt(pos);
+    // If stylus inverted tip is used, temporarily behave as eraser
+    final effectiveTool = (event.kind == PointerDeviceKind.invertedStylus)
+        ? CanvasTool.eraser
+        : _tool;
+
+    if (effectiveTool == CanvasTool.eraser) {
+      _sessionErasedStrokes.clear();
+      _sessionErasedIndices.clear();
+      _eraserPosition = canvasPos;
+      _eraseAt(canvasPos);
       notifyListeners();
       return;
     }
 
     _activePoints.clear();
     _activePoints.add(StrokePoint(
-      x: pos.dx,
-      y: pos.dy,
+      x: canvasPos.dx,
+      y: canvasPos.dy,
       pressure: pressure,
       tilt: event.tilt,
     ));
@@ -124,20 +215,28 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerMove(PointerMoveEvent event) {
-    final pos = event.localPosition;
+    if (!shouldAcceptPointerForInking(event)) {
+      return;
+    }
+
+    final canvasPos = _canvasCoordinates(event.localPosition);
     final pressure = event.pressure.clamp(0.1, 1.0);
 
-    if (_tool == CanvasTool.eraser) {
-      _eraserPosition = pos;
-      _eraseAt(pos);
+    final effectiveTool = (event.kind == PointerDeviceKind.invertedStylus)
+        ? CanvasTool.eraser
+        : _tool;
+
+    if (effectiveTool == CanvasTool.eraser) {
+      _eraserPosition = canvasPos;
+      _eraseAt(canvasPos);
       notifyListeners();
       return;
     }
 
     if (_activePoints.isNotEmpty) {
       _activePoints.add(StrokePoint(
-        x: pos.dx,
-        y: pos.dy,
+        x: canvasPos.dx,
+        y: canvasPos.dy,
         pressure: pressure,
         tilt: event.tilt,
       ));
@@ -146,20 +245,47 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerUp(PointerUpEvent event) {
-    if (_tool == CanvasTool.eraser) {
+    final isStylus = event.kind == PointerDeviceKind.stylus ||
+        event.kind == PointerDeviceKind.invertedStylus;
+    if (isStylus) {
+      _isStylusActive = false;
+    }
+
+    if (!shouldAcceptPointerForInking(event)) {
+      return;
+    }
+
+    final effectiveTool = (event.kind == PointerDeviceKind.invertedStylus)
+        ? CanvasTool.eraser
+        : _tool;
+
+    if (effectiveTool == CanvasTool.eraser) {
       _eraserPosition = null;
+      if (_sessionErasedStrokes.isNotEmpty) {
+        final action = EraseStrokesAction(
+          erasedStrokes: List.from(_sessionErasedStrokes),
+          originalIndices: List.from(_sessionErasedIndices),
+        );
+        _undoStack.add(action);
+        _redoStack.clear();
+        _sessionErasedStrokes.clear();
+        _sessionErasedIndices.clear();
+        _isModified = true;
+        _repaintCounter++;
+      }
       notifyListeners();
       return;
     }
 
-    if (_activePoints.length >= 2 || _activePoints.length == 1) {
+    if (_activePoints.isNotEmpty) {
       final stroke = StrokeElement(
         id: const Uuid().v4(),
         points: List.of(_activePoints),
         property: currentProperty,
       );
-      _document.addStroke(stroke);
-      _undoStack.add(stroke);
+      final action = AddStrokeAction(stroke);
+      action.execute(_document);
+      _undoStack.add(action);
       _redoStack.clear();
       _isModified = true;
       _repaintCounter++;
@@ -170,52 +296,70 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerCancel(PointerCancelEvent event) {
+    _isStylusActive = false;
     _activePoints.clear();
     _eraserPosition = null;
+    _sessionErasedStrokes.clear();
+    _sessionErasedIndices.clear();
     notifyListeners();
   }
 
   void _eraseAt(Offset pos) {
-    final toRemove = <StrokeElement>[];
-    for (final stroke in _document.strokes) {
+    final newlyErased = <StrokeElement>[];
+    final newlyErasedIndices = <int>[];
+
+    for (int i = _document.strokes.length - 1; i >= 0; i--) {
+      final stroke = _document.strokes[i];
       if (stroke.hitTest(pos, eraserRadius)) {
-        toRemove.add(stroke);
+        newlyErased.add(stroke);
+        newlyErasedIndices.add(i);
       }
     }
 
-    if (toRemove.isNotEmpty) {
-      for (final s in toRemove) {
+    if (newlyErased.isNotEmpty) {
+      for (int i = 0; i < newlyErased.length; i++) {
+        final s = newlyErased[i];
+        final originalIdx = newlyErasedIndices[i];
         _document.removeStroke(s);
+        _sessionErasedStrokes.add(s);
+        _sessionErasedIndices.add(originalIdx);
       }
       _isModified = true;
       _repaintCounter++;
     }
   }
 
+  /// Undoes the last action in the action-history stack.
   void undo() {
-    if (_document.strokes.isNotEmpty) {
-      final lastStroke = _document.strokes.removeLast();
-      _redoStack.add(lastStroke);
+    if (_undoStack.isNotEmpty) {
+      final action = _undoStack.removeLast();
+      action.undo(_document);
+      _redoStack.add(action);
       _isModified = true;
       _repaintCounter++;
       notifyListeners();
     }
   }
 
+  /// Redoes the last reverted action from the redo stack.
   void redo() {
     if (_redoStack.isNotEmpty) {
-      final stroke = _redoStack.removeLast();
-      _document.addStroke(stroke);
+      final action = _redoStack.removeLast();
+      action.redo(_document);
+      _undoStack.add(action);
       _isModified = true;
       _repaintCounter++;
       notifyListeners();
     }
   }
 
+  /// Clears all strokes on the canvas and logs a ClearCanvasAction to undo stack.
   void clearCanvas() {
     if (_document.strokes.isNotEmpty) {
-      _redoStack.addAll(_document.strokes.reversed);
-      _document.clearStrokes();
+      final action = ClearCanvasAction(_document.strokes);
+      action.execute(_document);
+      _undoStack.add(action);
+      _redoStack.clear();
       _isModified = true;
       _repaintCounter++;
       notifyListeners();

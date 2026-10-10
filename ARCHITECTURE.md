@@ -120,64 +120,58 @@ The development host is a **Lenovo ThinkPad X250** running Ubuntu Linux:
 
 ## 4. Subsystem Design Specifications
 
-### 4.1 Inking & Latency Pipeline
-- **Foreground Fast Path:** Ongoing strokes are gathered in `PenHandler` and immediately pushed to `ForegroundPainter`. They bypass the main canvas tree and render directly to the active hardware-accelerated Skia/Impeller canvas.
+### 4.1 Drawing Engine & Latency Pipeline
+- **Implementation Status:** The drawing engine in PHUCNOTE is an independent, lightweight custom Flutter implementation that faithfully replicates Linwood Butterfly's inking mathematics by utilizing `perfect_freehand` (the same core smoothing algorithm used by Butterfly's `PenRenderer`) paired with quadratic Bezier interpolation (`StrokeGeometry`), rather than importing Butterfly's complex `Renderer`/`TransformCubit`/`Bloc` monorepo components directly.
+- **Dual-Layer Architecture:**
+  - **Foreground In-Flight Layer (`PhucNoteForegroundPainter`):** Ongoing strokes are captured directly via `Listener` pointer events and rendered into a dynamic `RepaintBoundary` with `willChange: true` at display refresh rates (120–165Hz).
+  - **Committed View Layer (`PhucNoteViewPainter`):** Completed strokes and paper background patterns are painted into an isolated `RepaintBoundary` with `isComplex: true` (raster caching), ensuring zero repaint overhead during steady state.
 - **Smoothing & Outline Construction:**
-  - Points are collected as `PathPoint(x, y, pressure, tilt)`.
-  - Fed into `freehand.getStroke()` with `streamline` (0.45) and `smoothing` (0.55) to eliminate hand tremor while maintaining sharp corners.
-  - Outlines are joined with quadratic Bezier curves and filled with `Paint(isAntiAlias: true)`.
-- **Viewport Baking:** Once the stylus lifts (`onPointerUp`), after a debounce timer, strokes are baked into an off-screen bitmap tile (`cameraViewport.image`). During subsequent panning or zooming, only the lightweight raster tile is transformed until high-res settling occurs.
+  - Digitized points are collected as `StrokePoint(x, y, pressure, tilt)`.
+  - Passed to `freehand.getStroke()` with `streamline` (0.40) and `smoothing` (0.55) to eliminate tremor while maintaining sharp vertex definition.
+  - Outlines are transformed into smooth vector paths via quadratic Bezier interpolation (`quadraticBezierTo`) and rendered with anti-aliasing.
 
-### 4.2 Stylus & Palm Rejection (Lenovo AP501U Empirical Evaluation)
-- Stylus capabilities are verified empirically via Android `MotionEvent` and Flutter `PointerEvent` logging on physical hardware:
-  - Pressure reporting: Dynamic normalization using `event.pressure` / `event.pressureMin` / `event.pressureMax` rather than hardcoding assumed 4096 levels.
-  - Barrel buttons: Inspected dynamically via `event.buttons` bitmask (`kSecondaryMouseButton`, etc.) with fallback if unmapped by driver.
-  - Hover detection: Monitored via `onPointerHover` when stylus tip is within digitizer range.
-  - Palm rejection: Enforced at the gesture layer when `PointerDeviceKind.stylus` is active:
-- **Rejection Logic:**
-  ```dart
-  if (penOnlyInputActive && event.kind == PointerDeviceKind.touch) {
-    if (activePointerCount == 1) {
-      // Discard single-finger touch as palm contact
-      return;
-    }
-  }
-  ```
-  Two-finger touches are recognized by the gesture recognizer as navigation events (`TransformCubit.moveConstrained` and `zoomConstrained`).
+### 4.2 Stylus Input & Software Palm Rejection
+- **Framework-Level Discrimination:**
+  - Pointer events are inspected dynamically for `PointerDeviceKind.stylus` and `PointerDeviceKind.invertedStylus`.
+  - Inverted stylus tips automatically route to the stroke eraser.
+- **Configurable Stylus-Only Inking Mode:**
+  - When enabled, `PointerDeviceKind.touch` events are strictly gated away from the inking engine and dedicated exclusively to smooth viewport panning.
+  - When disabled, standard touch events are permitted to ink.
+- **Software Palm Rejection Heuristics:**
+  - Active stylus contact rejection: If a stylus is actively in contact with the screen (`_isStylusActive == true`), incoming touch events are rejected.
+  - Contact area gating: Touch events exhibiting abnormal contact area (`event.size > 0.5` or `event.radiusMajor > 35 && event.radiusMinor > 25`) are rejected.
+- **Hardware Disclaimer:** Software-level palm rejection is verified via automated widget and pointer tests. True hardware-level palm rejection and digitizer latency on the Lenovo Legion Y700 Gen 4 (Snapdragon 8 Elite) paired with the Lenovo AP501U active stylus cannot be claimed as verified without physical on-device empirical testing.
 
-### 4.3 Canvas Modes Architecture
-1. **Infinite 2D Canvas:** Utilizes Butterfly's native `CameraTransform` coordinate space ($[x, y, \text{scale}, \text{rotation}]$).
+### 4.3 Action-History Undo / Redo Engine
+- Replaces simplistic last-stroke popping with a complete Command/Action pattern (`CanvasAction`):
+  - `AddStrokeAction`: Commits ink stroke; undo removes stroke; redo re-adds stroke.
+  - `EraseStrokesAction`: Erases strokes and records their exact original indices; undo restores strokes back to their original z-order; redo re-erases them.
+  - `ClearCanvasAction`: Clears canvas; undo restores all previous strokes; redo re-clears canvas.
+- Maintains dedicated `_undoStack` and `_redoStack`, with new user mutations automatically clearing the redo stack.
+
+### 4.4 Canvas Modes Architecture
+1. **Infinite 2D Canvas:** Utilizes Butterfly-compatible coordinate space ($[x, y]$ translation).
 2. **Infinite Vertical Paper:**
    - Pages are stacked sequentially along the $Y$ axis: $\text{Page}_n.y = \text{Page}_{n-1}.y + \text{PageHeight} + \text{Margin}$.
    - Horizontal scrolling is constrained to the paper width, providing a stable, notebook-like column.
-   - Touching near the bottom boundary triggers dynamic page expansion.
 3. **Standard A4 Notebook Mode:**
    - Viewport is constrained to an A4 ratio ($1 : \sqrt{2}$).
    - Paging navigation transitions between discrete pages with thumbnail index previews.
 
-### 4.4 Floating Video Study Workflow
-- Implemented as a top-level overlay in the editor `Stack`:
-  ```dart
-  Stack(
-    children: [
-      ViewportCanvas(),       // Drawing canvas
-      FloatingVideoWidget(),  // Draggable picture-in-picture video
-      FloatingToolbar(),      // Collapsible pen palette
-    ],
-  )
-  ```
-- Uses a `GestureDetector` with `HitTestBehavior.translucent` bounded strictly to the video pill. Stylus touches outside the video pill fall through cleanly to the canvas.
-- Supports local video files (`video_player`) and YouTube / lecture streams.
-
-### 4.5 Storage Engine & File Format
-- File extension: `.bfly` (standard ZIP package).
-- Internal hierarchy:
-  - `meta.json`: Document name, created/updated timestamps, version header (`fileVersion: 2`).
-  - `info.json`: Document preferences, thumbnail metadata, paper type.
-  - `thumbnail.png`: 512×512 preview image.
-  - `pages/0.page.json`, `pages/1.page.json`: Layer hierarchy and vector stroke arrays.
-  - `assets/` (`images/`, `pdf/`, `textures/`): Stored by SHA-512 content hash to deduplicate binary assets.
-- Persistence is handled by `DocumentSaveCubit` wrapping all writes in a mutex `savingLock.synchronized()` to prevent corruption.
+### 4.5 Storage Engine & File Format Compatibility
+- **Archive Format:** `.bfly` (ZIP container) conforming to Linwood Butterfly v2.6.0 specification:
+  - `META-INF/butterfly.json`: Metadata (`version: 2.6.0`, `fileVersion: 13`, `type: document`, `generator: PHUCNOTE`).
+  - `META-INF/phucnote.json`: PHUCNOTE specific metadata.
+  - `BFLY/info.json`: Document preferences, title, version, timestamps, paper template.
+  - `BFLY/pages/0.Main.json`: Page layer hierarchy (`layers` -> `content`), `elements`, and vector stroke arrays.
+- **Text & Legacy Format Support:** Full import interoperability with `.tbfly` and legacy single-file JSON `.bfly` documents, verified against actual upstream fixtures (`document_v1.bfly` and `study.tbfly`).
+- **Atomic File Writes & Crash Recovery:**
+  - All file saves are written to a temporary file (`.tmp_<timestamp>`) and flushed to disk before an atomic rename over the destination.
+  - Previous file versions are preserved as `.bak` backup copies, allowing seamless automatic recovery if primary files are truncated or corrupted.
+- **Reliable Autosave & Switch Guards:**
+  - Automatic debounced autosave (1500ms inactivity timer).
+  - Immediate lifecycle autosave flush upon `AppLifecycleState.paused`, `inactive`, or `detached`.
+  - Unsaved modification warning dialogs and auto-save guards when creating new notes, switching documents, or exiting.
 
 ### 4.6 PHUC AI — Learning Assistant Extension Architecture
 

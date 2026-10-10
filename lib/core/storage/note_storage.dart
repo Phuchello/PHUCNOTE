@@ -7,11 +7,23 @@ import 'package:path_provider/path_provider.dart';
 import '../models/note_document.dart';
 import 'bfly_serializer.dart';
 
-/// Manages local persistent file storage for PhucNote documents.
+/// Manages local persistent file storage for PhucNote documents,
+/// implementing atomic writes, crash recovery, and directory isolation.
 class NoteStorage {
   static const String notesDirectoryName = 'phucnote_notes';
+  final Directory? customRootDirectory;
 
+  NoteStorage({this.customRootDirectory});
+
+  /// Resolves the storage directory for notes.
   Future<Directory> getNotesDirectory() async {
+    if (customRootDirectory != null) {
+      if (!await customRootDirectory!.exists()) {
+        await customRootDirectory!.create(recursive: true);
+      }
+      return customRootDirectory!;
+    }
+
     final appDir = await getApplicationDocumentsDirectory();
     final notesDir = Directory('${appDir.path}/$notesDirectoryName');
     if (!await notesDir.exists()) {
@@ -29,30 +41,75 @@ class NoteStorage {
     return files;
   }
 
-  /// Saves a document as a `.bfly` file in the notes directory.
+  /// Saves a document atomically as a `.bfly` file.
+  ///
+  /// Guarantees that:
+  /// 1. Data is written and flushed to a temporary file in the same directory.
+  /// 2. If the write fails or is interrupted, the original file is never corrupted or truncated.
+  /// 3. The temporary file is atomically renamed to the target filename.
+  /// 4. An optional `.bak` backup of the previous version is kept for disaster recovery.
   Future<File> saveNote(NoteDocument document) async {
     final dir = await getNotesDirectory();
     final sanitizedTitle = document.title
         .replaceAll(RegExp(r'[\\/:*?"<>|]'), '_')
         .trim();
     final filename = '${sanitizedTitle}_${document.id.substring(0, 8)}.bfly';
-    final file = File('${dir.path}/$filename');
+    final targetFile = File('${dir.path}/$filename');
+    final tmpFile = File('${targetFile.path}.tmp_${DateTime.now().microsecondsSinceEpoch}');
 
-    final bytes = BflySerializer.encode(document);
-    await file.writeAsBytes(bytes, flush: true);
-    return file;
+    try {
+      final bytes = BflySerializer.encode(document);
+      // Flush bytes to ensure all buffers are written to the physical block device
+      await tmpFile.writeAsBytes(bytes, flush: true);
+
+      // Create backup of existing file if it exists
+      if (await targetFile.exists()) {
+        final bakFile = File('${targetFile.path}.bak');
+        await targetFile.copy(bakFile.path);
+      }
+
+      // Atomic rename/move over the destination
+      await tmpFile.rename(targetFile.path);
+      return targetFile;
+    } catch (e) {
+      // Clean up temporary file so no half-written or orphaned files remain
+      if (await tmpFile.exists()) {
+        try {
+          await tmpFile.delete();
+        } catch (_) {}
+      }
+      rethrow;
+    }
   }
 
-  /// Loads a document from a given `.bfly` file.
+  /// Loads a document from a given `.bfly` file with automatic fallback recovery.
   Future<NoteDocument> loadNote(File file) async {
-    final bytes = await file.readAsBytes();
-    return BflySerializer.decode(bytes);
+    try {
+      final bytes = await file.readAsBytes();
+      return BflySerializer.decode(bytes);
+    } catch (primaryError) {
+      // Attempt recovery from .bak file if available
+      final bakFile = File('${file.path}.bak');
+      if (await bakFile.exists()) {
+        try {
+          final bakBytes = await bakFile.readAsBytes();
+          return BflySerializer.decode(bakBytes);
+        } catch (_) {
+          // If backup also fails, throw primary error
+        }
+      }
+      rethrow;
+    }
   }
 
-  /// Deletes a saved note file.
+  /// Deletes a saved note file and its corresponding backup.
   Future<void> deleteNote(File file) async {
     if (await file.exists()) {
       await file.delete();
+    }
+    final bakFile = File('${file.path}.bak');
+    if (await bakFile.exists()) {
+      await bakFile.delete();
     }
   }
 }

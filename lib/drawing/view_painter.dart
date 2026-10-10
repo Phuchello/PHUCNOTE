@@ -13,26 +13,33 @@ class PhucNoteViewPainter extends CustomPainter {
   final NoteDocument document;
   final Color backgroundColor;
   final int repaintCounter;
+  final Offset viewportOffset;
 
   PhucNoteViewPainter({
     required this.document,
     required this.backgroundColor,
     required this.repaintCounter,
+    this.viewportOffset = Offset.zero,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Draw paper background color
+    // 1. Draw paper background color across the visible viewport
     final bgPaint = Paint()..color = backgroundColor;
     canvas.drawRect(Offset.zero & size, bgPaint);
 
-    // 2. Draw paper template pattern
+    canvas.save();
+    canvas.translate(viewportOffset.dx, viewportOffset.dy);
+
+    // 2. Draw paper template pattern relative to canvas coordinates
     _drawPaperPattern(canvas, size);
 
     // 3. Draw all committed strokes
     for (final stroke in document.strokes) {
       _drawStroke(canvas, stroke);
     }
+
+    canvas.restore();
   }
 
   void _drawPaperPattern(Canvas canvas, Size size) {
@@ -40,30 +47,36 @@ class PhucNoteViewPainter extends CustomPainter {
       ..color = Colors.blueGrey.withValues(alpha: 0.18)
       ..strokeWidth = 1.0;
 
+    // Extend pattern beyond viewport size to support smooth panning
+    final canvasWidth = size.width + 4000.0;
+    final canvasHeight = size.height + 8000.0;
+    final startX = -2000.0;
+    final startY = -2000.0;
+
     switch (document.paperTemplate) {
       case PaperTemplate.blank:
         break;
 
       case PaperTemplate.ruled:
         const lineHeight = 36.0;
-        final topMargin = 50.0;
-        for (double y = topMargin; y < size.height; y += lineHeight) {
-          canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
+        const topMargin = 50.0;
+        for (double y = topMargin; y < canvasHeight; y += lineHeight) {
+          canvas.drawLine(Offset(startX, y), Offset(canvasWidth, y), linePaint);
         }
         // Red vertical margin rule
         final marginPaint = Paint()
           ..color = Colors.red.withValues(alpha: 0.20)
           ..strokeWidth = 1.2;
-        canvas.drawLine(const Offset(64, 0), Offset(64, size.height), marginPaint);
+        canvas.drawLine(Offset(64, startY), Offset(64, canvasHeight), marginPaint);
         break;
 
       case PaperTemplate.grid:
         const gridSize = 28.0;
-        for (double x = 0; x < size.width; x += gridSize) {
-          canvas.drawLine(Offset(x, 0), Offset(x, size.height), linePaint);
+        for (double x = startX; x < canvasWidth; x += gridSize) {
+          canvas.drawLine(Offset(x, startY), Offset(x, canvasHeight), linePaint);
         }
-        for (double y = 0; y < size.height; y += gridSize) {
-          canvas.drawLine(Offset(0, y), Offset(size.width, y), linePaint);
+        for (double y = startY; y < canvasHeight; y += gridSize) {
+          canvas.drawLine(Offset(startX, y), Offset(canvasWidth, y), linePaint);
         }
         break;
     }
@@ -86,6 +99,7 @@ class PhucNoteViewPainter extends CustomPainter {
   bool shouldRepaint(PhucNoteViewPainter oldDelegate) {
     return oldDelegate.repaintCounter != repaintCounter ||
         oldDelegate.document != document ||
-        oldDelegate.backgroundColor != backgroundColor;
+        oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.viewportOffset != viewportOffset;
   }
 }
