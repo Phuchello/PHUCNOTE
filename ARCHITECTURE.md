@@ -263,3 +263,142 @@ Following an empirical investigation into Google's services:
 - **Collapsible Side Panel:** Docks smoothly along the right edge (or left for left-handed writers) with 30/70 and 50/50 split ratios.
 - **Coexistence with Floating Video:** In lecture study mode, the floating video player, canvas, and AI chat panel occupy non-overlapping layout zones in landscape orientation.
 
+### 4.7 PHUC ORGANIZER — Academic & Research Workspace Architecture
+
+The Organizer module is an offline-first academic management subsystem (`lib/features/organizer`) built directly on top of the filesystem and `.bfly` archives without altering core note binary formats.
+
+```mermaid
+flowchart TD
+    subgraph Storage_Hierarchy["Filesystem & Metadata Layer"]
+        W[Workspaces Directory] --> AY[Academic Years]
+        AY --> S[Semesters\nActive / Archived]
+        S --> C[Course Directories]
+        C --> NB[.bfly Notebook Packages]
+        C --> DOCS[Course PDFs / Lab Slides]
+        RWS[Research Workspace] --> PAPERS[Research PDFs & BibTeX Cards]
+    end
+
+    subgraph Metadata_DB["Local SQLite Index (academic_catalog.db)"]
+        IDX1[FTS5 Global Full-Text Search]
+        IDX2[Tag Registry & Color Index]
+        IDX3[BibTeX / DOI & Citation Graph]
+        IDX4[Trash Soft-Delete Table (30 Days)]
+    end
+
+    subgraph Smart_Classifier["Smart Ingestion & Classification Pipeline"]
+        INP[Imported File / Dropped PDF] --> HEUR[Filename & Keyword Heuristic Engine]
+        INP --> PDF_PARSER[First-Page Text & Title Extractor]
+        HEUR --> SUGGEST[Target Course & Folder Suggestion]
+        PDF_PARSER --> SUGGEST
+        SUGGEST --> MODAL[Interactive User Confirmation Dialog]
+        MODAL -->|Confirmed / Overridden| ROUTER[Atomic File Relocation]
+    end
+
+    Storage_Hierarchy <--> Metadata_DB
+    ROUTER --> Storage_Hierarchy
+```
+
+#### 4.7.1 Hierarchical Academic Schema
+- Organizes notes according to academic reality:
+  $$\text{Workspace} \longrightarrow \text{Academic Year} \longrightarrow \text{Semester} \longrightarrow \text{Course} \longrightarrow \text{Notebooks} / \text{PDFs}$$
+- Document `.bfly` packages remain self-contained. The taxonomy is indexed via a lightweight local SQLite database (`academic_catalog.db`) with zero remote network calls.
+- **Semester Archiving:** Marking a semester as archived sets a read-only flag in the database and collapses the folder tree, keeping all search indices intact while decluttering the active dashboard.
+- **Soft Deletion:** Deleting a document moves it to `.trash/` with a timestamp record in `academic_catalog.db`. A daily cron prune clears items older than 30 days.
+
+#### 4.7.2 Smart Classification Pipeline
+- When external course materials or PDFs are imported into PhucNote:
+  1. **Filename Tokenizer:** Regex extracts course codes (e.g. `CS301`, `EE200`), lecture indicators (`Lec04`, `Week_3`), and topic keywords.
+  2. **First-Page PDF Extractor:** Uses `pdfrx` text stream loader to parse title strings and author headers from the first 500 tokens of the document.
+  3. **Suggestion Engine:** Matches tokens against existing courses and folders.
+  4. **Confirmation Gate:** An interactive dialog displays: *"Classify into: Semester 1 > Computer Networks > Lecture Notes? [Confirm] [Choose Another]"*. No file is moved without student approval.
+
+#### 4.7.3 Research Workspace & Bibliographic Engine
+- Designed for academic paper reading, thesis writing, and literature reviews.
+- **Paper Metadata Model:** Extracts and stores DOI, arXiv ID, authors, publication year, venue, abstract, and BibTeX citation keys.
+- **Bidirectional Links:** Allows students to write literature review notes with hyperlinks pointing directly to PDF coordinates:
+  `phucnote://research/{paper_id}?page=4&bbox=120,340,500,420`
+- **Citation Exporter:** Exports bibliography references directly to IEEE, ACM, and APA formatted text.
+
+---
+
+### 4.8 PHUC TRANSLATE — Scientific & Academic Translation Architecture
+
+Phuc Translate is an in-situ translation subsystem (`lib/features/translate`) designed to preserve scientific rigor when reading English academic PDFs in Vietnamese.
+
+```mermaid
+flowchart TD
+    subgraph Input_Selection["Stylus & Document Selection"]
+        P1[AP501U Stylus Text Drag / Paragraph Highlight]
+        P2[Text Stream Extraction via pdfrx / Canvas Text]
+    end
+
+    subgraph Sanitizer["Scientific Integrity Masking Engine"]
+        P2 --> MASK[Formula, Citation & Notation Masker]
+        MASK --> M_TEXT[Sanitized Text with Protected Placeholders]
+        MASK --> P_TOKENS[Placeholder Map\n__MATH_0__, __CITE_1__, __UNIT_2__]
+    end
+
+    subgraph Translation_Engine["Provider-Independent Translation Pipeline"]
+        M_TEXT --> ROUTE{Provider Selector}
+        ROUTE -->|Offline Default| MLKIT[Google ML Kit On-Device Translation\nEN <-> VI Models]
+        ROUTE -->|Optional Cloud| GEMINI[Gemini 1.5/2.0 Academic Translation\nContext-Aware Prompt]
+        MLKIT --> GLOSS[Scientific Terminology Glossary Enforcer]
+        GEMINI --> GLOSS
+        GLOSS --> UNMASK[Placeholder Restoration Engine]
+        P_TOKENS --> UNMASK
+    end
+
+    subgraph Output_Presentation["Bilingual UI Presentation"]
+        UNMASK --> OUT1[Side-by-Side Split View / Interlinear Cards]
+        UNMASK --> OUT2[Floating Translation Popover]
+        OUT1 --> ACTION[1-Tap 'Save to Margin Note / Canvas']
+        OUT2 --> ACTION
+        OUT1 --> BRIDGE[Bridge to Phuc AI 'Explain in Detail']
+    end
+```
+
+#### 4.8.1 Scientific Integrity Protection (Masking & Restoration)
+Standard translation engines corrupt scientific papers by altering mathematical variables, translating acronyms literally, and translating citation numbers. Phuc Translate uses a pre-translation masking regex pipeline:
+1. **Mathematical Equations & Notation:** Protects inline and block LaTeX patterns ($x_i, \nabla f(x), \mathbb{E}[X]$) as `__MATH_n__`.
+2. **Citations & References:** Protects citation brackets (`[1]`, `[12-15]`, `(Smith et al., 2024)`) as `__CITE_n__`.
+3. **DOIs & URLs:** Protects identifiers (`10.1109/...`) as `__DOI_n__`.
+4. **Physical Units & Constants:** Protects SI units (`GHz`, `ms`, `$\mu$s`, `Mbps`, `V/m`) from inappropriate localization.
+5. Following translation, the `Placeholder Restoration Engine` restores the exact original scientific strings into the translated Vietnamese text.
+
+#### 4.8.2 Dual Translation Providers
+- **On-Device Offline Engine (Primary):** `google_mlkit_translation` provides local on-device translation models (~30MB for EN-VI). Translates within 300-600ms with zero network access and complete privacy.
+- **Optional Academic Cloud Engine:** Powered by Google Gemini API using BYOK credentials. Invokes a specialized system prompt for complex scientific passages:
+  *"Translate the following academic computer science text into professional academic Vietnamese. Strictly preserve all placeholders and mathematical formatting."*
+
+#### 4.8.3 Local Scientific Glossary
+- Stored locally in SQLite (`glossary.db`).
+- Preloaded with vetted engineering and computer science dictionaries:
+  - *Computer Networks:* Throughput $\to$ Thông lượng, Round-trip time $\to$ Thời gian khứ hồi, Latency $\to$ Độ trễ.
+  - *Operating Systems:* Thread $\to$ Tuyến trình, Deadlock $\to$ Khóa chết, Page fault $\to$ Lỗi trang.
+  - *Digital Twin & AI:* Digital Twin $\to$ Bản sao kỹ thuật số, Ground truth $\to$ Dữ liệu thực tế kiểm chứng.
+- Allows students to add, edit, or override glossary terms on-the-fly.
+
+#### 4.8.4 Technical Evaluation of Android MediaProjection
+- **Purpose:** Optional floating translation overlay outside PhucNote (translating screen content from external PDF viewers or browsers).
+- **Android Architecture Requirements:**
+  1. `MediaProjectionManager.createScreenCaptureIntent()` prompts the system-level user consent dialog.
+  2. Requires Android 14+ `FOREGROUND_SERVICE_MEDIA_PROJECTION` declared with an ongoing user notification.
+  3. Screen buffer processed in memory using Google ML Kit Text Recognition (OCR) followed by ML Kit Translation.
+- **Privacy & Security Constraints:**
+  - **`FLAG_SECURE` Respect:** The OS automatically masks protected banking, password, and DRM windows as black rectangles.
+  - **Zero Frame Persistence:** Screen frames are processed strictly in RAM and discarded immediately after OCR. Zero video recording or streaming.
+  - **Explicit User Control:** The floating capture button requires explicit student activation per translation query. Unrestricted background recording is prohibited.
+
+---
+
+### 4.9 Hardware Harmony & Multi-Tasking UX (Lenovo Legion Y700 Gen 4)
+
+The 8.8" 16:10 display (2560×1600) on the Legion Y700 requires disciplined screen-space management when multitasking:
+
+| Active Modes | Screen Allocation Strategy | Stylus Ergonomics |
+| :--- | :--- | :--- |
+| **PDF Reading + Note Writing** | Vertical 50/50 split (PDF on left, PhucNote canvas on right) | Stylus writes freely on canvas; tap text on PDF to translate. |
+| **Lecture Video + Notes + Translate** | Video player floating in top corner (16:9); note canvas occupying remaining area; translation popup appearing as non-intrusive bottom sheet. | Stylus inking maintains full 144Hz priority; floating video touches do not capture canvas pen input. |
+| **PDF Reading + AI Chat Panel** | 70% PDF reading view; 30% collapsible Phuc AI side panel docked right. | Seamlessly drag translated text or lassoed handwriting directly into AI prompt box. |
+
+

@@ -64,7 +64,29 @@
 - [ ] Test autosave resilience against crash, kill, and low-memory scenarios.
 - [ ] Verify 100% offline functionality without network dependencies.
 
-## Phase 5 — PHUC AI Learning Assistant Extension (Post-Core Validation)
+## Phase 5 — Academic Modules: PHUC ORGANIZER & PHUC TRANSLATE
+- [x] Design offline academic hierarchy schema and metadata specification (`academic_catalog.db`).
+- [x] Design smart classification pipeline (filename heuristics & first-page PDF extraction).
+- [x] Design scientific integrity protection rules (formula, LaTeX, and citation masking).
+- [x] Audit Google ML Kit on-device translation and domain glossary architecture.
+- [x] Evaluate Android MediaProjection technical requirements and privacy guardrails.
+- [ ] Create `lib/features/organizer` module boundary and SQLite catalog schema.
+- [ ] Implement Workspace, Academic Year, Semester, and Course hierarchy views.
+- [ ] Implement multi-tagging and color-tagging registry with tag filter chips.
+- [ ] Implement Global FTS5 search across note titles, tags, and indexed PDF text (< 100ms latency).
+- [ ] Implement Semester Archiving (read-only freeze) and Soft Delete (30-day trash bin).
+- [ ] Build Smart Classification ingestion engine with interactive confirmation routing dialog.
+- [ ] Build Research Workspace with BibTeX metadata cards, DOI indexing, and PDF coordinate deep-links.
+- [ ] Create `lib/features/translate` module boundary and `TranslationProvider` abstraction.
+- [ ] Implement stylus highlight selection on canvas text and `pdfrx` PDF text streams.
+- [ ] Implement Scientific Integrity Sanitizer (protecting `$math$`, `[citations]`, units, DOIs).
+- [ ] Integrate Google ML Kit on-device translation (`google_mlkit_translation`, 100% offline).
+- [ ] Integrate optional Gemini academic translation provider with BYOK KeyStore credentials.
+- [ ] Implement local SQLite scientific glossary editor (Networking, OS, Algorithms, DB, AI, Digital Twin).
+- [ ] Build bilingual UI modes: side-by-side split view, interlinear cards, and 1-tap margin export.
+- [ ] Build sandboxed Android MediaProjection screen translation service with system permission gating.
+
+## Phase 6 — PHUC AI Learning Assistant Extension (Post-Validation)
 - [x] Investigate and document official Gemini Notebook / NotebookLM API capabilities and constraints (`PRODUCT_REQUIREMENTS.md`, `ARCHITECTURE.md`).
 - [ ] Create decoupled module structure (`lib/features/phuc_ai`).
 - [ ] Implement BYOK (Bring Your Own Key) secure storage via `flutter_secure_storage` with Android KeyStore backing.
@@ -76,4 +98,5 @@
 - [ ] Build 1-tap "Export to NotebookLM" course bridge and optional Gemini Notebook Enterprise adapter.
 - [ ] Implement prominent User Consent Dialog and payload inspection before network transmission.
 - [ ] Verify zero latency impact on 144Hz background inking thread during active AI streaming.
+
 

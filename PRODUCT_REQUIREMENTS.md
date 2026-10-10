@@ -126,12 +126,74 @@ PhucNote is built to deliver a premium, distraction-free digital paper experienc
   - Compatible with the floating video study overlay: the AI chat panel and video player can dock side-by-side or stack ergonomically in both landscape and portrait orientations on the 8.8" tablet.
 - **FR-AI-12 (Staged Rollout Constraint):** AI features must remain decoupled and will only be activated after the core inking engine, palm rejection, and `.bfly` file safety pass physical validation on the Legion Y700.
 
+### 3.8 PHUC ORGANIZER — Academic & Research Workspace Management
+- **FR-ORG-01 (Unlimited Academic Workspaces):** Isolated top-level environments (e.g., "Undergraduate Studies", "Grad School / Lab", "Personal Notes") with independent storage trees and tag taxonomies.
+- **FR-ORG-02 (Academic Calendar Hierarchy):** Structured academic calendar hierarchy: `Workspace > Academic Year > Semester > Course > Notebook > Page`. Supports standard terms (Fall, Spring, Summer) and custom flexible terms.
+- **FR-ORG-03 (Course-Based Notebooks):** Dedicated home notebook per course, organizing syllabus tracking, lecture slides, lab notes, and exam reviews in structured sections.
+- **FR-ORG-04 (Nested Folders & Subfolders):** Arbitrary-depth folder nesting within courses (e.g., `Lectures / Week 03 / Lab Exercises`).
+- **FR-ORG-05 (Multi-Tagging & Color Coding):** Multiple customizable tags per notebook and page (e.g., `#exam-prep`, `#midterm`, `#needs-review`, `#lab3`) with color tagging for fast visual filtering.
+- **FR-ORG-06 (Course-Specific Academic Dashboard):**
+  - Course overview showing upcoming milestones, syllabus notes, pinned references, and recent lecture note cards.
+  - 1-tap quick action to "New Lecture Note" inheriting course templates and styling.
+- **FR-ORG-07 (Global Multi-Attribute Search):**
+  - Instant search across all notebooks within a workspace.
+  - Queries search notebook titles, tags, typed text elements, metadata, and extracted PDF text with search latency < 100ms.
+- **FR-ORG-08 (Favorites & Recents Shelf):** Fast-access shelf on the home screen for pinned documents and recently opened notebooks.
+- **FR-ORG-09 (Semester Archiving):** Completed semesters can be archived into read-only freeze state, hiding them from the active dashboard while keeping all notes, vector strokes, and attachments searchable and fully intact.
+- **FR-ORG-10 (Soft Delete & Trash Recovery):** Two-stage deletion: files moved to Trash Bin can be restored within 30 days or immediately purged.
+- **FR-ORG-11 (Smart Classification Engine):**
+  - Analyzes imported files (filename heuristics: e.g. `CS301_Lec05.pdf`, creation timestamps, and extracted first-page text).
+  - Automatically suggests target workspace, semester, course, and folder.
+  - Optional AI-assisted classification (heuristics first, optional Gemini categorization).
+  - Requires explicit user confirmation dialog before moving any file, with 1-tap manual override.
+- **FR-ORG-12 (Dedicated Research Workspace & Literature Library):**
+  - Specialized workspace optimized for paper reading, thesis writing, and literature reviews.
+  - Paper metadata fields: Title, Authors, Year, Journal/Conference, DOI, BibTeX citation key, Abstract.
+  - Literature review note cards linked to the source PDF.
+  - Bi-directional cross-document links between papers, review notes, and handwriting canvases.
+  - Automatic citation generation in standard formats (IEEE, ACM, APA).
+
+### 3.9 PHUC TRANSLATE — Scientific & Academic Translation Engine
+- **FR-TRN-01 (Bilingual Target):** High-precision English <-> Vietnamese academic translation.
+- **FR-TRN-02 (Granular Selection Translation):**
+  - Translate selected words, phrases, or full paragraphs directly on the canvas or active PDF.
+  - Stylus-driven selection: Lenovo AP501U stylus drag highlight over text or lasso rectangle over paragraph.
+- **FR-TRN-03 (Side-by-Side & Popover Views):**
+  - Floating translation card next to the selected text with 1-tap expandable side-by-side view.
+  - Bilingual reading mode: parallel columns or interlinear translation cards that preserve document context.
+- **FR-TRN-04 (Save Translation to Notes):**
+  - 1-tap action to paste translation as a margin annotation, sticky note, or canvas Markdown block directly alongside the original text.
+- **FR-TRN-05 (Bridge to Phuc AI):**
+  - "Ask Phuc AI About This Translation" action in the translation popup for instant conceptual breakdown or deeper clarification.
+- **FR-TRN-06 (Scientific Integrity Preservation):**
+  - Strictly preserves:
+    - Mathematical symbols, variables ($x, y, \theta$), equations, and scientific notation ($1.2 \times 10^{-4}$).
+    - Citation indices ([1], [12-15]), DOIs, Figure/Table labels (Figure 2a, Table 1).
+    - Units (ms, GHz, $\mu m$, MB/s, mW) and quantitative numerical findings.
+  - Zero modification to the source PDF file.
+  - Text-based PDF extraction prioritized; scanned PDF OCR evaluated separately.
+- **FR-TRN-07 (Dual Translation Providers & Offline Mode):**
+  - **On-Device Offline Engine (Primary Default):** Google ML Kit Translation (`google_mlkit_translation`), downloading English-Vietnamese offline models (~30MB) for 100% offline, privacy-first translation.
+  - **Optional Academic Cloud Engine:** Google Gemini API with specialized academic translation system prompts preserving mathematical syntax and context.
+  - Provider-independent architecture (`TranslationProvider` interface) with zero hardcoded shared API secrets (BYOK).
+- **FR-TRN-08 (Customizable Scientific Terminology Glossary):**
+  - Preloaded with vetted academic dictionaries in: Computer Networks, Operating Systems, Algorithms, Databases, Artificial Intelligence, and Digital Twin research.
+  - User-configurable terminology preferences (e.g. override specific translations) stored locally in SQLite/JSON.
+- **FR-TRN-09 (External Screen Translation Evaluation - MediaProjection):**
+  - Technical evaluation of optional translation outside PhucNote using Android `MediaProjection`.
+  - Requires explicit `FOREGROUND_SERVICE_MEDIA_PROJECTION` runtime permission and system user consent dialog.
+  - Privacy safeguards: Automatically respects `FLAG_SECURE` to prevent capturing banking/auth apps; strictly on-device processing; zero background recording or streaming.
+  - Unrestricted background screen capture is strictly forbidden.
+
 ---
 
-## 4. Non-Functional Requirements (NFR)
+## 4. Non-Functional Requirements & Measurable Acceptance Criteria
 
 - **NFR-PERF-01 (Touch-to-Ink Latency):** Sub-15ms perceived latency when running on Snapdragon 8 Gen 3 at 144Hz.
 - **NFR-PERF-02 (Memory Overhead):** Baseline idle memory under 180MB RAM; large 100-page PDF documents capped under 450MB RAM via aggressive off-screen tile eviction.
+- **NFR-PERF-03 (Translation Responsiveness):** On-device ML Kit translation returns rendered Vietnamese text within 600ms for standard paragraphs (up to 200 words).
+- **NFR-PERF-04 (Organizer Search Latency):** Global metadata and text search returns top 50 ranked results across 10,000 note entities in under 100ms.
 - **NFR-SEC-01 (Data Integrity):** File saves must be atomic (write to temporary cache then swap) to eliminate file corruption during abrupt shutdowns.
-- **NFR-SEC-02 (AI Privacy & Secret Safety):** Zero client telemetry; no shared API secrets compiled into the client APK; all user API keys encrypted with Android KeyStore; explicit user consent per transmission.
+- **NFR-SEC-02 (AI & Translation Privacy):** Zero client telemetry; no shared API secrets compiled into the client APK; all user API keys encrypted with Android KeyStore; explicit user consent per cloud transmission; ML Kit translation runs 100% on-device.
+- **NFR-SEC-03 (Screen Translation Guardrails):** MediaProjection must enforce system consent modal, display ongoing notification, respect `FLAG_SECURE`, and never store raw screen frames to disk.
 - **NFR-LEGAL-01 (License Compliance):** 100% AGPL-3.0 compliant source distribution; complete decoupling from Linwood Butterfly trademarks.

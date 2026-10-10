@@ -23,4 +23,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - Explicit user privacy consent gate; 100% offline core note-taking preservation.
   - Official investigation of Gemini Notebook Enterprise vs. Consumer NotebookLM API.
   - Floating AI chat window and collapsible dockable side panel optimized for 8.8" display.
+- PHUC ORGANIZER Academic & Research Workspace module specification and architecture:
+  - Academic calendar hierarchy (`Workspace > Year > Semester > Course`), course dashboards, and color tags.
+  - Smart classification engine with filename heuristics, first-page PDF extraction, and user confirmation modal.
+  - Global FTS5 search across note titles, tags, and indexed PDF text (< 100ms latency).
+  - Research Workspace with BibTeX metadata cards, DOI indexing, and bidirectional PDF coordinate deep-links.
+  - Semester Archiving (read-only freeze) and Soft Delete (30-day trash bin).
+- PHUC TRANSLATE Scientific & Academic Translation module specification and architecture:
+  - English <-> Vietnamese academic translation with Google ML Kit on-device engine (100% offline).
+  - Optional Gemini academic cloud translation with BYOK hardware KeyStore credentials.
+  - Scientific integrity protection engine: masking formulas, LaTeX, citations `[1]`, units, and DOIs.
+  - Local SQLite scientific glossary editor for Computer Networks, OS, Algorithms, DB, AI, and Digital Twins.
+  - Sandboxed Android MediaProjection screen translation evaluation with strict privacy guardrails.
+
 

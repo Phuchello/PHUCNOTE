@@ -121,19 +121,36 @@ gantt
 
 ---
 
-### Phase 5 — PHUC AI Learning Assistant Extension (Post-Core Validation)
+### Phase 5 — Academic Modules: PHUC ORGANIZER & PHUC TRANSLATE
+> [!NOTE]
+> **Prerequisite:** Built directly on top of validated core file persistence and `pdfrx` text extraction. Both modules are designed offline-first.
+
+- **Objective:** Deliver the academic course workspace management system, smart ingestion engine, research paper library, and scientific translation engine (EN <-> VI).
+- **Milestones:**
+  - **M5.1: Organizer Core & Academic Hierarchy:** Academic catalog database (`academic_catalog.db`), workspace switcher, academic year/semester navigation, course dashboards, and color tags.
+  - **M5.2: Smart Classification Engine:** Filename heuristic tokenizer, first-page PDF text extraction, and user confirmation routing modal.
+  - **M5.3: Research Workspace & Bibliographic Engine:** Paper metadata cards (DOI, BibTeX, authors), literature review notes, and bidirectional PDF coordinate links.
+  - **M5.4: Translate Core & Stylus Selection:** Lenovo AP501U stylus highlight selection on canvas text and `pdfrx` text streams; side-by-side and popover translation cards.
+  - **M5.5: Scientific Integrity Sanitizer:** Formula, LaTeX, citation (`[1]`), unit, and DOI masking/restoration pipeline.
+  - **M5.6: Dual Translation Engines & Local Glossary:** Google ML Kit on-device translation (100% offline) + optional Gemini academic translation (BYOK); local SQLite scientific glossary editor.
+  - **M5.7: MediaProjection Screen Translation Service:** Permission-gated Android service with system consent, `FLAG_SECURE` enforcement, and memory-only frame processing.
+- **Checkpoint:** `CHECKPOINT-09-ORGANIZER-TRANSLATE-SPECS`
+
+---
+
+### Phase 6 — PHUC AI Learning Assistant Extension
 > [!IMPORTANT]
-> **Prerequisite Rule:** In accordance with the project engineering charter, Phase 5 implementation will **only** commence after Phase 4 core handwriting and data safety validation is successfully verified and signed off on the Lenovo Legion Y700 Gen 4.
+> **Prerequisite Rule:** Phase 6 implementation commences after the core handwriting, organizer, and translation modules pass verification on the Lenovo Legion Y700 Gen 4.
 
 - **Objective:** Implement the decoupled multimodal learning assistant, BYOK Gemini API integration, handwriting lasso Q&A, and notebook study tools.
 - **Milestones:**
-  - **M5.1: Decoupled Module & BYOK Security:** Create `lib/features/phuc_ai` boundary; implement Android KeyStore-backed API key storage with `flutter_secure_storage`.
-  - **M5.2: Multimodal Handwriting Pipeline:** Integrate in-memory lasso selection crop rasterization and Gemini multimodal vision querying.
-  - **M5.3: Document Retrieval & Citations:** Implement text chunking for active PDF and note pages with structured coordinate citations.
-  - **M5.4: Academic Study Tool Actions:** Build 1-tap quick actions (Explain, Summarize, 5-Question Quiz, Flashcards, Insert answer to canvas).
-  - **M5.5: Tablet-First UI & Video Coexistence:** Implement floating AI chat window and collapsible dockable side panel optimized for 8.8" display alongside floating video player.
-  - **M5.6: Gemini Notebook Bridge:** Build the 1-tap NotebookLM course export bridge and optional Gemini Notebook Enterprise connector.
-- **Checkpoint:** `CHECKPOINT-09-PHUCAI-INTEGRATED`
+  - **M6.1: Decoupled Module & BYOK Security:** Create `lib/features/phuc_ai` boundary; implement Android KeyStore-backed API key storage with `flutter_secure_storage`.
+  - **M6.2: Multimodal Handwriting Pipeline:** Integrate in-memory lasso selection crop rasterization and Gemini multimodal vision querying.
+  - **M6.3: Document Retrieval & Citations:** Implement text chunking for active PDF and note pages with structured coordinate citations.
+  - **M6.4: Academic Study Tool Actions:** Build 1-tap quick actions (Explain, Summarize, 5-Question Quiz, Flashcards, Insert answer to canvas).
+  - **M6.5: Tablet-First UI & Video Coexistence:** Implement floating AI chat window and collapsible dockable side panel optimized for 8.8" display alongside floating video player.
+  - **M6.6: Gemini Notebook Bridge:** Build the 1-tap NotebookLM course export bridge and optional Gemini Notebook Enterprise connector.
+- **Checkpoint:** `CHECKPOINT-10-PHUCAI-INTEGRATED`
 
 ---
 
@@ -147,5 +164,7 @@ gantt
    - `feat/vertical-paper`
    - `feat/video-overlay`
    - `feat/tablet-ui`
+   - `feat/phuc-organizer`
+   - `feat/phuc-translate`
    - `feat/phuc-ai-assistant` (conditioned on Phase 4 passing)
 4. **Pull Requests:** Substantial changes will be bundled into pull requests with automated commit checkpoints and changelog updates.
