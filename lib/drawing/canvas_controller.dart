@@ -51,6 +51,12 @@ class CanvasController extends ChangeNotifier {
   static const double maxZoom = 4.0;
   static const double maxTopOverscroll = 80.0;
 
+  // A4 Notebook Visual Guides (210:297 aspect ratio layout)
+  bool _showA4Guides = false;
+  static const double a4Width = 840.0;
+  static const double a4Height = 1188.0;
+  static const double a4PageGap = 24.0;
+
   int _repaintCounter = 0;
   int _revision = 0;
   int _savedRevision = 0;
@@ -74,6 +80,21 @@ class CanvasController extends ChangeNotifier {
   bool get isStylusActive => _isStylusActive;
   Offset get viewportOffset => _viewportOffset;
   double get zoomScale => _zoomScale;
+  bool get showA4Guides => _showA4Guides;
+
+  void toggleA4Guides() {
+    _showA4Guides = !_showA4Guides;
+    _repaintCounter++;
+    notifyListeners();
+  }
+
+  void setShowA4Guides(bool enabled) {
+    if (_showA4Guides != enabled) {
+      _showA4Guides = enabled;
+      _repaintCounter++;
+      notifyListeners();
+    }
+  }
 
   StrokeProperty get currentProperty => StrokeProperty(
         colorValue: _color.toARGB32(),

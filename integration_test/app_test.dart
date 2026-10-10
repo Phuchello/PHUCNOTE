@@ -566,5 +566,28 @@ void main() {
       expect(controller.zoomScale, equals(1.0));
       expect(controller.viewportOffset, equals(Offset.zero));
     });
+
+    // TC-17: Toggle A4 notebook page guides visual layout
+    testWidgets('TC-17: Toggle A4 notebook page guides visual layout', (tester) async {
+      await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
+      await tester.pumpAndSettle();
+
+      final controller = getController(tester);
+      expect(controller.showA4Guides, isFalse);
+
+      final a4Toggle = find.byTooltip('Continuous Paper (Tap for A4 Page Guides)');
+      expect(a4Toggle, findsOneWidget);
+
+      await tester.tap(a4Toggle);
+      await tester.pumpAndSettle();
+
+      expect(controller.showA4Guides, isTrue);
+      expect(find.byTooltip('A4 Page Guides Active (Tap to disable)'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('A4 Page Guides Active (Tap to disable)'));
+      await tester.pumpAndSettle();
+
+      expect(controller.showA4Guides, isFalse);
+    });
   });
 }

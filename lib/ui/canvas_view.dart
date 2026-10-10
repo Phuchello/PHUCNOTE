@@ -187,6 +187,7 @@ class _CanvasViewState extends State<CanvasView> {
                       repaintCounter: widget.controller.repaintCounter,
                       viewportOffset: widget.controller.viewportOffset,
                       zoomScale: widget.controller.zoomScale,
+                      showA4Guides: widget.controller.showA4Guides,
                     ),
                     isComplex: true,
                   ),

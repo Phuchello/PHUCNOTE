@@ -111,6 +111,19 @@ class ToolbarWidget extends StatelessWidget {
                     onPressed: controller.resetViewport,
                   ),
 
+                // A4 Page Guides Toggle
+                IconButton(
+                  icon: Icon(
+                    controller.showA4Guides ? Icons.menu_book : Icons.menu_book_outlined,
+                    size: 20,
+                    color: controller.showA4Guides ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                  ),
+                  tooltip: controller.showA4Guides
+                      ? 'A4 Page Guides Active (Tap to disable)'
+                      : 'Continuous Paper (Tap for A4 Page Guides)',
+                  onPressed: controller.toggleA4Guides,
+                ),
+
                 // Paper Template Popup
                 PopupMenuButton<PaperTemplate>(
                   tooltip: 'Paper Template',

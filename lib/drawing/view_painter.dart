@@ -9,13 +9,14 @@ import '../core/models/stroke_element.dart';
 import 'stroke_geometry.dart';
 
 /// CustomPainter responsible for rendering the static canvas background,
-/// paper ruling/grid patterns, and committed vector strokes for continuous vertical paper.
+/// paper ruling/grid patterns, optional A4 notebook page guides, and committed vector strokes.
 class PhucNoteViewPainter extends CustomPainter {
   final NoteDocument document;
   final Color backgroundColor;
   final int repaintCounter;
   final Offset viewportOffset;
   final double zoomScale;
+  final bool showA4Guides;
 
   PhucNoteViewPainter({
     required this.document,
@@ -23,6 +24,7 @@ class PhucNoteViewPainter extends CustomPainter {
     required this.repaintCounter,
     this.viewportOffset = Offset.zero,
     this.zoomScale = 1.0,
+    this.showA4Guides = false,
   });
 
   @override
@@ -45,7 +47,12 @@ class PhucNoteViewPainter extends CustomPainter {
     // 2. Draw paper template pattern strictly for visible canvas bounds
     _drawPaperPattern(canvas, visibleCanvasRect);
 
-    // 3. Draw committed strokes with offscreen viewport culling
+    // 3. Draw optional A4 visual page outlines, separators, and page numbers
+    if (showA4Guides) {
+      _drawA4Guides(canvas, visibleCanvasRect);
+    }
+
+    // 4. Draw committed strokes with offscreen viewport culling
     for (final stroke in document.strokes) {
       if (stroke.points.isEmpty || !visibleCanvasRect.overlaps(stroke.boundingBox)) {
         continue;
@@ -110,6 +117,79 @@ class PhucNoteViewPainter extends CustomPainter {
     }
   }
 
+  void _drawA4Guides(Canvas canvas, Rect visibleRect) {
+    const double a4Width = 840.0;
+    const double a4Height = 1188.0;
+    const double a4PageGap = 24.0;
+    const double stride = a4Height + a4PageGap;
+
+    // Viewport-bounded page calculation
+    final firstPage = max(1, (visibleRect.top / stride).floor() + 1);
+    final lastPage = max(firstPage, (visibleRect.bottom / stride).ceil() + 1);
+
+    final pageBorderPaint = Paint()
+      ..color = Colors.blueGrey.withValues(alpha: 0.35)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0 / zoomScale;
+
+    final gapFillPaint = Paint()
+      ..color = Colors.blueGrey.withValues(alpha: 0.08)
+      ..style = PaintingStyle.fill;
+
+    final gapLinePaint = Paint()
+      ..color = Colors.blueGrey.withValues(alpha: 0.25)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0 / zoomScale;
+
+    for (int k = firstPage; k <= lastPage; k++) {
+      final topY = (k - 1) * stride;
+      final bottomY = topY + a4Height;
+
+      if (bottomY < visibleRect.top || topY > visibleRect.bottom) {
+        continue;
+      }
+
+      // 1. Vertically stacked A4 page outline (210:297 ratio)
+      final pageRect = Rect.fromLTWH(0, topY, a4Width, a4Height);
+      canvas.drawRect(pageRect, pageBorderPaint);
+
+      // 2. Inter-page separator bar & divider line
+      if (k > 1) {
+        final gapTop = topY - a4PageGap;
+        if (gapTop < visibleRect.bottom && topY > visibleRect.top) {
+          final gapRect = Rect.fromLTWH(0, gapTop, a4Width, a4PageGap);
+          canvas.drawRect(gapRect, gapFillPaint);
+          canvas.drawLine(
+            Offset(0, gapTop + a4PageGap / 2),
+            Offset(a4Width, gapTop + a4PageGap / 2),
+            gapLinePaint,
+          );
+        }
+      }
+
+      // 3. Subtle page number indicator at bottom-right
+      if (bottomY - 40 < visibleRect.bottom && bottomY > visibleRect.top) {
+        final textPainter = TextPainter(
+          text: TextSpan(
+            text: 'Page $k',
+            style: const TextStyle(
+              color: Color(0xFF78909C),
+              fontSize: 12.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.5,
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+        )..layout();
+
+        textPainter.paint(
+          canvas,
+          Offset(a4Width - textPainter.width - 24.0, bottomY - textPainter.height - 12.0),
+        );
+      }
+    }
+  }
+
   void _drawStroke(Canvas canvas, StrokeElement stroke) {
     final path = StrokeGeometry.generatePath(stroke.points, stroke.property);
     final paint = Paint()
@@ -129,6 +209,7 @@ class PhucNoteViewPainter extends CustomPainter {
         oldDelegate.document != document ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.viewportOffset != viewportOffset ||
-        oldDelegate.zoomScale != zoomScale;
+        oldDelegate.zoomScale != zoomScale ||
+        oldDelegate.showA4Guides != showA4Guides;
   }
 }
