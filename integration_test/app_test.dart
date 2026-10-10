@@ -575,16 +575,16 @@ void main() {
       final controller = getController(tester);
       expect(controller.showA4Guides, isFalse);
 
-      final a4Toggle = find.byTooltip('Continuous Paper (Tap for A4 Page Guides)');
+      final a4Toggle = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
       expect(a4Toggle, findsOneWidget);
 
       await tester.tap(a4Toggle);
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
-      expect(find.byTooltip('A4 Page Guides Active (Tap to disable)'), findsOneWidget);
+      expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
 
-      await tester.tap(find.byTooltip('A4 Page Guides Active (Tap to disable)'));
+      await tester.tap(find.byTooltip(ToolbarWidget.a4WritingTooltip));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isFalse);

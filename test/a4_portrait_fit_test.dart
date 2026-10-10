@@ -121,7 +121,7 @@ void main() {
       expect(find.byTooltip('Fit to Width'), findsNothing);
 
       // Toggle A4 guides active
-      await tester.tap(find.byTooltip('Continuous Paper (Tap for A4 Page Guides)'));
+      await tester.tap(find.byTooltip(ToolbarWidget.continuousPaperTooltip));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../core/models/note_document.dart';
 import '../core/models/stroke_element.dart';
 import 'stroke_geometry.dart';
+import 'a4_page_layout.dart';
 
 /// CustomPainter responsible for rendering the static canvas background,
 /// paper ruling/grid patterns, optional A4 notebook page guides, and committed vector strokes.
@@ -118,14 +119,8 @@ class PhucNoteViewPainter extends CustomPainter {
   }
 
   void _drawA4Guides(Canvas canvas, Rect visibleRect) {
-    const double a4Width = 840.0;
-    const double a4Height = 1188.0;
-    const double a4PageGap = 24.0;
-    const double stride = a4Height + a4PageGap;
-
-    // Viewport-bounded page calculation
-    final firstPage = max(1, (visibleRect.top / stride).floor() + 1);
-    final lastPage = max(firstPage, (visibleRect.bottom / stride).ceil() + 1);
+    const double a4Width = A4PageLayout.width;
+    const double a4PageGap = A4PageLayout.gap;
 
     final pageBorderPaint = Paint()
       ..color = Colors.blueGrey.withValues(alpha: 0.35)
@@ -141,23 +136,19 @@ class PhucNoteViewPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0 / zoomScale;
 
-    for (int k = firstPage; k <= lastPage; k++) {
-      final topY = (k - 1) * stride;
-      final bottomY = topY + a4Height;
-
-      if (bottomY < visibleRect.top || topY > visibleRect.bottom) {
-        continue;
-      }
+    for (final k in A4PageLayout.visiblePageIndices(visibleRect)) {
+      final pageRect = A4PageLayout.pageBounds(k);
+      final topY = pageRect.top;
+      final bottomY = pageRect.bottom;
 
       // 1. Vertically stacked A4 page outline (210:297 ratio)
-      final pageRect = Rect.fromLTWH(0, topY, a4Width, a4Height);
       canvas.drawRect(pageRect, pageBorderPaint);
 
       // 2. Inter-page separator bar & divider line
       if (k > 1) {
-        final gapTop = topY - a4PageGap;
+        final gapRect = A4PageLayout.gapAfterPage(k - 1);
+        final gapTop = gapRect.top;
         if (gapTop < visibleRect.bottom && topY > visibleRect.top) {
-          final gapRect = Rect.fromLTWH(0, gapTop, a4Width, a4PageGap);
           canvas.drawRect(gapRect, gapFillPaint);
           canvas.drawLine(
             Offset(0, gapTop + a4PageGap / 2),

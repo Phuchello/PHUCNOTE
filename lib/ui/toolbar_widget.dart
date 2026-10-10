@@ -11,6 +11,10 @@ import '../drawing/canvas_controller.dart';
 class ToolbarWidget extends StatelessWidget {
   final CanvasController controller;
 
+  static const continuousPaperTooltip = 'Continuous Paper (Tap for A4 Writing)';
+  static const a4WritingTooltip =
+      'A4 Writing (Tap to disable)\nStart inside a page; strokes may cross edges.';
+
   const ToolbarWidget({
     super.key,
     required this.controller,
@@ -119,8 +123,8 @@ class ToolbarWidget extends StatelessWidget {
                     color: controller.showA4Guides ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
                   ),
                   tooltip: controller.showA4Guides
-                      ? 'A4 Page Guides Active (Tap to disable)'
-                      : 'Continuous Paper (Tap for A4 Page Guides)',
+                      ? a4WritingTooltip
+                      : continuousPaperTooltip,
                   onPressed: controller.toggleA4Guides,
                 ),
 

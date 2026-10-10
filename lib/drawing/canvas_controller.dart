@@ -11,6 +11,7 @@ import '../core/models/stroke_element.dart';
 import '../core/models/stroke_point.dart';
 import '../core/models/stroke_property.dart';
 import 'canvas_action.dart';
+import 'a4_page_layout.dart';
 
 enum CanvasTool {
   pen,
@@ -53,9 +54,9 @@ class CanvasController extends ChangeNotifier {
 
   // A4 Notebook Visual Guides (210:297 aspect ratio layout)
   bool _showA4Guides = false;
-  static const double a4Width = 840.0;
-  static const double a4Height = 1188.0;
-  static const double a4PageGap = 24.0;
+  static const double a4Width = A4PageLayout.width;
+  static const double a4Height = A4PageLayout.height;
+  static const double a4PageGap = A4PageLayout.gap;
 
   int _repaintCounter = 0;
   int _revision = 0;
@@ -334,6 +335,12 @@ class CanvasController extends ChangeNotifier {
     }
 
     _activePoints.clear();
+    if (_showA4Guides && A4PageLayout.pageIndexAt(canvasPos) == null) {
+      notifyListeners();
+      return;
+    }
+    // A4 limits only stroke initiation. Once accepted, every sample is retained
+    // across page edges/gaps as one global-coordinate stroke and undo action.
     _activePoints.add(StrokePoint(
       x: canvasPos.dx,
       y: canvasPos.dy,

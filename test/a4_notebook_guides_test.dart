@@ -244,7 +244,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final a4Button = find.byTooltip('Continuous Paper (Tap for A4 Page Guides)');
+      final a4Button = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
       expect(a4Button, findsOneWidget);
 
       // Tap to enable A4 guides
@@ -252,14 +252,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
-      expect(find.byTooltip('A4 Page Guides Active (Tap to disable)'), findsOneWidget);
+      expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
 
       // Tap to disable A4 guides
-      await tester.tap(find.byTooltip('A4 Page Guides Active (Tap to disable)'));
+      await tester.tap(find.byTooltip(ToolbarWidget.a4WritingTooltip));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isFalse);
-      expect(find.byTooltip('Continuous Paper (Tap for A4 Page Guides)'), findsOneWidget);
+      expect(find.byTooltip(ToolbarWidget.continuousPaperTooltip), findsOneWidget);
     });
   });
 }
