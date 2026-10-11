@@ -1,0 +1,246 @@
+Running Gradle task 'assembleProfile'...                        
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Running Gradle task 'assembleProfile'...                           60,1s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (31.9MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...      1.002ms
+I/WindowExtensionsImpl( 9169): Initializing Window Extensions, vendor API level=6, activity embedding enabled=true
+W/HWUI    ( 9169): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4( 9169): mapper 4.x is not supported
+I/Choreographer( 9169): Skipped 58 frames!  The application may be doing too much work on its main thread.
+I/ucnote.phucnote( 9169): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:61453/Da-RPc7RDVg=/
+VMServiceFlutterDriver: Isolate found with number: 8460172040667071
+VMServiceFlutterDriver: Isolate 8460172040667071 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 9169): 00:00 +0: P02 three matched committed-cache frame repetitions
+VMServiceFlutterDriver: Connected to Flutter application.
+D/ProfileInstaller( 9169): Installing profile for com.phucnote.phucnote
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_32_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=259.28ms min=29.33ms max=2013.81ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=51.80ms min=16.33ms max=72.06ms count=18
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation( 9169): app_time_stats: avg=45.42ms min=16.95ms max=90.38ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=46.34ms min=17.58ms max=83.08ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_32_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 1838KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 2532KB/5064KB, paused 849us,2.893ms total 22.399ms
+D/EGL_emulation( 9169): app_time_stats: avg=239.51ms min=12.95ms max=3013.23ms count=15
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_32_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=238.46ms min=16.47ms max=2006.59ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=41.29ms min=14.47ms max=64.05ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=36.90ms min=11.30ms max=78.69ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=42.01ms min=12.05ms max=73.95ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_32_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 168KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 777us,3.416ms total 50.464ms
+D/EGL_emulation( 9169): app_time_stats: avg=289.87ms min=14.14ms max=2980.08ms count=12
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_128_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=245.65ms min=17.43ms max=2027.48ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=46.34ms min=21.14ms max=77.85ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=47.10ms min=17.92ms max=96.51ms count=18
+D/EGL_emulation( 9169): app_time_stats: avg=42.72ms min=21.16ms max=83.88ms count=19
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_128_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 923us,2.793ms total 17.708ms
+D/EGL_emulation( 9169): app_time_stats: avg=231.06ms min=18.82ms max=3045.55ms count=16
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_128_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=241.96ms min=24.41ms max=2097.70ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=46.14ms min=25.53ms max=83.43ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=50.99ms min=29.28ms max=75.03ms count=18
+D/EGL_emulation( 9169): app_time_stats: avg=46.77ms min=15.95ms max=75.22ms count=19
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_128_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 551us,1.717ms total 22.169ms
+D/EGL_emulation( 9169): app_time_stats: avg=228.71ms min=22.11ms max=3043.24ms count=16
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_256_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=102.56ms min=62.68ms max=175.54ms count=10
+D/EGL_emulation( 9169): app_time_stats: avg=2078.71ms min=2078.71ms max=2078.71ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=80.70ms min=58.51ms max=105.21ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=85.31ms min=69.72ms max=103.03ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=81.68ms min=51.72ms max=122.26ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=88.96ms min=69.18ms max=121.49ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=77.86ms min=61.79ms max=107.42ms count=13
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_256_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 648us,1.805ms total 13.201ms
+D/EGL_emulation( 9169): app_time_stats: avg=417.74ms min=72.83ms max=3057.83ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_256_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=264.79ms min=59.45ms max=2075.89ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=62.98ms min=39.02ms max=85.28ms count=15
+D/EGL_emulation( 9169): app_time_stats: avg=65.08ms min=51.05ms max=80.61ms count=16
+D/EGL_emulation( 9169): app_time_stats: avg=58.62ms min=32.52ms max=99.35ms count=15
+D/EGL_emulation( 9169): app_time_stats: avg=72.82ms min=45.79ms max=110.46ms count=14
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_256_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 765us,1.669ms total 12.994ms
+D/EGL_emulation( 9169): app_time_stats: avg=313.00ms min=54.81ms max=3021.78ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=113.78ms min=66.66ms max=187.95ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_512_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=1073.47ms min=68.89ms max=2078.06ms count=2
+D/EGL_emulation( 9169): app_time_stats: avg=84.93ms min=73.28ms max=117.69ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=81.11ms min=64.74ms max=98.34ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=92.66ms min=63.16ms max=124.91ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=87.33ms min=68.09ms max=125.29ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=86.18ms min=69.68ms max=116.16ms count=12
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_512_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 160KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 602us,1.662ms total 11.892ms
+D/EGL_emulation( 9169): app_time_stats: avg=333.90ms min=75.30ms max=3017.38ms count=12
+I/flutter ( 9169): INK_ALLOC_RESET:r0_cache_512_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=274.71ms min=63.93ms max=2067.22ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=90.87ms min=59.35ms max=125.54ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=75.39ms min=54.59ms max=102.21ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=89.20ms min=70.04ms max=112.30ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=74.75ms min=55.73ms max=110.34ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=79.09ms min=57.24ms max=97.33ms count=13
+I/flutter ( 9169): INK_ALLOC_END:r0_cache_512_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 601us,1.691ms total 23.984ms
+D/EGL_emulation( 9169): app_time_stats: avg=459.05ms min=75.46ms max=3013.43ms count=8
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_32_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=233.75ms min=12.77ms max=2037.69ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=44.73ms min=11.55ms max=108.88ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=39.05ms min=9.57ms max=74.55ms count=21
+D/EGL_emulation( 9169): app_time_stats: avg=45.17ms min=14.54ms max=68.18ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_32_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 550us,1.781ms total 14.592ms
+D/EGL_emulation( 9169): app_time_stats: avg=308.31ms min=14.41ms max=2995.15ms count=11
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_32_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=242.03ms min=34.07ms max=2074.18ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=48.06ms min=11.60ms max=81.23ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=41.05ms min=12.28ms max=70.46ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=38.69ms min=8.93ms max=70.33ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_32_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 727us,1.192ms total 11.355ms
+D/EGL_emulation( 9169): app_time_stats: avg=277.62ms min=22.38ms max=3005.47ms count=13
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_128_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=233.36ms min=28.52ms max=2012.78ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=38.32ms min=14.83ms max=63.87ms count=21
+D/EGL_emulation( 9169): app_time_stats: avg=47.27ms min=21.91ms max=75.32ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=41.83ms min=18.17ms max=67.80ms count=19
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_128_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 967us,2.051ms total 16.478ms
+D/EGL_emulation( 9169): app_time_stats: avg=266.87ms min=25.32ms max=2971.17ms count=13
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_128_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=245.18ms min=46.26ms max=1985.01ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=52.57ms min=27.47ms max=83.28ms count=18
+D/EGL_emulation( 9169): app_time_stats: avg=47.05ms min=18.90ms max=78.76ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=43.75ms min=16.63ms max=67.97ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_128_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 576us,1.368ms total 10.396ms
+D/EGL_emulation( 9169): app_time_stats: avg=237.60ms min=20.63ms max=3021.77ms count=15
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_256_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=263.50ms min=61.97ms max=2048.87ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=68.29ms min=44.89ms max=85.62ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=56.91ms min=33.13ms max=66.42ms count=18
+D/EGL_emulation( 9169): app_time_stats: avg=65.65ms min=45.66ms max=87.40ms count=16
+D/EGL_emulation( 9169): app_time_stats: avg=67.89ms min=53.95ms max=98.32ms count=15
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_256_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 613us,2.325ms total 13.308ms
+D/EGL_emulation( 9169): app_time_stats: avg=404.63ms min=57.26ms max=3009.96ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_256_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=269.10ms min=56.10ms max=2077.69ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=73.41ms min=56.78ms max=91.13ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=84.06ms min=66.37ms max=107.89ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=74.19ms min=56.43ms max=107.88ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=75.11ms min=57.80ms max=102.81ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=71.41ms min=57.22ms max=102.18ms count=14
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_256_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 576us,2.050ms total 13.973ms
+D/EGL_emulation( 9169): app_time_stats: avg=825.58ms min=79.08ms max=3035.05ms count=4
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_512_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=275.44ms min=42.54ms max=2108.33ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=92.30ms min=66.39ms max=114.28ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=78.79ms min=54.90ms max=101.11ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=77.68ms min=70.09ms max=91.00ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=89.02ms min=62.67ms max=116.64ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=76.88ms min=58.24ms max=108.30ms count=14
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_512_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 192KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 655us,1.641ms total 13.469ms
+D/EGL_emulation( 9169): app_time_stats: avg=407.02ms min=64.21ms max=3024.83ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r1_cache_512_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=107.90ms min=78.50ms max=147.57ms count=10
+D/EGL_emulation( 9169): app_time_stats: avg=2066.55ms min=2066.55ms max=2066.55ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=92.95ms min=67.21ms max=130.64ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=93.56ms min=70.47ms max=110.30ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=85.29ms min=70.47ms max=115.12ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=94.08ms min=72.43ms max=110.97ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=106.12ms min=68.35ms max=153.49ms count=10
+D/EGL_emulation( 9169): app_time_stats: avg=92.27ms min=76.54ms max=123.73ms count=11
+I/flutter ( 9169): INK_ALLOC_END:r1_cache_512_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 160KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 1.060ms,1.701ms total 11.916ms
+D/EGL_emulation( 9169): app_time_stats: avg=593.41ms min=68.78ms max=3031.93ms count=6
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_32_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=226.92ms min=17.86ms max=2028.21ms count=11
+D/EGL_emulation( 9169): app_time_stats: avg=42.06ms min=13.41ms max=61.12ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=40.75ms min=11.00ms max=78.60ms count=21
+D/EGL_emulation( 9169): app_time_stats: avg=46.25ms min=24.50ms max=88.18ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_32_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 160KB AllocSpace bytes, 1(20KB) LOS objects, 49% free, 2524KB/5048KB, paused 640us,2.050ms total 28.695ms
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_32_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=262.22ms min=20.52ms max=2115.25ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=46.78ms min=11.83ms max=70.21ms count=22
+D/EGL_emulation( 9169): app_time_stats: avg=46.36ms min=13.61ms max=90.64ms count=22
+D/EGL_emulation( 9169): app_time_stats: avg=43.81ms min=14.02ms max=76.24ms count=23
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_32_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 148KB AllocSpace bytes, 5(152KB) LOS objects, 49% free, 2557KB/5114KB, paused 776us,1.682ms total 14.348ms
+D/EGL_emulation( 9169): app_time_stats: avg=659.99ms min=27.24ms max=3133.51ms count=5
+D/EGL_emulation( 9169): app_time_stats: avg=63128.80ms min=306.21ms max=179671.03ms count=3
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_128_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=250.42ms min=34.07ms max=2087.39ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=49.08ms min=25.02ms max=106.81ms count=22
+D/EGL_emulation( 9169): app_time_stats: avg=48.25ms min=22.45ms max=78.82ms count=21
+D/EGL_emulation( 9169): app_time_stats: avg=48.80ms min=22.31ms max=82.04ms count=21
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_128_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 6(172KB) LOS objects, 49% free, 2557KB/5114KB, paused 8.634ms,2.468ms total 65.771ms
+D/EGL_emulation( 9169): app_time_stats: avg=433.65ms min=21.15ms max=3171.32ms count=8
+D/EGL_emulation( 9169): app_time_stats: avg=9598.92ms min=9598.92ms max=9598.92ms count=1
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_128_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=245.46ms min=26.58ms max=2077.02ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=47.81ms min=23.60ms max=92.79ms count=21
+D/EGL_emulation( 9169): app_time_stats: avg=50.98ms min=27.86ms max=81.07ms count=20
+D/EGL_emulation( 9169): app_time_stats: avg=53.37ms min=25.45ms max=91.80ms count=19
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_128_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 8(480KB) LOS objects, 49% free, 2557KB/5114KB, paused 744us,1.655ms total 18.141ms
+D/EGL_emulation( 9169): app_time_stats: avg=306.81ms min=23.75ms max=3144.32ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=9684.34ms min=9684.34ms max=9684.34ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=112.43ms min=46.90ms max=360.95ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_256_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=745.26ms min=70.06ms max=2085.04ms count=3
+D/EGL_emulation( 9169): app_time_stats: avg=63.69ms min=42.90ms max=81.34ms count=16
+D/EGL_emulation( 9169): app_time_stats: avg=72.38ms min=42.93ms max=105.67ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=63.03ms min=43.33ms max=85.95ms count=16
+D/EGL_emulation( 9169): app_time_stats: avg=64.18ms min=42.71ms max=104.63ms count=16
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_256_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 8(480KB) LOS objects, 49% free, 2557KB/5114KB, paused 726us,1.396ms total 11.541ms
+D/EGL_emulation( 9169): app_time_stats: avg=10971.82ms min=10971.82ms max=10971.82ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=367.20ms min=45.07ms max=3157.71ms count=10
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_256_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=252.51ms min=45.38ms max=2066.59ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=56.53ms min=38.87ms max=79.01ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=53.42ms min=40.88ms max=76.90ms count=19
+D/EGL_emulation( 9169): app_time_stats: avg=51.74ms min=39.52ms max=75.33ms count=20
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_256_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 8(624KB) LOS objects, 49% free, 2557KB/5114KB, paused 811us,1.565ms total 11.297ms
+D/EGL_emulation( 9169): app_time_stats: avg=280.11ms min=45.74ms max=3150.29ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=10117.67ms min=10117.67ms max=10117.67ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=112.84ms min=56.77ms max=349.48ms count=9
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_512_baseline:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=741.28ms min=67.21ms max=2060.65ms count=3
+D/EGL_emulation( 9169): app_time_stats: avg=71.60ms min=51.08ms max=89.42ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=85.80ms min=43.84ms max=108.98ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=77.89ms min=58.65ms max=103.51ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=83.36ms min=66.79ms max=105.27ms count=12
+D/EGL_emulation( 9169): app_time_stats: avg=75.69ms min=59.09ms max=127.41ms count=14
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_512_baseline:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 8(624KB) LOS objects, 49% free, 2557KB/5114KB, paused 637us,2.004ms total 12.917ms
+D/EGL_emulation( 9169): app_time_stats: avg=11943.65ms min=11943.65ms max=11943.65ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=595.01ms min=55.65ms max=3217.40ms count=6
+D/EGL_emulation( 9169): app_time_stats: avg=101.56ms min=58.92ms max=267.61ms count=10
+I/flutter ( 9169): INK_ALLOC_RESET:r2_cache_512_candidate:isolates/8460172040667071
+D/EGL_emulation( 9169): app_time_stats: avg=1081.86ms min=62.06ms max=2101.65ms count=2
+D/EGL_emulation( 9169): app_time_stats: avg=67.64ms min=43.57ms max=111.73ms count=15
+D/EGL_emulation( 9169): app_time_stats: avg=73.14ms min=45.98ms max=98.06ms count=14
+D/EGL_emulation( 9169): app_time_stats: avg=77.33ms min=61.37ms max=91.86ms count=13
+D/EGL_emulation( 9169): app_time_stats: avg=67.47ms min=40.89ms max=94.55ms count=15
+D/EGL_emulation( 9169): app_time_stats: avg=71.56ms min=45.58ms max=97.69ms count=14
+I/flutter ( 9169): INK_ALLOC_END:r2_cache_512_candidate:isolates/8460172040667071
+I/ucnote.phucnote( 9169): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 9(984KB) LOS objects, 49% free, 2557KB/5114KB, paused 532us,2.527ms total 15.036ms
+D/EGL_emulation( 9169): app_time_stats: avg=11496.33ms min=11496.33ms max=11496.33ms count=1
+D/EGL_emulation( 9169): app_time_stats: avg=3217.88ms min=3217.88ms max=3217.88ms count=1
+I/flutter ( 9169): 04:14 +1: (tearDownAll)
+I/flutter ( 9169): 04:14 +2: All tests passed!
+All tests passed.

@@ -17,7 +17,9 @@ void main() {
     controller.handlePointerMove(
       const PointerMoveEvent(position: Offset(120, 230)),
     );
-    controller.handlePointerUp(const PointerUpEvent());
+    controller.handlePointerUp(
+      const PointerUpEvent(position: Offset(120, 230)),
+    );
     expect(controller.document.strokes.single.property.toJson(), initial);
     expect(controller.document.strokes.single.points.map((p) => p.toOffset()), [
       const Offset(100, 200),
@@ -43,7 +45,9 @@ void main() {
       controller.handlePointerMove(
         const PointerMoveEvent(position: Offset(120, 230)),
       );
-      controller.handlePointerUp(const PointerUpEvent());
+      controller.handlePointerUp(
+        const PointerUpEvent(position: Offset(120, 230)),
+      );
       expect(controller.document.strokes.single.property.toJson(), initial);
       expect(controller.document.strokes.single.points, hasLength(2));
       expect(
@@ -56,7 +60,9 @@ void main() {
         const PointerDownEvent(position: Offset(200, 200)),
       );
       controller.setPenProperty(PenPreset.defaults.last.property);
-      controller.handlePointerUp(const PointerUpEvent());
+      controller.handlePointerUp(
+        const PointerUpEvent(position: Offset(200, 200)),
+      );
       expect(controller.document.strokes.last.property.toJson(), highlighter);
     },
   );
@@ -86,7 +92,9 @@ void main() {
       controller.handlePointerDown(
         const PointerDownEvent(position: Offset(100, 200)),
       );
-      controller.handlePointerUp(const PointerUpEvent());
+      controller.handlePointerUp(
+        const PointerUpEvent(position: Offset(100, 200)),
+      );
       expect(
         controller.document.strokes.single.property.toJson(),
         controller.penProperty.toJson(),

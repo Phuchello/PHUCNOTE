@@ -1,0 +1,9 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart
+00:00 +0: C:/Users/lyle3/Music/Phucnote/test/stroke_path_cache_test.dart: Committed paths reused; mutable points invalidate bounds and geometry
+00:00 +1: C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-03/04 visible cached working set survives sequential over-capacity paint
+00:00 +2: C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-03/04 visible cached working set survives sequential over-capacity paint
+00:00 +3: C:/Users/lyle3/Music/Phucnote/test/stroke_path_cache_test.dart: Cached and uncached ink has identical pixels, including reopen and all pens
+00:00 +4: C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-01/02/07 bounded admission across density, long strokes and viewport changes
+00:01 +5: C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-05/06 mutations, undo/redo and document clearing cannot reuse stale paths
+00:01 +6: C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-08 all four pens, accents, formulas and dense ink retain exact pixels and bfly coordinates
+00:02 +7: All tests passed!

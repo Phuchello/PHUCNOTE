@@ -1,0 +1,72 @@
+Running Gradle task 'assembleProfile'...                           39,0s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (31.9MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...        542ms
+I/Choreographer( 9780): Skipped 59 frames!  The application may be doing too much work on its main thread.
+I/ucnote.phucnote( 9780): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:56170/QVpTGHUHA_E=/
+VMServiceFlutterDriver: Isolate found with number: 18444961481935
+VMServiceFlutterDriver: Isolate 18444961481935 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 9780): 00:00 +0: Isolated baseline A1 A2 profile replay and geometry measurements
+VMServiceFlutterDriver: Connected to Flutter application.
+I/flutter ( 9780): INK_ALLOC_RESET:baseline:isolates/18444961481935
+D/ProfileInstaller( 9780): Installing profile for com.phucnote.phucnote
+D/EGL_emulation( 9780): app_time_stats: avg=829.13ms min=81.09ms max=1967.94ms count=3
+D/EGL_emulation( 9780): app_time_stats: avg=44.28ms min=22.74ms max=64.87ms count=19
+D/EGL_emulation( 9780): app_time_stats: avg=46.02ms min=28.38ms max=83.07ms count=19
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation( 9780): app_time_stats: avg=47.29ms min=24.24ms max=93.33ms count=19
+D/EGL_emulation( 9780): app_time_stats: avg=52.89ms min=27.47ms max=69.57ms count=18
+D/EGL_emulation( 9780): app_time_stats: avg=43.56ms min=22.59ms max=69.84ms count=20
+D/EGL_emulation( 9780): app_time_stats: avg=41.66ms min=21.83ms max=72.75ms count=21
+D/EGL_emulation( 9780): app_time_stats: avg=46.13ms min=28.29ms max=58.16ms count=20
+D/EGL_emulation( 9780): app_time_stats: avg=48.60ms min=20.56ms max=71.42ms count=19
+D/EGL_emulation( 9780): app_time_stats: avg=47.58ms min=24.46ms max=73.39ms count=19
+D/EGL_emulation( 9780): app_time_stats: avg=45.06ms min=20.28ms max=69.49ms count=20
+D/EGL_emulation( 9780): app_time_stats: avg=47.01ms min=22.90ms max=72.43ms count=19
+D/EGL_emulation( 9780): app_time_stats: avg=49.96ms min=25.31ms max=81.62ms count=18
+D/EGL_emulation( 9780): app_time_stats: avg=40.12ms min=21.36ms max=68.41ms count=20
+D/EGL_emulation( 9780): app_time_stats: avg=39.64ms min=22.05ms max=66.83ms count=21
+I/flutter ( 9780): INK_ALLOC_END:baseline:isolates/18444961481935
+I/ucnote.phucnote( 9780): Explicit concurrent mark compact GC freed 1770KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 2536KB/5072KB, paused 740us,1.645ms total 15.236ms
+I/flutter ( 9780): INK_ALLOC_RESET:a1_incremental:isolates/18444961481935
+D/EGL_emulation( 9780): app_time_stats: avg=676.19ms min=45.67ms max=2059.77ms count=4
+D/EGL_emulation( 9780): app_time_stats: avg=44.23ms min=19.83ms max=81.70ms count=23
+D/EGL_emulation( 9780): app_time_stats: avg=41.53ms min=21.99ms max=69.97ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=43.67ms min=24.75ms max=80.36ms count=23
+D/EGL_emulation( 9780): app_time_stats: avg=42.41ms min=22.97ms max=79.86ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=40.47ms min=22.04ms max=85.38ms count=25
+D/EGL_emulation( 9780): app_time_stats: avg=41.80ms min=20.14ms max=75.55ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=45.68ms min=19.70ms max=74.75ms count=23
+D/EGL_emulation( 9780): app_time_stats: avg=45.15ms min=21.88ms max=84.18ms count=23
+D/EGL_emulation( 9780): app_time_stats: avg=42.55ms min=20.52ms max=73.28ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=40.75ms min=24.77ms max=69.29ms count=25
+D/EGL_emulation( 9780): app_time_stats: avg=44.30ms min=24.03ms max=86.97ms count=23
+D/EGL_emulation( 9780): app_time_stats: avg=42.58ms min=22.41ms max=79.45ms count=24
+I/flutter ( 9780): INK_ALLOC_END:a1_incremental:isolates/18444961481935
+I/ucnote.phucnote( 9780): Explicit concurrent mark compact GC freed 152KB AllocSpace bytes, 6(304KB) LOS objects, 49% free, 2557KB/5114KB, paused 638us,1.888ms total 12.418ms
+D/EGL_emulation( 9780): app_time_stats: avg=12849.50ms min=292.36ms max=20191.90ms count=3
+D/EGL_emulation( 9780): app_time_stats: avg=3209.53ms min=3209.53ms max=3209.53ms count=1
+I/flutter ( 9780): INK_ALLOC_RESET:a2_repaint:isolates/18444961481935
+D/EGL_emulation( 9780): app_time_stats: avg=637.06ms min=44.68ms max=2089.82ms count=4
+D/EGL_emulation( 9780): app_time_stats: avg=45.97ms min=20.59ms max=83.67ms count=22
+D/EGL_emulation( 9780): app_time_stats: avg=41.83ms min=19.33ms max=70.69ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=40.70ms min=24.47ms max=96.76ms count=25
+D/EGL_emulation( 9780): app_time_stats: avg=51.04ms min=22.63ms max=98.20ms count=20
+D/EGL_emulation( 9780): app_time_stats: avg=41.77ms min=23.57ms max=67.25ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=42.20ms min=22.33ms max=64.13ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=37.68ms min=23.16ms max=71.62ms count=27
+D/EGL_emulation( 9780): app_time_stats: avg=46.78ms min=26.97ms max=81.10ms count=22
+D/EGL_emulation( 9780): app_time_stats: avg=48.13ms min=20.94ms max=77.83ms count=22
+D/EGL_emulation( 9780): app_time_stats: avg=43.10ms min=22.23ms max=75.09ms count=24
+D/EGL_emulation( 9780): app_time_stats: avg=47.44ms min=21.32ms max=87.07ms count=22
+D/EGL_emulation( 9780): app_time_stats: avg=40.38ms min=20.93ms max=62.78ms count=25
+I/flutter ( 9780): INK_ALLOC_END:a2_repaint:isolates/18444961481935
+I/ucnote.phucnote( 9780): Explicit concurrent mark compact GC freed 224KB AllocSpace bytes, 7(324KB) LOS objects, 49% free, 2557KB/5114KB, paused 597us,1.610ms total 9.716ms
+D/EGL_emulation( 9780): app_time_stats: avg=18260.31ms min=18260.31ms max=18260.31ms count=1
+D/EGL_emulation( 9780): app_time_stats: avg=679.30ms min=39.66ms max=3201.23ms count=5
+D/EGL_emulation( 9780): app_time_stats: avg=21303.08ms min=21303.08ms max=21303.08ms count=1
+I/flutter ( 9780): 01:18 +1: (tearDownAll)
+I/flutter ( 9780): 01:19 +2: All tests passed!
+All tests passed.

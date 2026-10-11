@@ -113,6 +113,8 @@ Widget _shell(_Replay replay, NoteDocument document, StrokePathCache cache) {
 }
 
 void main() {
+  const p02 = bool.fromEnvironment('P02_MODE');
+  const repeat = int.fromEnvironment('P02_REPEAT');
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
     'Isolated baseline A1 A2 profile replay and geometry measurements',
@@ -127,23 +129,32 @@ void main() {
       final phases = <Map<String, Object?>>[];
       // Same fixed dry page and point trace in all three phases. A2 alone changes
       // notification-to-widget wiring; A1 only changes wet preprocessing.
+      final phaseOrder = p02 && repeat == 1
+          ? ['a2_repaint', 'a1_incremental', 'baseline']
+          : p02 && repeat == 2
+          ? ['a1_incremental', 'baseline', 'a2_repaint']
+          : ['baseline', 'a1_incremental', 'a2_repaint'];
       final document = NoteDocument(
         strokes: [
-          for (var i = 0; i < 32; i++)
+          for (var i = 0; i < (p02 ? 128 : 32); i++)
             StrokeElement(
               id: 'fixed_$i',
               points: [
                 for (final s in curve(count: 64))
                   s.point.copyWith(
-                    x: s.point.x + (i % 8) * 140,
-                    y: s.point.y + (i ~/ 8) * 110,
+                    x: p02
+                        ? s.point.x * .55 + (i % 16) * 72
+                        : s.point.x + (i % 8) * 140,
+                    y: p02
+                        ? s.point.y * .35 + (i ~/ 16) * 35
+                        : s.point.y + (i ~/ 8) * 110,
                   ),
               ],
               property: PenPreset.defaults.first.property,
             ),
         ],
       );
-      for (final phase in ['baseline', 'a1_incremental', 'a2_repaint']) {
+      for (final phase in phaseOrder) {
         final replay = _Replay(phase);
         await tester.pumpWidget(_shell(replay, document, StrokePathCache()));
         await tester.pumpAndSettle();
@@ -252,17 +263,39 @@ void main() {
         controllerTimes.add(watch.elapsedMicroseconds / 1000);
       }
       controller.handlePointerUp(
-        const PointerUpEvent(kind: PointerDeviceKind.stylus),
+        PointerUpEvent(
+          kind: PointerDeviceKind.stylus,
+          position: controller.canvasToScreen(
+            controller.activePoints.last.toOffset(),
+          ),
+        ),
       );
       expect(controller.document.strokes.single.points.length, 1025);
       controller.dispose();
-      final geometry = geometryBenchmark(lengths: const [128, 512, 2048]);
+      final geometry = geometryBenchmark(
+        lengths: p02 ? const [128, 512, 2048, 4096] : const [128, 512, 2048],
+        repetitions: p02 ? 1 : 2,
+      );
+      final plateauGeometry = p02
+          ? geometryBenchmark(
+              repetitions: 1,
+              traceFactory: (count) => [
+                for (final s in curve(count: count))
+                  InkSample(s.point.copyWith(pressure: .2), s.timeUs),
+              ],
+            )
+          : null;
       binding.reportData = {
         ...?binding.reportData,
         'environment':
             'medium_tablet Android 15; profile; synthetic, no physical Y700',
         'phases': phases,
         'geometry': geometry,
+        if (p02) 'plateauGeometry': plateauGeometry,
+        if (p02) 'repeat': repeat,
+        if (p02) 'phaseOrder': phaseOrder,
+        if (p02) 'dryStrokeCount': 128,
+        if (p02) 'viewportLimit': 'Wet transforms only; dry page fixed; not production transform acceptance',
         'controllerInputMs': distribution(controllerTimes),
         'trace': catalogJson(),
       };

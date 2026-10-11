@@ -1,0 +1,44 @@
+Running Gradle task 'assembleDebug'...                             22,1s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1.198ms
+I/ucnote.phucnote(11273): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(11273): Skipped 55 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI(11273): Sending viewport metrics to the engine.
+D/ProfileInstaller(11273): Installing profile for com.phucnote.phucnote
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:53560/ME25We9eT6s=/
+VMServiceFlutterDriver: Isolate found with number: 8731342954478131
+VMServiceFlutterDriver: Isolate 8731342954478131 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter (11273): 00:00 +0: Native diagnostic observer/export; ADB touch only
+VMServiceFlutterDriver: Connected to Flutter application.
+I/Choreographer(11273): Skipped 97 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI(11273): Sending viewport metrics to the engine.
+W/WindowOnBackDispatcher(11273): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(11273): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation(11273): app_time_stats: avg=140.65ms min=20.91ms max=429.07ms count=9
+I/flutter (11273): Y700_NATIVE_CAPTURE_READY
+I/flutter (11273): Some possible finders for the widgets at Offset(250.0, 300.0):
+I/flutter (11273):   find.byKey(const Key('editor-canvas'))
+I/flutter (11273):   find.byType(KeyedSubtree)
+I/flutter (11273):   find.byType(NotificationListener<ScrollNotification>)
+I/flutter (11273):   find.byType(NotificationListener<ScrollMetricsNotification>)
+I/flutter (11273):   find.byType(ScrollNotificationObserver)
+I/flutter (11273):   find.byType(Scaffold)
+I/flutter (11273):   find.byElementType(InheritedModelElement<_ModalRouteAspect>)
+I/flutter (11273):   find.byElementType(InheritedModelElement<Object>)
+D/EGL_emulation(11273): app_time_stats: avg=7605.00ms min=305.29ms max=14904.72ms count=2
+D/EGL_emulation(11273): app_time_stats: avg=4348.02ms min=23.13ms max=12982.21ms count=3
+W/WindowOnBackDispatcher(11273): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(11273): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+D/EGL_emulation(11273): app_time_stats: avg=1112.18ms min=1112.18ms max=1112.18ms count=1
+D/EGL_emulation(11273): app_time_stats: avg=134.01ms min=39.54ms max=494.66ms count=10
+D/EGL_emulation(11273): app_time_stats: avg=3727.45ms min=3727.45ms max=3727.45ms count=1
+W/ucnote.phucnote(11273): Suspending all threads took: 35.746ms
+I/ucnote.phucnote(11273): NativeAlloc concurrent mark compact GC freed 392KB AllocSpace bytes, 14(512KB) LOS objects, 49% free, 2725KB/5451KB, paused 39.592ms,6.242ms total 95.324ms
+D/EGL_emulation(11273): app_time_stats: avg=178.09ms min=20.08ms max=832.53ms count=7
+I/flutter (11273): 00:23 +1: (tearDownAll)
+D/EGL_emulation(11273): app_time_stats: avg=1702.61ms min=1702.61ms max=1702.61ms count=1
+I/flutter (11273): 00:23 +2: All tests passed!
+All tests passed.

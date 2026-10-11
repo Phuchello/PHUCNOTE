@@ -1,0 +1,7 @@
+*.json binary
+*.png binary
+*.pftrace binary
+*.log binary
+*.txt binary
+*.patch binary
+.gitattributes -text

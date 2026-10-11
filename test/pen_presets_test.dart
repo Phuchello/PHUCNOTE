@@ -140,7 +140,9 @@ void main() {
       controller.handlePointerMove(
         const PointerMoveEvent(position: Offset(50, 60), pressure: 0.8),
       );
-      controller.handlePointerUp(const PointerUpEvent());
+      controller.handlePointerUp(
+        const PointerUpEvent(position: Offset(50, 60)),
+      );
     }
     final original = controller.document.strokes
         .map((stroke) => stroke.toJson())

@@ -1,0 +1,272 @@
+{
+  "captures": [
+    {
+      "phase": "a1_incremental",
+      "reset": true,
+      "status": "MEASURED_HEAP",
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION",
+      "profileClassCount": 2540,
+      "error": null,
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 11541584,
+          "heapCapacity": 13107200,
+          "externalUsage": 5312
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": "1791722793234",
+      "classes": [
+        {
+          "name": "_List",
+          "instancesAccumulated": 13509,
+          "bytesAccumulated": null,
+          "instancesCurrent": 13509,
+          "bytesCurrent": 1274736
+        },
+        {
+          "name": "_GrowableList",
+          "instancesAccumulated": 2850,
+          "bytesAccumulated": null,
+          "instancesCurrent": 2850,
+          "bytesCurrent": 91200
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 8197,
+          "bytesAccumulated": null,
+          "instancesCurrent": 8197,
+          "bytesCurrent": 393456
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 2666,
+          "bytesAccumulated": null,
+          "instancesCurrent": 2666,
+          "bytesCurrent": 127968
+        },
+        {
+          "name": "PointVector",
+          "instancesAccumulated": 20771,
+          "bytesAccumulated": null,
+          "instancesCurrent": 20771,
+          "bytesCurrent": 997008
+        }
+      ]
+    },
+    {
+      "phase": "a1_incremental",
+      "reset": false,
+      "status": "UNAVAILABLE",
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE",
+      "profileClassCount": null,
+      "error": {
+        "code": -32602,
+        "message": "Invalid params",
+        "data": {
+          "request": {
+            "method": "getAllocationProfile",
+            "params": {
+              "isolateId": "isolates/5879515385874175",
+              "reset": "false"
+            }
+          },
+          "details": "getAllocationProfile: invalid 'reset' parameter: false"
+        }
+      },
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 9901568,
+          "heapCapacity": 11264000,
+          "externalUsage": 8832
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": null,
+      "classes": null
+    },
+    {
+      "phase": "baseline",
+      "reset": true,
+      "status": "MEASURED_HEAP",
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION",
+      "profileClassCount": 2540,
+      "error": null,
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 13186912,
+          "heapCapacity": 14409728,
+          "externalUsage": 69776
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": "1791722814173",
+      "classes": [
+        {
+          "name": "_List",
+          "instancesAccumulated": 15282,
+          "bytesAccumulated": null,
+          "instancesCurrent": 15282,
+          "bytesCurrent": 1090176
+        },
+        {
+          "name": "_GrowableList",
+          "instancesAccumulated": 3478,
+          "bytesAccumulated": null,
+          "instancesCurrent": 3478,
+          "bytesCurrent": 111296
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 9221,
+          "bytesAccumulated": null,
+          "instancesCurrent": 9221,
+          "bytesCurrent": 442608
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 4928,
+          "bytesAccumulated": null,
+          "instancesCurrent": 4928,
+          "bytesCurrent": 236544
+        },
+        {
+          "name": "PointVector",
+          "instancesAccumulated": 34324,
+          "bytesAccumulated": null,
+          "instancesCurrent": 34324,
+          "bytesCurrent": 1647552
+        }
+      ]
+    },
+    {
+      "phase": "baseline",
+      "reset": false,
+      "status": "UNAVAILABLE",
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE",
+      "profileClassCount": null,
+      "error": {
+        "code": -32602,
+        "message": "Invalid params",
+        "data": {
+          "request": {
+            "method": "getAllocationProfile",
+            "params": {
+              "isolateId": "isolates/5879515385874175",
+              "reset": "false"
+            }
+          },
+          "details": "getAllocationProfile: invalid 'reset' parameter: false"
+        }
+      },
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 12463920,
+          "heapCapacity": 13361152,
+          "externalUsage": 70032
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": null,
+      "classes": null
+    },
+    {
+      "phase": "a2_repaint",
+      "reset": true,
+      "status": "MEASURED_HEAP",
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION",
+      "profileClassCount": 2540,
+      "error": null,
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 15657168,
+          "heapCapacity": 16506880,
+          "externalUsage": 132656
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": "1791722833124",
+      "classes": [
+        {
+          "name": "_List",
+          "instancesAccumulated": 16939,
+          "bytesAccumulated": null,
+          "instancesCurrent": 16939,
+          "bytesCurrent": 1287072
+        },
+        {
+          "name": "_GrowableList",
+          "instancesAccumulated": 4204,
+          "bytesAccumulated": null,
+          "instancesCurrent": 4204,
+          "bytesCurrent": 134528
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 10245,
+          "bytesAccumulated": null,
+          "instancesCurrent": 10245,
+          "bytesCurrent": 491760
+        },
+        {
+          "name": "StrokePoint",
+          "instancesAccumulated": 6898,
+          "bytesAccumulated": null,
+          "instancesCurrent": 6898,
+          "bytesCurrent": 331104
+        },
+        {
+          "name": "PointVector",
+          "instancesAccumulated": 48618,
+          "bytesAccumulated": null,
+          "instancesCurrent": 48618,
+          "bytesCurrent": 2333664
+        }
+      ]
+    },
+    {
+      "phase": "a2_repaint",
+      "reset": false,
+      "status": "UNAVAILABLE",
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE",
+      "profileClassCount": null,
+      "error": {
+        "code": -32602,
+        "message": "Invalid params",
+        "data": {
+          "request": {
+            "method": "getAllocationProfile",
+            "params": {
+              "isolateId": "isolates/5879515385874175",
+              "reset": "false"
+            }
+          },
+          "details": "getAllocationProfile: invalid 'reset' parameter: false"
+        }
+      },
+      "memoryUsage": {
+        "jsonrpc": "2.0",
+        "result": {
+          "type": "MemoryUsage",
+          "heapUsage": 12833072,
+          "heapCapacity": 14409728,
+          "externalUsage": 123376
+        },
+        "id": ""
+      },
+      "dateLastAccumulatorReset": null,
+      "classes": null
+    }
+  ],
+  "limits": "Dart counters and Android process snapshots; harness included; native/GPU outside Dart counters"
+}

@@ -48,6 +48,9 @@ class CanvasController extends ChangeNotifier {
   // Stylus and Palm Rejection Settings
   bool _stylusOnlyMode = false;
   bool _isStylusActive = false;
+  int? _activePointerId;
+  PointerDeviceKind? _activePointerKind;
+  Duration _lastPointerTimeStamp = Duration.zero;
 
   // Viewport navigation offset and zoom
   Offset _viewportOffset = Offset.zero;
@@ -139,6 +142,7 @@ class CanvasController extends ChangeNotifier {
   }
 
   void setDocument(NoteDocument doc) {
+    _releasePointer();
     _document = doc;
     _activePoints.clear();
     _activeStrokeProperty = null;
@@ -259,8 +263,13 @@ class CanvasController extends ChangeNotifier {
   }
 
   void cancelActivePoints() {
+    final hadInput = _activePointerId != null ||
+        _eraserPosition != null ||
+        _activePoints.isNotEmpty;
+    _releasePointer();
+    _finishEraseSession();
     _activeStrokeProperty = null;
-    if (_activePoints.isNotEmpty) {
+    if (hadInput) {
       _activePoints.clear();
       _repaintCounter++;
       notifyListeners();
@@ -318,16 +327,31 @@ class CanvasController extends ChangeNotifier {
     return screenToCanvas(localPosition);
   }
 
+  bool _ownsPointer(PointerEvent event) =>
+      event.pointer == _activePointerId &&
+      event.kind == _activePointerKind &&
+      event.timeStamp >= _lastPointerTimeStamp;
+
+  void _releasePointer() {
+    _activePointerId = null;
+    _activePointerKind = null;
+    _lastPointerTimeStamp = Duration.zero;
+    _isStylusActive = false;
+  }
+
   void handlePointerDown(PointerDownEvent event) {
+    // A second or duplicate down cannot replace an accepted gesture.
+    if (_activePointerId != null) return;
     final isStylus = event.kind == PointerDeviceKind.stylus ||
         event.kind == PointerDeviceKind.invertedStylus;
-    if (isStylus) {
-      _isStylusActive = true;
-    }
-
     if (!shouldAcceptPointerForInking(event)) {
       return;
     }
+
+    _activePointerId = event.pointer;
+    _activePointerKind = event.kind;
+    _lastPointerTimeStamp = event.timeStamp;
+    _isStylusActive = isStylus;
 
     _finishEraseSession();
     _activePoints.clear();
@@ -370,9 +394,10 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerMove(PointerMoveEvent event) {
-    if (!shouldAcceptPointerForInking(event)) {
+    if (!_ownsPointer(event)) {
       return;
     }
+    _lastPointerTimeStamp = event.timeStamp;
 
     final canvasPos = _canvasCoordinates(event.localPosition);
     final pressure = event.pressure.clamp(0.1, 1.0);
@@ -401,15 +426,8 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerUp(PointerUpEvent event) {
-    final isStylus = event.kind == PointerDeviceKind.stylus ||
-        event.kind == PointerDeviceKind.invertedStylus;
-    if (isStylus) {
-      _isStylusActive = false;
-    }
-
-    if (!shouldAcceptPointerForInking(event)) {
-      return;
-    }
+    if (!_ownsPointer(event)) return;
+    _releasePointer();
 
     if (_eraserPosition != null) {
       _finishEraseSession();
@@ -418,6 +436,15 @@ class CanvasController extends ChangeNotifier {
     }
 
     if (_activePoints.isNotEmpty && _activeStrokeProperty != null) {
+      final last = _activePoints.last;
+      final terminal = _canvasCoordinates(event.localPosition);
+      if (terminal.dx.isFinite &&
+          terminal.dy.isFinite &&
+          terminal != last.toOffset()) {
+        // UP commonly reports zero pressure/tilt. Retain the last accepted axes
+        // and append only its actual location, without changing cap semantics.
+        _activePoints.add(last.copyWith(x: terminal.dx, y: terminal.dy));
+      }
       final stroke = StrokeElement(
         id: const Uuid().v4(),
         points: List.of(_activePoints),
@@ -437,7 +464,8 @@ class CanvasController extends ChangeNotifier {
   }
 
   void handlePointerCancel(PointerCancelEvent event) {
-    _isStylusActive = false;
+    if (!_ownsPointer(event)) return;
+    _releasePointer();
     _activePoints.clear();
     _activeStrokeProperty = null;
     // Erasures already changed the document; cancellation still needs history.

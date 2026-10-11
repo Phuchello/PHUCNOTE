@@ -1,0 +1,15 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart
+00:00 +0: CACHE-03/04 visible cached working set survives sequential over-capacity paint
+00:00 +0 -1: CACHE-03/04 visible cached working set survives sequential over-capacity paint [E]
+  Expected: same instance as _NativePath:<Path>
+    Actual: _NativePath:<Path>
+  Visible cached ink should not be cyclically evicted at density 256
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_dense_cache_test.dart 32:7                 main.<fn>
+  
+00:00 +0 -1: Some tests failed.
+
+Failing tests:
+  C:/Users/lyle3/Music/Phucnote/test/p02_dense_cache_test.dart: CACHE-03/04 visible cached working set survives sequential over-capacity paint

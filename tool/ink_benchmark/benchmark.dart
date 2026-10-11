@@ -73,12 +73,14 @@ Map<String, Object> densityBenchmark() {
 
 Map<String, Object> geometryBenchmark({
   List<int> lengths = const [128, 512, 2048, 4096],
+  int repetitions = 2,
+  List<InkSample> Function(int)? traceFactory,
 }) {
   final property = PenPreset.defaults.last.property;
   for (var warm = 0; warm < 3; warm++) {
     final candidate = IncrementalGeometry(property);
     final raw = <StrokePoint>[];
-    for (final s in curve(count: 256, ramp: true)) {
+    for (final s in traceFactory?.call(256) ?? curve(count: 256, ramp: true)) {
       raw.add(s.point);
       candidate.append(s.point);
       StrokeGeometry.generatePath(raw, property);
@@ -87,13 +89,14 @@ Map<String, Object> geometryBenchmark({
   }
   final runs = <Map<String, Object>>[];
   for (final count in lengths) {
-    for (var repeat = 0; repeat < 2; repeat++) {
+    for (var repeat = 0; repeat < repetitions; repeat++) {
       final raw = <StrokePoint>[];
       final candidate = IncrementalGeometry(property);
       final baseline = <double>[];
       final incremental = <double>[];
       final append = <double>[];
-      for (final s in curve(count: count, ramp: true)) {
+      for (final s
+          in traceFactory?.call(count) ?? curve(count: count, ramp: true)) {
         raw.add(s.point);
         final a = Stopwatch()..start();
         candidate.append(s.point);
@@ -141,6 +144,8 @@ Map<String, Object> geometryBenchmark({
   }
   return {
     'units': 'milliseconds; CPU processing, never physical ink latency',
+    'warmup': '3 matched 256-prefix traversals',
+    'order': 'Alternating baseline/candidate path calls at each prefix, reversed on odd repetitions; append timed separately',
     'preset': PenPreset.defaults.last.toJson(),
     'runs': runs,
   };

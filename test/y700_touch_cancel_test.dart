@@ -21,10 +21,14 @@ void main() {
         final origin = tester.getTopLeft(find.byType(CanvasView));
         TestGesture? touch;
         if (trackedBeforeStylus) {
+          // Track a navigation touch, without giving it ownership of finger ink.
+          // A writing pointer now cannot be preempted by another pointer.
+          controller.setStylusOnlyMode(true);
           touch = await tester.startGesture(
             origin + const Offset(80, 80),
             pointer: 20,
           );
+          controller.setStylusOnlyMode(false);
         }
         final pen = await tester.startGesture(
           origin + const Offset(120, 120),

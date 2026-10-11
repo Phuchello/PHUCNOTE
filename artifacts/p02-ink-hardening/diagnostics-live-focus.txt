@@ -1,0 +1,2 @@
+  mCurrentFocus=Window{71151c5 u0 com.phucnote.phucnote/com.phucnote.phucnote.MainActivity}
+  mFocusedApp=ActivityRecord{f67b92d u0 com.phucnote.phucnote/.MainActivity t39}

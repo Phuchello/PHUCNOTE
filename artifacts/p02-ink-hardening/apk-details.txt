@@ -1,0 +1,13 @@
+Build: flutter build apk --debug --target-platform android-arm64 --no-pub
+Entry point: lib/main.dart (production)
+Path: C:\Users\lyle3\Music\Phucnote\build\app\outputs\flutter-apk\app-debug.apk
+Bytes: 124191960
+SHA256: 1227d2a384864c0c9b4d752fcdcfa11936294b3c4cfe944b2b6a9b3de970ca9b
+Native ZIP entries:
+lib/arm64-v8a/libdartjni.so
+lib/arm64-v8a/libVkLayer_khronos_validation.so
+lib/arm64-v8a/libflutter.so
+lib/armeabi-v7a/libdartjni.so
+lib/x86_64/libdartjni.so
+PASS: Flutter runtime is ARM64 only. Existing dartjni plugin also bundles armeabi-v7a and x86_64 native library entries; no packaging changes were made.
+2026-10-11T22:49:55.7748766+07:00

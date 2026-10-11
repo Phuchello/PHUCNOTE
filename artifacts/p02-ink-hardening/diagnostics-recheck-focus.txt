@@ -1,0 +1,2 @@
+  mCurrentFocus=Window{ac158a2 u0 com.phucnote.ink_spike/com.phucnote.ink_spike.MainActivity}
+  mFocusedApp=ActivityRecord{5717fba u0 com.phucnote.ink_spike/.MainActivity t33}

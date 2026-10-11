@@ -1,0 +1,97 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart
+00:00 +0: INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner
+00:00 +0 -1: INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 28:7           main.<fn>
+  
+00:00 +0 -1: INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner
+00:00 +0 -2: INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 28:7           main.<fn>
+  
+00:00 +0 -2: INPUT-01/04/05 unrelated PointerDeviceKind.invertedStylus cannot replace, append, finish or cancel owner
+00:00 +0 -3: INPUT-01/04/05 unrelated PointerDeviceKind.invertedStylus cannot replace, append, finish or cancel owner [E]
+  Expected: true
+    Actual: <false>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 28:7           main.<fn>
+  
+00:00 +0 -3: INPUT-02/03 tap or single move (0): identical UP stays unduplicated
+00:00 +1 -3: INPUT-02/03 tap or single move (1): identical UP stays unduplicated
+00:00 +2 -3: INPUT-02 rapid lift uses transformed final location and last accepted axes
+00:00 +2 -4: INPUT-02 rapid lift uses transformed final location and last accepted axes [E]
+  Expected: Offset:<Offset(35.0, 12.0)>
+    Actual: Offset:<Offset(20.0, 10.0)>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 57:5           main.<fn>
+  
+00:00 +2 -4: INPUT-02 lift without move captures endpoint without pressure taper
+00:00 +2 -5: INPUT-02 lift without move captures endpoint without pressure taper [E]
+  Expected: an object with length of <2>
+    Actual: [Instance of 'StrokePoint']
+     Which: has length of <1>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 68:5           main.<fn>
+  
+00:00 +2 -5: INPUT-06 own cancel discards ink; late moves/up and missing down are inert
+00:00 +3 -5: INPUT-01 duplicate down, wrong kind and older timestamp cannot alter owner
+00:00 +3 -6: INPUT-01 duplicate down, wrong kind and older timestamp cannot alter owner [E]
+  Expected: an object with length of <2>
+    Actual: []
+     Which: has length of <0>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 98:5           main.<fn>
+  
+00:00 +3 -6: INPUT-07 inverted eraser is owned; cancellation keeps undoable erase
+00:00 +3 -7: INPUT-07 inverted eraser is owned; cancellation keeps undoable erase [E]
+  Expected: not null
+    Actual: <null>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 110:5          main.<fn>
+  
+00:00 +3 -7: INPUT-08 finger owns its stroke until release; stylus cannot preempt it
+00:00 +3 -8: INPUT-08 finger owns its stroke until release; stylus cannot preempt it [E]
+  Expected: [Offset:Offset(10.0, 10.0), Offset:Offset(20.0, 10.0)]
+    Actual: MappedListIterable<StrokePoint, Offset>:[Offset:Offset(90.0, 90.0)]
+     Which: at location [0] is Offset:<Offset(90.0, 90.0)> instead of Offset:<Offset(10.0, 10.0)>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 123:5          main.<fn>
+  
+00:00 +3 -8: Document switch and explicit navigation cancel release pointer ownership
+00:00 +3 -9: Document switch and explicit navigation cancel release pointer ownership [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\p02_input_correctness_test.dart 131:7          main.<fn>
+  
+00:00 +3 -9: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +4 -9: Some tests failed.
+
+Failing tests:
+  C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: Document switch and explicit navigation cancel release pointer ownership
+  C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01 duplicate down, wrong kind and older timestamp cannot alter owner
+  C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.invertedStylus cannot replace, append, finish or cancel owner
+  C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner
+  ... and 5 more

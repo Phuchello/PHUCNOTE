@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:integration_test/integration_test_driver_extended.dart';
 
-Future<void> collectAllocations(Directory directory) async {
+Future<void> collectAllocations(
+  Directory directory, {
+  int expectedPhases = 3,
+}) async {
   const adb = 'scratch/toolchain/android-sdk/platform-tools/adb.exe';
   final records = <Map<String, Object?>>[];
   final client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
@@ -97,7 +100,10 @@ Future<void> collectAllocations(Directory directory) async {
         await File('${directory.path}/flutter_memory_$phase.txt')
             .writeAsString('${processMemory.stdout}\n${processMemory.stderr}');
       }
-      if (!reset && phase == 'a2_repaint') break;
+      if (records.where((record) => record['reset'] == false).length >=
+          expectedPhases) {
+        break;
+      }
     }
   } catch (error) {
     records.add({'status': 'UNAVAILABLE', 'reason': error.toString()});
@@ -114,10 +120,14 @@ Future<void> collectAllocations(Directory directory) async {
 }
 
 Future<void> main() async {
-  final directory = Directory('artifacts/ink-engine')
-    ..createSync(recursive: true);
-  final allocations = collectAllocations(directory)
-      .timeout(const Duration(minutes: 8));
+  final directory = Directory(
+    Platform.environment['INK_OUTPUT_DIRECTORY'] ?? 'artifacts/ink-engine',
+  )..createSync(recursive: true);
+  final allocations = collectAllocations(
+    directory,
+    expectedPhases:
+        int.tryParse(Platform.environment['INK_PHASE_COUNT'] ?? '') ?? 3,
+  ).timeout(const Duration(minutes: 12));
   await integrationDriver(
     writeResponseOnFailure: true,
     responseDataCallback: (data) async {

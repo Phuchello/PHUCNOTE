@@ -1,0 +1,87 @@
+diff --git a/lib/drawing/stroke_path_cache.dart b/lib/drawing/stroke_path_cache.dart
+index f1a9b6f..b3bb839 100644
+--- a/lib/drawing/stroke_path_cache.dart
++++ b/lib/drawing/stroke_path_cache.dart
+@@ -13,7 +13,31 @@ class StrokePathCache {
+   final int maxEntries;
+   final int maxPoints;
+   final _entries = LinkedHashMap<StrokeElement, _CachedStroke>.identity();
++  final _visibleEntries = HashSet<StrokeElement>.identity();
+   int _pointCount = 0;
++  int hits = 0;
++  int misses = 0;
++  int evictions = 0;
++  int bypasses = 0;
++
++  int get entryCount => _entries.length;
++  int get retainedPointCount => _pointCount;
++
++  /// Protect already cached visible ink for this synchronous paint. Misses may
++  /// use remaining/offscreen capacity, but cannot evict the visible working set.
++  /// Over-capacity pages still draw every stroke, generating uncached misses.
++  void beginFrame(Rect visibleRect, {int? documentStrokeCount}) {
++    _visibleEntries.clear();
++    // No cyclic eviction is possible when the whole document already fits.
++    // Avoid a third point-snapshot scan on ordinary small pages.
++    if (_entries.length == documentStrokeCount) return;
++    for (final entry in _entries.entries) {
++      if (listEquals(entry.value.points, entry.key.points) &&
++          visibleRect.overlaps(entry.value.bounds)) {
++        _visibleEntries.add(entry.key);
++      }
++    }
++  }
+ 
+   StrokePathCache({this.maxEntries = 128, this.maxPoints = 20000})
+     : assert(maxEntries > 0),
+@@ -31,16 +55,28 @@ class StrokePathCache {
+     if (previous != null) {
+       _pointCount -= previous.points.length;
+       if (listEquals(previous.points, stroke.points)) {
++        hits++;
+         _entries[stroke] = previous;
+         _pointCount += previous.points.length;
+         return previous.path;
+       }
++      _visibleEntries.remove(stroke);
+     }
++    misses++;
+     final path = StrokeGeometry.generatePath(stroke.points, stroke.property);
+-    if (stroke.points.length > maxPoints) return path;
++    if (stroke.points.length > maxPoints) {
++      bypasses++;
++      return path;
++    }
+     while (_entries.length >= maxEntries ||
+         _pointCount + stroke.points.length > maxPoints) {
+-      final removed = _entries.remove(_entries.keys.first)!;
++      if (_visibleEntries.length == _entries.length) {
++        bypasses++;
++        return path;
++      }
++      final victim = _entries.keys.firstWhere((key) => !_visibleEntries.contains(key));
++      final removed = _entries.remove(victim)!;
++      evictions++;
+       _pointCount -= removed.points.length;
+     }
+     _entries[stroke] = _CachedStroke(
+@@ -54,6 +90,7 @@ class StrokePathCache {
+ 
+   void clear() {
+     _entries.clear();
++    _visibleEntries.clear();
+     _pointCount = 0;
+   }
+ }
+diff --git a/lib/drawing/view_painter.dart b/lib/drawing/view_painter.dart
+index 2e31042..cab8b34 100644
+--- a/lib/drawing/view_painter.dart
++++ b/lib/drawing/view_painter.dart
+@@ -61,6 +61,7 @@ class PhucNoteViewPainter extends CustomPainter {
+     }
+ 
+     // 4. Draw committed strokes with offscreen viewport culling
++    strokeCache?.beginFrame(visibleCanvasRect, documentStrokeCount: document.strokes.length);
+     for (final stroke in document.strokes) {
+       if (stroke.points.isEmpty || !visibleCanvasRect.overlaps(strokeCache?.boundsFor(stroke) ?? stroke.boundingBox)) {
+         continue;

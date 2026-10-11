@@ -1,0 +1,7 @@
+No-root Perfetto, 6s sched/gfx/view/input; ADB touchscreen injection
+exit=0
+
+Warning: No PTY. CTRL+C won't gracefully stop the trace. If you are running perfetto via adb shell, use the -tt arg (adb shell -t perfetto ...) or consider using the helper script tools/record_android_trace from the Perfetto repository.
+
+[759.332]    perfetto_cmd.cc:1100 Connected to the Perfetto traced service, TTL: 6s
+[766.076]    perfetto_cmd.cc:1263 Wrote 2154681 bytes into /data/misc/perfetto-traces/phucnote_ink_1791733719228.pftrace

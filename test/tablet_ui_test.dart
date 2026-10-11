@@ -224,7 +224,10 @@ void main() {
         ),
       );
       controller.handlePointerUp(
-        const PointerUpEvent(kind: PointerDeviceKind.stylus),
+        const PointerUpEvent(
+          kind: PointerDeviceKind.stylus,
+          position: Offset(330, 270),
+        ),
       );
       expect(controller.document.strokes.length, 2);
       controller.undo();
@@ -284,7 +287,9 @@ void main() {
       controller.handlePointerDown(
         const PointerDownEvent(position: Offset(900, 1200)),
       );
-      controller.handlePointerUp(const PointerUpEvent());
+      controller.handlePointerUp(
+        const PointerUpEvent(position: Offset(900, 1200)),
+      );
       expect(controller.document.strokes, hasLength(1));
     },
   );

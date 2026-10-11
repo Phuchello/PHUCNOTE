@@ -6,8 +6,10 @@ import 'package:integration_test/integration_test_driver_extended.dart';
 import 'y700_ink_driver.dart' show injectNativeCapture;
 
 Future<void> main() async {
-  final directory = Directory('artifacts/ink-engine/regression')
-    ..createSync(recursive: true);
+  final directory = Directory(
+    Platform.environment['INK_OUTPUT_DIRECTORY'] ??
+        'artifacts/ink-engine/regression',
+  )..createSync(recursive: true);
   final capture = injectNativeCapture(directory);
   await integrationDriver(
     writeResponseOnFailure: true,

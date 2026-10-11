@@ -1,0 +1,97 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart
+00:00 +0: C:/Users/lyle3/Music/Phucnote/test/stylus_input_test.dart: Stylus Input & Palm Rejection Handling when stylusOnlyMode is false, standard touch produces strokes
+00:00 +1: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner
+00:00 +2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner
+00:00 +3: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner
+00:00 +4: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner
+00:00 +5: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner
+00:00 +6: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01/04/05 unrelated PointerDeviceKind.invertedStylus cannot replace, append, finish or cancel owner
+00:00 +7: C:/Users/lyle3/Music/Phucnote/test/stylus_input_test.dart: Stylus Input & Palm Rejection Handling abnormal palm contact size touch is rejected even when stylusOnlyMode is off
+00:00 +8: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-02/03 tap or single move (0): identical UP stays unduplicated
+00:00 +9: C:/Users/lyle3/Music/Phucnote/test/stylus_input_test.dart: Stylus Input & Palm Rejection Handling invertedStylus tip routes to eraser mode automatically
+00:00 +10: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-02/03 tap or single move (1): identical UP stays unduplicated
+00:00 +11: C:/Users/lyle3/Music/Phucnote/test/stylus_input_test.dart: Stylus Input & Palm Rejection Handling panViewport translates viewport without corrupting stroke document coordinates
+00:00 +12: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-02 rapid lift uses transformed final location and last accepted axes
+00:00 +13: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-02 lift without move captures endpoint without pressure taper
+00:00 +14: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-06 own cancel discards ink; late moves/up and missing down are inert
+00:00 +15: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-01 duplicate down, wrong kind and older timestamp cannot alter owner
+00:00 +16: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-07 inverted eraser is owned; cancellation keeps undoable erase
+00:00 +17: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 finger owns its stroke until release; stylus cannot preempt it
+00:00 +18: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: Document switch and explicit navigation cancel release pointer ownership
+00:00 +19: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:00 +19 -1: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:00 +19 -1: C:/Users/lyle3/Music/Phucnote/test/pen_style_capture_test.dart: Stroke style is captured at pointer-down before toolbar changes [E]
+  Expected: [Offset:Offset(100.0, 200.0), Offset:Offset(120.0, 230.0)]
+    Actual: MappedListIterable<StrokePoint, Offset>:[
+              Offset:Offset(100.0, 200.0),
+              Offset:Offset(120.0, 230.0),
+              Offset:Offset(0.0, 0.0)
+            ]
+     Which: at location [2] is MappedListIterable<StrokePoint, Offset>:[
+              Offset:Offset(100.0, 200.0),
+              Offset:Offset(120.0, 230.0),
+              Offset:Offset(0.0, 0.0)
+            ] which longer than expected
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\pen_style_capture_test.dart 22:5               main.<fn>
+  
+00:00 +19 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:00 +19 -2: C:/Users/lyle3/Music/Phucnote/test/pen_style_capture_test.dart: Live and committed ink retain all parameters across preset/tool changes [E]
+  Expected: an object with length of <2>
+    Actual: [
+              Instance of 'StrokePoint',
+              Instance of 'StrokePoint',
+              Instance of 'StrokePoint'
+            ]
+     Which: has length of <3>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\pen_style_capture_test.dart 48:7               main.<fn>
+  
+00:00 +20 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +21 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +22 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +23 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +24 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +25 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +26 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +27 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +28 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +29 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +30 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +31 -2: C:/Users/lyle3/Music/Phucnote/test/p02_input_correctness_test.dart: INPUT-08 two-finger navigation cancels provisional finger ink and still zooms
+00:01 +32 -2: C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart: Touch cancellation preserves stylus (tracked=false)
+00:01 +33 -2: C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart: Touch cancellation preserves stylus (tracked=true)
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: true
+  Actual: <false>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (file:///C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart:40:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart line 40
+The test description was:
+  Touch cancellation preserves stylus (tracked=true)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +33 -3: C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart: Touch cancellation preserves stylus (tracked=true) [E]
+  Test failed. See exception logs above.
+  The test description was: Touch cancellation preserves stylus (tracked=true)
+  
+00:01 +33 -3: Some tests failed.
+
+Failing tests:
+  C:/Users/lyle3/Music/Phucnote/test/pen_style_capture_test.dart: Live and committed ink retain all parameters across preset/tool changes
+  C:/Users/lyle3/Music/Phucnote/test/pen_style_capture_test.dart: Stroke style is captured at pointer-down before toolbar changes
+  C:/Users/lyle3/Music/Phucnote/test/y700_touch_cancel_test.dart: Touch cancellation preserves stylus (tracked=true)

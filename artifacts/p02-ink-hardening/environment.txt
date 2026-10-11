@@ -1,0 +1,14 @@
+Repository: C:\Users\lyle3\Music\Phucnote
+Starting branch: develop
+Starting HEAD: a02a78ec6bc4cf703c20a6da93341108fbb2f0ba
+Origin: https://github.com/Phuchello/PHUCNOTE.git
+Flutter: 3.47.7; Dart: 3.13.5; perfect_freehand: 2.5.2+1
+Flutter executable: C:\Users\lyle3\.codex\visualizations\2026\10\10\01a12533-6d39-7542-8205-9c33fb77fb75\p0-toolchain\flutter\bin\flutter.bat
+JAVA_HOME: C:\Users\lyle3\Music\Phucnote\scratch\toolchain\jdk-17.0.20.1+1
+ANDROID_HOME / ANDROID_SDK_ROOT: C:\Users\lyle3\Music\Phucnote\scratch\toolchain\android-sdk
+GRADLE_USER_HOME: C:\Users\lyle3\Music\Phucnote\scratch\toolchain\gradle
+ADB: scratch/toolchain/android-sdk/platform-tools/adb.exe
+Existing emulator: medium_tablet / emulator-5554, Pixel Tablet, Android 15 SDK35, x86_64, software graphics
+Observed diagnostics refresh: 60.000003814697266 Hz
+Physical Y700 Gen4 / AP501U: NOT EXECUTED; no target connected
+No SDK/dependency installation or native Ink spike work in P0.2.

@@ -140,7 +140,10 @@ void main() {
         }
       }
       controller.handlePointerUp(
-        const PointerUpEvent(kind: PointerDeviceKind.stylus),
+        PointerUpEvent(
+          kind: PointerDeviceKind.stylus,
+          position: controller.canvasToScreen(source.last.point.toOffset()),
+        ),
       );
       final stroke = controller.document.strokes.single;
       final serialized = BflySerializer.encode(controller.document);
@@ -223,8 +226,8 @@ void main() {
         pressure: .5,
       ),
     );
-    // Audit of existing behavior, not a repaired production assertion.
-    expect(controller.document.strokes.single.points.last.x, 40);
+    // P0.2 retains the accepted UP location for newly written strokes.
+    expect(controller.document.strokes.single.points.last.x, 80);
     controller.dispose();
   });
 

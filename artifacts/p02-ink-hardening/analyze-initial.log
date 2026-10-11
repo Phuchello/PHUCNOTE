@@ -1,0 +1,6 @@
+Analyzing Phucnote...                                           
+
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - test\p02_dense_cache_test.dart:92:11 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block. Try wrapping the statement in a block - test_driver\ink_engine_driver.dart:105:9 - curly_braces_in_flow_control_structures
+
+2 issues found. (ran in 72.3s)

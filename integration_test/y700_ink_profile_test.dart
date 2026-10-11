@@ -89,7 +89,12 @@ void main() {
       await tester.pump(const Duration(milliseconds: 17));
     }
     controller.handlePointerUp(
-      const PointerUpEvent(kind: PointerDeviceKind.stylus),
+      PointerUpEvent(
+        kind: PointerDeviceKind.stylus,
+        position: controller.canvasToScreen(
+          controller.activePoints.last.toOffset(),
+        ),
+      ),
     );
     await tester.pumpAndSettle();
     // Flutter batches timings in profile mode. Wait without adding measured work.

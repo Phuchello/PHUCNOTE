@@ -1,0 +1,1 @@
+PASS: no fatal exception, correct-package native fatal signal or ANR entry in buffers after final regression. Package com.phucnote.phucnote, test PID 11530. This is limited to retained logcat, not physical certification.
