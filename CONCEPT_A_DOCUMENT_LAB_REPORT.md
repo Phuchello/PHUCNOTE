@@ -158,3 +158,31 @@ Theo chỉ thị nghiêm ngặt của dự án, các thành phần được phâ
 Nguyên mẫu **Concept A: Document Experience Lab** đã chứng minh rằng phong cách **Academic Atelier** (Oxford Navy, Giấy Ngà Ấm, Nhũ Vàng Thao Khảm) hoàn toàn vượt trội trong việc đem lại cảm giác học thuật chuyên sâu, cao cấp và khác biệt cho người dùng máy tính bảng. 
 
 Tất cả 12 ảnh chụp màn hình chất lượng cao và bảng đối chiếu tổng hợp đã sẵn sàng để người dùng đánh giá thẩm mỹ trực tiếp.
+
+---
+
+## Errata verified during the functional POC audit (2026-10-11)
+
+These corrections supplement the historical visual report; its screenshot/test
+claims above have not been rewritten as functional validation.
+
+- Reader and thumbnails use `Image.asset` PNGs, not runtime PDF-byte rendering.
+  `_zoomScale`/`_fitWidth` update controls without an actual viewport transform.
+- `ConceptAAnnotationOverlay` uses `IgnorePointer` and a pre-drawn painter.
+  Its eraser circle and handwritten notes do not demonstrate live input/erasing.
+- Split Study maps slides 2-6 to `slide_16_9_s2.png`; its PDF pane always uses
+  `a4_lecture_p1.png`. Displayed counters do not establish correct pagination.
+- Exact repository sizes: lecture notes PDF **2,622,538 bytes**, six-slide PDF
+  **2,610,519 bytes**, PPTX **39,741 bytes**, scanned PDF **176,034 bytes**.
+  The prior PDF sizes 41.5 KB and 30.5 KB are incorrect. Page counts and source
+  dimensions verified from the PDFs: 4 x 595.3/841.9pt, 6 x 960/540pt, and one
+  595.3/841.9pt scanned page respectively.
+- `generate_16_9_pptx()` and `generate_slides_pdf_rendition()` produce their files
+  independently. The PDF is not evidence of PPTX conversion or layout fidelity.
+- Root assets include all 11 prototype PNGs. Their total contribution in the
+  existing APK ZIP entries is **2,600,751 bytes**; the earlier PDFium size estimate
+  was not an installed-package measurement. The separate functional example adds
+  no production PNG assets, native bridge or PDF dependency.
+
+Functional evidence, converter findings and remaining limits belong to
+`PDF_FUNCTIONAL_POC_REPORT.md` and `PDF_BACKEND_DECISION.md`.

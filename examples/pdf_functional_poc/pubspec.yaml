@@ -1,0 +1,23 @@
+name: pdf_functional_poc
+publish_to: none
+version: 0.1.0+1
+environment:
+  sdk: ">=3.13.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  perfect_freehand: 2.5.2+1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/lecture_notes_discrete_math.pdf
+    - assets/lecture_slides_network_security.pdf
+    - assets/scanned_historical_notes.pdf

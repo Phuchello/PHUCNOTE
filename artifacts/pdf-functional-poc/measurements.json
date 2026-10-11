@@ -1,0 +1,139 @@
+{
+  "scaffoldDebugAPKBytes": 150511196,
+  "pocDebugAPKBytes": 180151516,
+  "wholeExperimentAPKDeltaBytes": 29640320,
+  "newNativeLibraries": [],
+  "unchangedCommonNativeLibraries": true,
+  "pocPDFFixtures": [
+    {
+      "name": "assets/flutter_assets/assets/lecture_notes_discrete_math.pdf",
+      "bytes": 2622538,
+      "compressedBytes": 1478379,
+      "SHA256": "4c1f2509efcef3e195df49d61d438eca4957cc9555743f7f97ff761a3075c304"
+    },
+    {
+      "name": "assets/flutter_assets/assets/lecture_slides_network_security.pdf",
+      "bytes": 2610519,
+      "compressedBytes": 1474161,
+      "SHA256": "d53fc717647435c03b1f764446752fb4d3b186c1b4bc11b8d1e4b96b92228a37"
+    },
+    {
+      "name": "assets/flutter_assets/assets/scanned_historical_notes.pdf",
+      "bytes": 176034,
+      "compressedBytes": 161446,
+      "SHA256": "cd05a98ca7ebe2c77d2d2588da17c95e09d5c04ab74cf0d24627198bf1a287be"
+    }
+  ],
+  "documentLabPNGAssets": [],
+  "opensMs": [
+    1351.843,
+    131.801,
+    45.581,
+    61.124,
+    77.275,
+    105.691
+  ],
+  "nativeRenderMsRange": [
+    74.4521,
+    569.3485
+  ],
+  "renderDecodeTransitionMsRange": [
+    135.463,
+    712.767
+  ],
+  "observedRasterSizes": [
+    [
+      1000,
+      1413
+    ],
+    [
+      1682,
+      2377
+    ],
+    [
+      2304,
+      1296
+    ]
+  ],
+  "snapshotMaxCacheBytes": 23887872,
+  "snapshotMaxCacheEntries": 2,
+  "splitDimensionsDp": [
+    {
+      "ratio": 0.4,
+      "leftDp": 492.8,
+      "rightDp": 739.2
+    },
+    {
+      "ratio": 0.5,
+      "leftDp": 616.0,
+      "rightDp": 616.0
+    },
+    {
+      "ratio": 0.6,
+      "leftDp": 739.1999999999999,
+      "rightDp": 492.80000000000007
+    }
+  ],
+  "screenshotDimensions": [
+    [
+      "01-pdf-page-1",
+      2560.0,
+      1600.0
+    ],
+    [
+      "02-pdf-page-4",
+      2560.0,
+      1600.0
+    ],
+    [
+      "03-pdf-200-percent",
+      2560.0,
+      1600.0
+    ],
+    [
+      "04-pdf-fit-width",
+      2560.0,
+      1600.0
+    ],
+    [
+      "05-pdf-live-ink",
+      2560.0,
+      1600.0
+    ],
+    [
+      "06-same-ink-after-zoom",
+      2560.0,
+      1600.0
+    ],
+    [
+      "07-pdf-thumbnails",
+      2560.0,
+      1600.0
+    ],
+    [
+      "08-slide-page-1",
+      2560.0,
+      1600.0
+    ],
+    [
+      "09-slide-page-6",
+      2560.0,
+      1600.0
+    ],
+    [
+      "10-split-real-slide-and-note",
+      2560.0,
+      1600.0
+    ],
+    [
+      "11-portrait-reader",
+      1600.0,
+      2560.0
+    ],
+    [
+      "12-dark-atelier-reader",
+      1600.0,
+      2560.0
+    ]
+  ]
+}

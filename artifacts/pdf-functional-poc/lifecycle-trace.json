@@ -1,0 +1,32 @@
+{
+  "crashOrANRMatches": 0,
+  "totalRSSKiB": 391252,
+  "foreground": "    topResumedActivity=ActivityRecord{35cdbd0 u0 com.phucnote.pdf_functional_poc/.MainActivity t19}",
+  "background": "ADB KEYCODE_HOME",
+  "memorySampleOnly": true,
+  "pidBefore": "6756",
+  "productionPackageInstalled": false,
+  "package": "com.phucnote.pdf_functional_poc",
+  "launch": [
+    "Starting: Intent { cmp=com.phucnote.pdf_functional_poc/.MainActivity }",
+    "Status: ok",
+    "LaunchState: COLD",
+    "Activity: com.phucnote.pdf_functional_poc/.MainActivity",
+    "TotalTime: 6078",
+    "WaitTime: 6081",
+    "Complete"
+  ],
+  "totalPSSKiB": 266053,
+  "pidAfter": "6756",
+  "result": "PASS process survives real background/resume; screenshots require visual inspection",
+  "resume": [
+    "Starting: Intent { cmp=com.phucnote.pdf_functional_poc/.MainActivity }",
+    "Warning: Activity not started, its current task has been brought to the front",
+    "Status: ok",
+    "LaunchState: HOT",
+    "Activity: com.phucnote.pdf_functional_poc/.MainActivity",
+    "TotalTime: 197",
+    "WaitTime: 203",
+    "Complete"
+  ]
+}

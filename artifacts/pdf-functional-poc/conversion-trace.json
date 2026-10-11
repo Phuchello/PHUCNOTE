@@ -1,0 +1,68 @@
+{
+  "converter": "Microsoft PowerPoint 16.0, SaveAs ppSaveAsPDF=32, source read-only",
+  "sourceSHA256": "e1406f50d71db41fcf9a691de734b1342aa6160f1633a1e0367662e53cdf14af",
+  "outputSHA256": "94313449fdf71d4d9d6e4d4a95f004752d62c8163f03218f86ce16fed368d74e",
+  "outputBytes": 582640,
+  "slides": [
+    {
+      "page": 1,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 8,
+      "missingTextItems": [],
+      "tables": 0
+    },
+    {
+      "page": 2,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 23,
+      "missingTextItems": [],
+      "tables": 1
+    },
+    {
+      "page": 3,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 12,
+      "missingTextItems": [],
+      "tables": 0
+    },
+    {
+      "page": 4,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 19,
+      "missingTextItems": [],
+      "tables": 0
+    },
+    {
+      "page": 5,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 18,
+      "missingTextItems": [],
+      "tables": 0
+    },
+    {
+      "page": 6,
+      "widthPt": 960.0,
+      "heightPt": 540.0,
+      "checkedTextItems": 28,
+      "missingTextItems": [],
+      "tables": 1
+    }
+  ],
+  "embeddedPDFFonts": [
+    "BCDEEE+Calibri-Bold",
+    "BCDFEE+Calibri",
+    "BCDGEE+Calibri",
+    "BCDHEE+Calibri-Bold",
+    "BCDIEE+CourierNewPSMT",
+    "BCDJEE+CourierNewPSMT"
+  ],
+  "themeLatinFonts": [
+    "Calibri",
+    "Calibri"
+  ]
+}
