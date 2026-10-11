@@ -7,6 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import 'support/editor_interactions.dart';
+
 void main() {
   group('A4 Portrait Fit & Clipping Verification', () {
     test('Reproduce portrait clipping at 800px width with scale 1.0', () {
@@ -118,6 +120,7 @@ void main() {
       ));
 
       // Initially A4 guides are inactive -> Fit to Width button not present
+      await openDrawingOptions(tester);
       expect(find.byTooltip('Fit to Width'), findsNothing);
 
       // Toggle A4 guides active
@@ -125,6 +128,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
+      await openDrawingOptions(tester);
       expect(find.byTooltip('Fit to Width'), findsOneWidget);
 
       // Tap Fit to Width

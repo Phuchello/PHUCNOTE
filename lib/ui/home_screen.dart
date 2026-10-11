@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Future<void>? _saveFuture;
   Timer? _autosaveTimer;
   DateTime? _lastSavedAt;
+  bool _zenMode = false;
 
   @override
   void initState() {
@@ -371,16 +372,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       builder: (context, _) {
         final doc = _controller.document;
         return PopScope(
-          canPop: !_controller.isModified,
+          canPop: !_zenMode && !_controller.isModified,
           onPopInvokedWithResult: (didPop, _) async {
             if (didPop) return;
+            if (_zenMode) {
+              setState(() => _zenMode = false);
+              return;
+            }
             final canProceed = await _ensureSavedBeforeAction('exiting the application');
             if (canProceed && context.mounted) {
               Navigator.pop(context);
             }
           },
           child: Scaffold(
-            appBar: AppBar(
+            appBar: _zenMode ? null : AppBar(
               titleSpacing: 8,
               title: InkWell(
                 borderRadius: BorderRadius.circular(8),
@@ -399,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       ),
                       const SizedBox(width: 6),
                       const Icon(Icons.edit, size: 16, color: Colors.grey),
-                      if (_controller.isModified) ...[
+                      if (_controller.isModified && MediaQuery.sizeOf(context).width >= 480) ...[
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -412,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             style: TextStyle(fontSize: 10, color: Colors.brown, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ] else if (_lastSavedAt != null) ...[
+                      ] else if (_lastSavedAt != null && MediaQuery.sizeOf(context).width >= 480) ...[
                         const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -463,18 +468,40 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 // Canvas View
                 Positioned.fill(
                   child: CanvasView(
+                    key: const ValueKey('editor-canvas'),
                     controller: _controller,
                     paperColor: const Color(0xFFFBFBF9), // Warm Paper Ivory
                   ),
                 ),
 
                 // Floating Ergonomic Toolbar
-                Positioned(
+                if (!_zenMode) Positioned(
                   top: 12,
                   left: 16,
                   right: 16,
                   child: Center(
-                    child: ToolbarWidget(controller: _controller),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 720),
+                      child: ToolbarWidget(
+                        controller: _controller,
+                        onEnterZen: () => setState(() => _zenMode = true),
+                      ),
+                    ),
+                  ),
+                ),
+                if (_zenMode) Positioned(
+                  top: 12,
+                  right: 16,
+                  child: SafeArea(
+                    child: Tooltip(
+                      message: 'Exit Zen',
+                      child: FilledButton.tonalIcon(
+                        style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+                        icon: const Icon(Icons.fullscreen_exit, size: 20),
+                        label: const Text('Exit Zen'),
+                        onPressed: () => setState(() => _zenMode = false),
+                      ),
+                    ),
                   ),
                 ),
               ],

@@ -10,6 +10,8 @@ import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/drawing/view_painter.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import 'support/editor_interactions.dart';
+
 /// Test spy canvas tracking drawRect and drawPath invocations.
 class A4SpyCanvas extends Fake implements Canvas {
   final List<Rect> drawnRects = [];
@@ -244,6 +246,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
+      await openDrawingOptions(tester);
       final a4Button = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
       expect(a4Button, findsOneWidget);
 
@@ -252,6 +255,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
+      await openDrawingOptions(tester);
       expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
 
       // Tap to disable A4 guides
@@ -259,6 +263,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isFalse);
+      await openDrawingOptions(tester);
       expect(find.byTooltip(ToolbarWidget.continuousPaperTooltip), findsOneWidget);
     });
   });

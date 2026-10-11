@@ -12,6 +12,8 @@ import 'package:phucnote/main.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import '../test/support/editor_interactions.dart';
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   late Directory tempDir;
@@ -53,6 +55,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Find and tap the Fit to Width button on toolbar
+      await openDrawingOptions(tester);
       final fitBtn = find.byTooltip('Fit to Width');
       expect(fitBtn, findsOneWidget);
       await tester.tap(fitBtn);

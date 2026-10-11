@@ -15,6 +15,8 @@ import 'package:phucnote/main.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import '../test/support/editor_interactions.dart';
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -51,9 +53,9 @@ void main() {
 
       final canvasFinder = find.byType(CanvasView);
       final controller = tester.widget<CanvasView>(canvasFinder).controller;
-      await tester.tap(find.byTooltip(ToolbarWidget.continuousPaperTooltip));
+      await tapDrawingOption(tester, ToolbarWidget.continuousPaperTooltip);
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Fit to Width'));
+      await tapDrawingOption(tester, 'Fit to Width');
       await tester.pumpAndSettle();
       final width = tester.getSize(canvasFinder).width;
       expect(controller.zoomScale, closeTo(width / A4PageLayout.width, 1e-6));
@@ -181,7 +183,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(controller.document.strokes.map((s) => s.toJson()), strokes);
-      await tester.tap(find.byTooltip('Fit to Width'));
+      await tapDrawingOption(tester, 'Fit to Width');
       await tester.pumpAndSettle();
       showY(1180, 300);
       await tester.pumpAndSettle();

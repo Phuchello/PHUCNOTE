@@ -14,6 +14,8 @@ import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/home_screen.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import '../test/support/editor_interactions.dart';
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -422,6 +424,7 @@ void main() {
       final controller = getController(tester);
 
       // Enable stylus-only mode
+      await openDrawingOptions(tester);
       final stylusToggle = find.byTooltip('Finger Inking Allowed (Tap to enable Stylus-Only)');
       expect(stylusToggle, findsOneWidget);
       await tester.tap(stylusToggle);
@@ -453,6 +456,7 @@ void main() {
       final controller = getController(tester);
 
       // Enable Stylus-Only mode
+      await openDrawingOptions(tester);
       final stylusToggle = find.byTooltip('Finger Inking Allowed (Tap to enable Stylus-Only)');
       await tester.tap(stylusToggle);
       await tester.pumpAndSettle();
@@ -475,6 +479,7 @@ void main() {
       expect(controller.document.strokes.length, equals(1));
 
       // 3. Disable Stylus-Only mode -> touch event MUST now ink
+      await openDrawingOptions(tester);
       final stylusOnlyToggle = find.byTooltip('Stylus-Only Active (Fingers Pan Canvas)');
       await tester.tap(stylusOnlyToggle);
       await tester.pumpAndSettle();
@@ -557,6 +562,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.zoomScale, greaterThan(1.5));
+      await openDrawingOptions(tester);
       expect(find.byTooltip('Reset View'), findsOneWidget);
 
       // Tap Reset View
@@ -575,6 +581,7 @@ void main() {
       final controller = getController(tester);
       expect(controller.showA4Guides, isFalse);
 
+      await openDrawingOptions(tester);
       final a4Toggle = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
       expect(a4Toggle, findsOneWidget);
 
@@ -582,6 +589,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
+      await openDrawingOptions(tester);
       expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
 
       await tester.tap(find.byTooltip(ToolbarWidget.a4WritingTooltip));

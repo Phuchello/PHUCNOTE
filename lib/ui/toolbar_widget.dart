@@ -3,259 +3,314 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+
 import '../core/models/note_document.dart';
 import '../drawing/canvas_controller.dart';
 
-/// Ergonomic tablet-first floating toolbar for inking tools, colors, widths, templates,
-/// and stylus-only inking mode.
+/// Primary inking controls stay visible; secondary settings use one menu.
 class ToolbarWidget extends StatelessWidget {
   final CanvasController controller;
+  final VoidCallback? onEnterZen;
 
   static const continuousPaperTooltip = 'Continuous Paper (Tap for A4 Writing)';
   static const a4WritingTooltip =
       'A4 Writing (Tap to disable)\nStart inside a page; strokes may cross edges.';
 
-  const ToolbarWidget({
-    super.key,
-    required this.controller,
-  });
+  const ToolbarWidget({super.key, required this.controller, this.onEnterZen});
 
-  static const List<Color> _paletteColors = [
-    Color(0xFF1E1E1E), // Obsidian Black
-    Color(0xFF1565C0), // Academic Blue
-    Color(0xFFC62828), // Crimson Red
-    Color(0xFF2E7D32), // Forest Green
-    Color(0xFFEF6C00), // Amber Orange
-    Color(0xFF6A1B9A), // Deep Purple
-  ];
+  static const _palette = <String, Color>{
+    'Black': Color(0xFF1E1E1E),
+    'Blue': Color(0xFF1565C0),
+    'Red': Color(0xFFC62828),
+    'Green': Color(0xFF2E7D32),
+    'Orange': Color(0xFFEF6C00),
+    'Purple': Color(0xFF6A1B9A),
+  };
+  static const _widths = <String, double>{'Fine': 2, 'Normal': 3.5, 'Bold': 6};
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: controller,
-      builder: (context, _) {
-        final theme = Theme.of(context);
-        return Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.95),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 6,
-              children: [
-                // Tool Selectors
-                _buildToolButton(
-                  context,
-                  tool: CanvasTool.pen,
-                  icon: Icons.edit_outlined,
-                  selectedIcon: Icons.edit,
-                  tooltip: 'Pen',
+      builder: (context, _) => LayoutBuilder(
+        builder: (context, constraints) {
+          final theme = Theme.of(context);
+          final narrow = constraints.maxWidth < 360;
+          final showInkSettings = constraints.maxWidth >= 480;
+          final tools = [
+            _toolButton(
+              context,
+              CanvasTool.pen,
+              Icons.edit_outlined,
+              Icons.edit,
+              'Pen',
+            ),
+            _toolButton(
+              context,
+              CanvasTool.highlighter,
+              Icons.highlight_outlined,
+              Icons.highlight,
+              'Highlighter',
+            ),
+            _toolButton(
+              context,
+              CanvasTool.eraser,
+              Icons.auto_fix_normal_outlined,
+              Icons.auto_fix_normal,
+              'Stroke Eraser',
+            ),
+          ];
+          final history = [
+            _button(
+              icon: const Icon(Icons.undo),
+              tooltip: 'Undo',
+              onPressed: controller.canUndo ? controller.undo : null,
+            ),
+            _button(
+              icon: const Icon(Icons.redo),
+              tooltip: 'Redo',
+              onPressed: controller.canRedo ? controller.redo : null,
+            ),
+          ];
+          final settings = [
+            if (showInkSettings && controller.tool != CanvasTool.eraser) ...[
+              PopupMenuButton<String>(
+                tooltip: 'Ink Color',
+                constraints: const BoxConstraints(minWidth: 180),
+                icon: Icon(Icons.circle, color: controller.color, size: 22),
+                onSelected: (label) => controller.setColor(_palette[label]!),
+                itemBuilder: (_) => _colorItems(),
+              ),
+              PopupMenuButton<String>(
+                tooltip: 'Stroke Width',
+                icon: Text(
+                  controller.strokeWidth.toString(),
+                  style: theme.textTheme.labelMedium,
                 ),
-                _buildToolButton(
-                  context,
-                  tool: CanvasTool.highlighter,
-                  icon: Icons.highlight_outlined,
-                  selectedIcon: Icons.highlight,
-                  tooltip: 'Highlighter',
-                ),
-                _buildToolButton(
-                  context,
-                  tool: CanvasTool.eraser,
-                  icon: Icons.auto_fix_normal_outlined,
-                  selectedIcon: Icons.auto_fix_normal,
-                  tooltip: 'Stroke Eraser',
-                ),
-
-                const SizedBox(height: 24, child: VerticalDivider(width: 16)),
-
-                // Color Chips (only when not in eraser mode)
-                if (controller.tool != CanvasTool.eraser) ...[
-                  for (final c in _paletteColors)
-                    _buildColorChip(c, isSelected: controller.color.toARGB32() == c.toARGB32()),
-                  const SizedBox(height: 24, child: VerticalDivider(width: 16)),
-                ],
-
-                // Stroke Width Chips
-                _buildWidthChip(2.0, label: 'Fine'),
-                _buildWidthChip(3.5, label: 'Normal'),
-                _buildWidthChip(6.0, label: 'Bold'),
-
-                const SizedBox(height: 24, child: VerticalDivider(width: 16)),
-
-                // Stylus-only inking toggle
-                IconButton(
-                  icon: Icon(
-                    controller.stylusOnlyMode ? Icons.draw : Icons.touch_app,
-                    size: 20,
-                    color: controller.stylusOnlyMode ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                onSelected: (label) =>
+                    controller.setStrokeWidth(_widths[label]!),
+                itemBuilder: (_) => _widthItems(),
+              ),
+            ],
+            if (constraints.maxWidth >= 560 && controller.showA4Guides)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  'A4',
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.primary,
                   ),
-                  tooltip: controller.stylusOnlyMode
-                      ? 'Stylus-Only Active (Fingers Pan Canvas)'
-                      : 'Finger Inking Allowed (Tap to enable Stylus-Only)',
-                  onPressed: () => controller.setStylusOnlyMode(!controller.stylusOnlyMode),
                 ),
-
-                // Reset Zoom & View button (visible when transformed)
-                if (controller.zoomScale != 1.0 || controller.viewportOffset != Offset.zero)
-                  IconButton(
-                    icon: Row(
+              ),
+            if (constraints.maxWidth >= 560 && controller.stylusOnlyMode)
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(Icons.draw, size: 18),
+              ),
+            PopupMenuButton<String>(
+              tooltip: 'Drawing Options',
+              icon: Icon(
+                Icons.more_horiz,
+                color: controller.showA4Guides || controller.stylusOnlyMode
+                    ? theme.colorScheme.primary
+                    : null,
+              ),
+              onSelected: (value) => _selectOption(context, value),
+              itemBuilder: (_) => _optionItems(showInkSettings),
+            ),
+            if (onEnterZen != null)
+              _button(
+                icon: const Icon(Icons.fullscreen),
+                tooltip: 'Enter Zen',
+                onPressed: onEnterZen,
+              ),
+          ];
+          return Card(
+            margin: EdgeInsets.zero,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.95,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: narrow
+                  ? Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.zoom_in_map, size: 16),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${(controller.zoomScale * 100).round()}%',
-                          style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
-                        ),
+                        Row(children: [...tools, const Spacer(), ...settings]),
+                        Row(children: history),
+                      ],
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ...tools,
+                        const SizedBox(width: 8),
+                        ...history,
+                        const Spacer(),
+                        ...settings,
                       ],
                     ),
-                    tooltip: 'Reset View',
-                    onPressed: controller.resetViewport,
-                  ),
-
-                // A4 Page Guides Toggle
-                IconButton(
-                  icon: Icon(
-                    controller.showA4Guides ? Icons.menu_book : Icons.menu_book_outlined,
-                    size: 20,
-                    color: controller.showA4Guides ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
-                  ),
-                  tooltip: controller.showA4Guides
-                      ? a4WritingTooltip
-                      : continuousPaperTooltip,
-                  onPressed: controller.toggleA4Guides,
-                ),
-
-                // Fit to Width (visible when A4 guides are active)
-                if (controller.showA4Guides)
-                  IconButton(
-                    icon: const Icon(Icons.fit_screen, size: 20),
-                    tooltip: 'Fit to Width',
-                    onPressed: () => controller.fitToWidth(MediaQuery.sizeOf(context).width),
-                  ),
-
-                // Paper Template Popup
-                PopupMenuButton<PaperTemplate>(
-                  tooltip: 'Paper Template',
-                  icon: const Icon(Icons.grid_4x4, size: 20),
-                  onSelected: controller.setPaperTemplate,
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: PaperTemplate.ruled,
-                      child: Text('Ruled Paper'),
-                    ),
-                    const PopupMenuItem(
-                      value: PaperTemplate.grid,
-                      child: Text('Grid / Graph Paper'),
-                    ),
-                    const PopupMenuItem(
-                      value: PaperTemplate.blank,
-                      child: Text('Blank Canvas'),
-                    ),
-                  ],
-                ),
-
-                // Undo / Redo
-                IconButton(
-                  icon: const Icon(Icons.undo, size: 20),
-                  tooltip: 'Undo',
-                  onPressed: controller.canUndo ? controller.undo : null,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.redo, size: 20),
-                  tooltip: 'Redo',
-                  onPressed: controller.canRedo ? controller.redo : null,
-                ),
-
-                // Clear
-                IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 20),
-                  tooltip: 'Clear Canvas',
-                  onPressed: () => _confirmClear(context),
-                ),
-              ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildToolButton(
-    BuildContext context, {
-    required CanvasTool tool,
-    required IconData icon,
-    required IconData selectedIcon,
+  Widget _button({
+    required Widget icon,
     required String tooltip,
+    required VoidCallback? onPressed,
   }) {
-    final isSelected = controller.tool == tool;
+    return IconButton(
+      constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+      icon: icon,
+      tooltip: tooltip,
+      onPressed: onPressed,
+    );
+  }
+
+  Widget _toolButton(
+    BuildContext context,
+    CanvasTool tool,
+    IconData icon,
+    IconData selectedIcon,
+    String tooltip,
+  ) {
+    final selected = controller.tool == tool;
     final theme = Theme.of(context);
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: () => controller.setTool(tool),
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: isSelected ? theme.colorScheme.primaryContainer : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(
-            isSelected ? selectedIcon : icon,
-            size: 22,
-            color: isSelected ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onSurface,
-          ),
-        ),
+    return IconButton(
+      constraints: const BoxConstraints.tightFor(width: 48, height: 48),
+      tooltip: tooltip,
+      isSelected: selected,
+      icon: Icon(icon, size: 22),
+      selectedIcon: Icon(selectedIcon, size: 22),
+      style: IconButton.styleFrom(
+        backgroundColor: selected
+            ? theme.colorScheme.primaryContainer
+            : Colors.transparent,
+        foregroundColor: selected
+            ? theme.colorScheme.onPrimaryContainer
+            : theme.colorScheme.onSurface,
       ),
+      onPressed: () => controller.setTool(tool),
     );
   }
 
-  Widget _buildColorChip(Color color, {required bool isSelected}) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: () => controller.setColor(color),
-      child: Container(
-        width: 24,
-        height: 24,
-        margin: const EdgeInsets.symmetric(horizontal: 2),
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: isSelected ? Colors.white : Colors.black26,
-            width: isSelected ? 2.5 : 1.0,
-          ),
-          boxShadow: isSelected
-              ? [BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 4, spreadRadius: 1)]
-              : null,
+  List<PopupMenuEntry<String>> _colorItems({String prefix = ''}) => [
+    for (final entry in _palette.entries)
+      CheckedPopupMenuItem(
+        value: '$prefix${entry.key}',
+        checked: controller.color.toARGB32() == entry.value.toARGB32(),
+        child: Row(
+          children: [
+            Icon(Icons.circle, size: 18, color: entry.value),
+            const SizedBox(width: 12),
+            Text(entry.key),
+          ],
         ),
       ),
-    );
-  }
+  ];
 
-  Widget _buildWidthChip(double width, {required String label}) {
-    final isSelected = (controller.strokeWidth - width).abs() < 0.1;
-    return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => controller.setStrokeWidth(width),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.black12 : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          ),
+  List<PopupMenuEntry<String>> _widthItems({String prefix = ''}) => [
+    for (final entry in _widths.entries)
+      CheckedPopupMenuItem(
+        value: '$prefix${entry.key}',
+        checked: (controller.strokeWidth - entry.value).abs() < 0.1,
+        child: Text(entry.key),
+      ),
+  ];
+
+  List<PopupMenuEntry<String>> _optionItems(bool showInkSettings) => [
+    if (!showInkSettings && controller.tool != CanvasTool.eraser) ...[
+      ..._colorItems(prefix: 'color:'),
+      const PopupMenuDivider(),
+      ..._widthItems(prefix: 'width:'),
+      const PopupMenuDivider(),
+    ],
+    const PopupMenuItem<String>(
+      enabled: false,
+      child: Tooltip(message: 'Paper Template', child: Text('Paper Template')),
+    ),
+    for (final entry in <PaperTemplate, String>{
+      PaperTemplate.ruled: 'Ruled Paper',
+      PaperTemplate.grid: 'Grid / Graph Paper',
+      PaperTemplate.blank: 'Blank Canvas',
+    }.entries)
+      CheckedPopupMenuItem(
+        value: 'paper:${entry.key.name}',
+        checked: controller.document.paperTemplate == entry.key,
+        child: Text(entry.value),
+      ),
+    const PopupMenuDivider(),
+    CheckedPopupMenuItem(
+      value: 'stylus',
+      checked: controller.stylusOnlyMode,
+      child: Tooltip(
+        message: controller.stylusOnlyMode
+            ? 'Stylus-Only Active (Fingers Pan Canvas)'
+            : 'Finger Inking Allowed (Tap to enable Stylus-Only)',
+        child: const Text('Stylus-only input'),
+      ),
+    ),
+    CheckedPopupMenuItem<String>(
+      key: const ValueKey('a4-option'),
+      value: 'a4',
+      checked: controller.showA4Guides,
+      child: Tooltip(
+        message: controller.showA4Guides
+            ? a4WritingTooltip
+            : continuousPaperTooltip,
+        child: const Text('A4 Writing'),
+      ),
+    ),
+    if (controller.showA4Guides)
+      const PopupMenuItem<String>(
+        value: 'fit',
+        child: Tooltip(message: 'Fit to Width', child: Text('Fit to Width')),
+      ),
+    if (controller.zoomScale != 1 || controller.viewportOffset != Offset.zero)
+      PopupMenuItem<String>(
+        value: 'reset',
+        child: Tooltip(
+          message: 'Reset View',
+          child: Text('Reset View (${(controller.zoomScale * 100).round()}%)'),
         ),
       ),
-    );
+    const PopupMenuDivider(),
+    const PopupMenuItem<String>(
+      value: 'clear',
+      child: Tooltip(message: 'Clear Canvas', child: Text('Clear Canvas')),
+    ),
+  ];
+
+  void _selectOption(BuildContext context, String value) {
+    if (value.startsWith('color:')) {
+      controller.setColor(_palette[value.substring(6)]!);
+    } else if (value.startsWith('width:')) {
+      controller.setStrokeWidth(_widths[value.substring(6)]!);
+    } else if (value.startsWith('paper:')) {
+      controller.setPaperTemplate(
+        PaperTemplate.values.byName(value.substring(6)),
+      );
+    } else {
+      switch (value) {
+        case 'stylus':
+          controller.setStylusOnlyMode(!controller.stylusOnlyMode);
+        case 'a4':
+          controller.toggleA4Guides();
+        case 'fit':
+          controller.fitToWidth(MediaQuery.sizeOf(context).width);
+        case 'reset':
+          controller.resetViewport();
+        case 'clear':
+          _confirmClear(context);
+      }
+    }
   }
 
   void _confirmClear(BuildContext context) {
@@ -263,7 +318,9 @@ class ToolbarWidget extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Clear Canvas'),
-        content: const Text('Are you sure you want to clear all strokes? This can be undone.'),
+        content: const Text(
+          'Are you sure you want to clear all strokes? This can be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
