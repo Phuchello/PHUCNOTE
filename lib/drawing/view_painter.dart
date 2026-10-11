@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../core/models/note_document.dart';
 import '../core/models/stroke_element.dart';
 import 'stroke_geometry.dart';
+import 'stroke_path_cache.dart';
 import 'a4_page_layout.dart';
 
 /// CustomPainter responsible for rendering the static canvas background,
@@ -20,6 +21,7 @@ class PhucNoteViewPainter extends CustomPainter {
   final bool showA4Guides;
   final String Function(int)? pageLabel;
   final String? localeName;
+  final StrokePathCache? strokeCache;
 
   PhucNoteViewPainter({
     required this.document,
@@ -30,6 +32,7 @@ class PhucNoteViewPainter extends CustomPainter {
     this.showA4Guides = false,
     this.pageLabel,
     this.localeName,
+    this.strokeCache,
   });
 
   @override
@@ -59,7 +62,7 @@ class PhucNoteViewPainter extends CustomPainter {
 
     // 4. Draw committed strokes with offscreen viewport culling
     for (final stroke in document.strokes) {
-      if (stroke.points.isEmpty || !visibleCanvasRect.overlaps(stroke.boundingBox)) {
+      if (stroke.points.isEmpty || !visibleCanvasRect.overlaps(strokeCache?.boundsFor(stroke) ?? stroke.boundingBox)) {
         continue;
       }
       _drawStroke(canvas, stroke);
@@ -188,7 +191,7 @@ class PhucNoteViewPainter extends CustomPainter {
   }
 
   void _drawStroke(Canvas canvas, StrokeElement stroke) {
-    final path = StrokeGeometry.generatePath(stroke.points, stroke.property);
+    final path = strokeCache?.pathFor(stroke) ?? StrokeGeometry.generatePath(stroke.points, stroke.property);
     final paint = Paint()
       ..color = stroke.property.color
       ..style = PaintingStyle.fill;

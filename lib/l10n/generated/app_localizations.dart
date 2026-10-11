@@ -723,6 +723,96 @@ abstract class AppLocalizations {
   /// In vi, this message translates to:
   /// **'Chưa có thay đổi'**
   String get noChanges;
+
+  /// No description provided for @stylusDiagnostics.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chẩn đoán bút Y700'**
+  String get stylusDiagnostics;
+
+  /// No description provided for @diagnosticsInstructions.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bắt đầu rồi viết trên trang hiện tại. Mở lại mục này để dừng và xuất JSON. Dữ liệu chỉ lưu cục bộ, không lưu vào ghi chú.'**
+  String get diagnosticsInstructions;
+
+  /// No description provided for @diagnosticsRecording.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đang đo — có thêm chi phí chẩn đoán.'**
+  String get diagnosticsRecording;
+
+  /// No description provided for @diagnosticsStopped.
+  ///
+  /// In vi, this message translates to:
+  /// **'Chưa đo hoặc đã dừng.'**
+  String get diagnosticsStopped;
+
+  /// No description provided for @diagnosticsCaveat.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không suy ra chất lượng bút thật từ emulator. Không đồng nhất Hz màn hình với tần số lấy mẫu bút.'**
+  String get diagnosticsCaveat;
+
+  /// No description provided for @diagnosticsFailed.
+  ///
+  /// In vi, this message translates to:
+  /// **'Không thể thu thập chẩn đoán. Vui lòng thử lại.'**
+  String get diagnosticsFailed;
+
+  /// No description provided for @diagnosticsStart.
+  ///
+  /// In vi, this message translates to:
+  /// **'Bắt đầu đo'**
+  String get diagnosticsStart;
+
+  /// No description provided for @diagnosticsStop.
+  ///
+  /// In vi, this message translates to:
+  /// **'Dừng đo'**
+  String get diagnosticsStop;
+
+  /// No description provided for @diagnosticsExport.
+  ///
+  /// In vi, this message translates to:
+  /// **'Xuất JSON'**
+  String get diagnosticsExport;
+
+  /// No description provided for @diagnosticsModel.
+  ///
+  /// In vi, this message translates to:
+  /// **'Máy: {model} · Android {os}'**
+  String diagnosticsModel(String model, String os);
+
+  /// No description provided for @diagnosticsRefresh.
+  ///
+  /// In vi, this message translates to:
+  /// **'Tần số hiện tại: {rate} Hz'**
+  String diagnosticsRefresh(String rate);
+
+  /// No description provided for @diagnosticsEvents.
+  ///
+  /// In vi, this message translates to:
+  /// **'Sự kiện: {events} · Hủy: {cancellations} · Lịch sử: {history}'**
+  String diagnosticsEvents(String events, String cancellations, String history);
+
+  /// No description provided for @diagnosticsFrames.
+  ///
+  /// In vi, this message translates to:
+  /// **'Khung hình Flutter: {frames}'**
+  String diagnosticsFrames(String frames);
+
+  /// No description provided for @diagnosticsDropped.
+  ///
+  /// In vi, this message translates to:
+  /// **'Mẫu bị bỏ do giới hạn: {count}'**
+  String diagnosticsDropped(String count);
+
+  /// No description provided for @diagnosticsSaved.
+  ///
+  /// In vi, this message translates to:
+  /// **'Đã lưu JSON. Đường dẫn đã sao chép:\n{path}'**
+  String diagnosticsSaved(String path);
 }
 
 class _AppLocalizationsDelegate

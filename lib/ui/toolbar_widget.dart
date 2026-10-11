@@ -10,6 +10,7 @@ import 'pen_studio_panel.dart';
 import '../l10n/l10n.dart';
 import 'app_theme.dart';
 import 'ink_palette.dart';
+import 'stylus_diagnostics_panel.dart';
 
 /// Primary inking controls stay visible; secondary settings use one menu.
 class ToolbarWidget extends StatelessWidget {
@@ -325,6 +326,10 @@ class ToolbarWidget extends StatelessWidget {
       ),
     const PopupMenuDivider(),
     PopupMenuItem<String>(
+      value: 'diagnostics',
+      child: Text(context.l10n.stylusDiagnostics),
+    ),
+    PopupMenuItem<String>(
       value: 'clear',
       child: Tooltip(
         message: context.l10n.clearCanvas,
@@ -346,6 +351,11 @@ class ToolbarWidget extends StatelessWidget {
       switch (value) {
         case 'studio':
           _openPenStudio(context);
+        case 'diagnostics':
+          showDialog<void>(
+            context: context,
+            builder: (_) => const StylusDiagnosticsPanel(),
+          );
         case 'stylus':
           controller.setStylusOnlyMode(!controller.stylusOnlyMode);
         case 'a4':

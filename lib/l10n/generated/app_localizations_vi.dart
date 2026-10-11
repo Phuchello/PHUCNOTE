@@ -356,4 +356,68 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noChanges => 'Chưa có thay đổi';
+
+  @override
+  String get stylusDiagnostics => 'Chẩn đoán bút Y700';
+
+  @override
+  String get diagnosticsInstructions =>
+      'Bắt đầu rồi viết trên trang hiện tại. Mở lại mục này để dừng và xuất JSON. Dữ liệu chỉ lưu cục bộ, không lưu vào ghi chú.';
+
+  @override
+  String get diagnosticsRecording => 'Đang đo — có thêm chi phí chẩn đoán.';
+
+  @override
+  String get diagnosticsStopped => 'Chưa đo hoặc đã dừng.';
+
+  @override
+  String get diagnosticsCaveat =>
+      'Không suy ra chất lượng bút thật từ emulator. Không đồng nhất Hz màn hình với tần số lấy mẫu bút.';
+
+  @override
+  String get diagnosticsFailed =>
+      'Không thể thu thập chẩn đoán. Vui lòng thử lại.';
+
+  @override
+  String get diagnosticsStart => 'Bắt đầu đo';
+
+  @override
+  String get diagnosticsStop => 'Dừng đo';
+
+  @override
+  String get diagnosticsExport => 'Xuất JSON';
+
+  @override
+  String diagnosticsModel(String model, String os) {
+    return 'Máy: $model · Android $os';
+  }
+
+  @override
+  String diagnosticsRefresh(String rate) {
+    return 'Tần số hiện tại: $rate Hz';
+  }
+
+  @override
+  String diagnosticsEvents(
+    String events,
+    String cancellations,
+    String history,
+  ) {
+    return 'Sự kiện: $events · Hủy: $cancellations · Lịch sử: $history';
+  }
+
+  @override
+  String diagnosticsFrames(String frames) {
+    return 'Khung hình Flutter: $frames';
+  }
+
+  @override
+  String diagnosticsDropped(String count) {
+    return 'Mẫu bị bỏ do giới hạn: $count';
+  }
+
+  @override
+  String diagnosticsSaved(String path) {
+    return 'Đã lưu JSON. Đường dẫn đã sao chép:\n$path';
+  }
 }

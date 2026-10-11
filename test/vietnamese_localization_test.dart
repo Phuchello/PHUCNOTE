@@ -40,6 +40,7 @@ const technical = <String>{
   'discard',
   'save',
   'studio',
+  'diagnostics',
   'stylus',
   'a4',
   'fit',

@@ -1,0 +1,40 @@
+Running Gradle task 'assembleProfile'...                           21,2s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (31.9MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...         4,6s
+I/WindowExtensionsImpl( 2319): Initializing Window Extensions, vendor API level=6, activity embedding enabled=true
+W/HWUI    ( 2319): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4( 2319): mapper 4.x is not supported
+I/Choreographer( 2319): Skipped 75 frames!  The application may be doing too much work on its main thread.
+D/ProfileInstaller( 2319): Installing profile for com.phucnote.phucnote
+I/ucnote.phucnote( 2319): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:50474/bM6jUc9XVVM=/
+VMServiceFlutterDriver: Isolate found with number: 421743911228499
+VMServiceFlutterDriver: Isolate 421743911228499 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 2319): 00:00 +0: Synthetic dense ink profile (baseline)
+VMServiceFlutterDriver: Connected to Flutter application.
+D/EGL_emulation( 2319): app_time_stats: avg=272.08ms min=56.59ms max=681.98ms count=5
+D/EGL_emulation( 2319): app_time_stats: avg=104.90ms min=81.15ms max=131.26ms count=10
+D/EGL_emulation( 2319): app_time_stats: avg=94.94ms min=72.82ms max=158.17ms count=11
+D/EGL_emulation( 2319): app_time_stats: avg=79.15ms min=59.90ms max=90.57ms count=13
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation( 2319): app_time_stats: avg=77.96ms min=59.81ms max=101.02ms count=13
+D/EGL_emulation( 2319): app_time_stats: avg=78.01ms min=63.45ms max=97.21ms count=13
+D/EGL_emulation( 2319): app_time_stats: avg=87.51ms min=68.84ms max=102.16ms count=12
+D/EGL_emulation( 2319): app_time_stats: avg=68.64ms min=40.45ms max=124.68ms count=15
+D/EGL_emulation( 2319): app_time_stats: avg=48.60ms min=28.96ms max=71.43ms count=19
+D/EGL_emulation( 2319): app_time_stats: avg=42.97ms min=23.00ms max=60.77ms count=21
+D/EGL_emulation( 2319): app_time_stats: avg=41.79ms min=25.41ms max=62.39ms count=20
+D/EGL_emulation( 2319): app_time_stats: avg=46.11ms min=37.58ms max=60.27ms count=21
+D/EGL_emulation( 2319): app_time_stats: avg=39.86ms min=31.33ms max=47.15ms count=23
+D/EGL_emulation( 2319): app_time_stats: avg=36.21ms min=20.27ms max=45.31ms count=23
+D/EGL_emulation( 2319): app_time_stats: avg=37.37ms min=18.43ms max=46.18ms count=24
+D/EGL_emulation( 2319): app_time_stats: avg=38.46ms min=31.66ms max=47.56ms count=24
+D/EGL_emulation( 2319): app_time_stats: avg=42.86ms min=33.07ms max=52.07ms count=22
+D/EGL_emulation( 2319): app_time_stats: avg=39.07ms min=23.50ms max=50.71ms count=23
+W/WindowOnBackDispatcher( 2319): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 2319): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/flutter ( 2319): 00:21 +1: (tearDownAll)
+I/flutter ( 2319): 00:21 +2: All tests passed!
+All tests passed.

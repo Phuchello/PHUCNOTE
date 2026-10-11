@@ -1,0 +1,34 @@
+Running Gradle task 'assembleProfile'...                           46,6s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (41.1MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...        612ms
+I/Choreographer( 3369): Skipped 39 frames!  The application may be doing too much work on its main thread.
+I/ucnote.phucnote( 3369): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:54910/2UItCxEwf4I=/
+VMServiceFlutterDriver: Isolate found with number: 601888961834287
+VMServiceFlutterDriver: Isolate 601888961834287 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 3369): 00:00 +0: Synthetic dense ink profile (optimized)
+VMServiceFlutterDriver: Connected to Flutter application.
+D/ProfileInstaller( 3369): Installing profile for com.phucnote.phucnote
+D/EGL_emulation( 3369): app_time_stats: avg=92.96ms min=38.77ms max=318.66ms count=14
+D/EGL_emulation( 3369): app_time_stats: avg=39.59ms min=18.01ms max=46.03ms count=23
+D/EGL_emulation( 3369): app_time_stats: avg=39.02ms min=20.46ms max=83.13ms count=23
+D/EGL_emulation( 3369): app_time_stats: avg=38.75ms min=27.54ms max=52.69ms count=23
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation( 3369): app_time_stats: avg=38.13ms min=28.61ms max=47.79ms count=24
+D/EGL_emulation( 3369): app_time_stats: avg=40.83ms min=31.74ms max=52.83ms count=22
+D/EGL_emulation( 3369): app_time_stats: avg=39.44ms min=31.80ms max=52.52ms count=23
+D/EGL_emulation( 3369): app_time_stats: avg=37.17ms min=21.05ms max=42.95ms count=24
+D/EGL_emulation( 3369): app_time_stats: avg=38.60ms min=21.20ms max=45.18ms count=24
+D/EGL_emulation( 3369): app_time_stats: avg=39.08ms min=31.90ms max=48.33ms count=24
+D/EGL_emulation( 3369): app_time_stats: avg=37.88ms min=20.50ms max=50.07ms count=24
+D/EGL_emulation( 3369): app_time_stats: avg=39.97ms min=20.63ms max=47.50ms count=23
+D/EGL_emulation( 3369): app_time_stats: avg=36.83ms min=21.21ms max=49.51ms count=23
+D/EGL_emulation( 3369): app_time_stats: avg=39.32ms min=30.42ms max=54.53ms count=23
+W/WindowOnBackDispatcher( 3369): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher( 3369): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/ucnote.phucnote( 3369): NativeAlloc concurrent mark compact GC freed 1847KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 2576KB/5153KB, paused 956us,7.146ms total 41.087ms
+I/flutter ( 3369): 00:17 +1: (tearDownAll)
+I/flutter ( 3369): 00:17 +2: All tests passed!
+All tests passed.

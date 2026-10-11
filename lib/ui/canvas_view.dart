@@ -11,6 +11,7 @@ import '../l10n/l10n.dart';
 import '../drawing/canvas_controller.dart';
 import '../drawing/foreground_painter.dart';
 import '../drawing/view_painter.dart';
+import '../drawing/stroke_path_cache.dart';
 
 /// The handwriting canvas widget with dual-layer RepaintBoundary architecture,
 /// configurable stylus-only gating, two-finger pinch zoom, and continuous vertical navigation.
@@ -29,6 +30,8 @@ class CanvasView extends StatefulWidget {
 }
 
 class _CanvasViewState extends State<CanvasView> {
+  final _strokeCache = StrokePathCache();
+  Object? _cachedDocument;
   final Map<int, Offset> _activeTouchPointers = {};
   Offset? _prevFocalPoint;
   double? _prevDistance;
@@ -126,6 +129,7 @@ class _CanvasViewState extends State<CanvasView> {
     }
 
     if (_activeTouchPointers.isEmpty) {
+      if (widget.controller.isStylusActive) return;
       if (!widget.controller.stylusOnlyMode) {
         widget.controller.handlePointerUp(event);
       }
@@ -147,6 +151,8 @@ class _CanvasViewState extends State<CanvasView> {
     }
 
     if (_activeTouchPointers.isEmpty) {
+      // Touch can be cancelled independently while a stylus is still writing.
+      if (widget.controller.isStylusActive) return;
       if (!widget.controller.stylusOnlyMode) {
         widget.controller.handlePointerCancel(event);
       }
@@ -169,6 +175,10 @@ class _CanvasViewState extends State<CanvasView> {
     return ListenableBuilder(
       listenable: widget.controller,
       builder: (context, _) {
+        if (!identical(_cachedDocument, widget.controller.document)) {
+          _strokeCache.clear();
+          _cachedDocument = widget.controller.document;
+        }
         return Semantics(
           label: context.l10n.writingCanvas,
           child: ClipRect(
@@ -190,6 +200,7 @@ class _CanvasViewState extends State<CanvasView> {
                         pageLabel: context.l10n.pageNumber,
                         localeName: context.l10n.localeName,
                         document: widget.controller.document,
+                        strokeCache: _strokeCache,
                         backgroundColor: widget.paperColor,
                         repaintCounter: widget.controller.repaintCounter,
                         viewportOffset: widget.controller.viewportOffset,
@@ -200,7 +211,7 @@ class _CanvasViewState extends State<CanvasView> {
                     ),
                   ),
 
-                  // Layer 2: Fast in-flight active stroke / eraser indicator (120-165Hz render loop)
+                  // Layer 2: Active stroke / eraser; cadence follows actual Flutter frames.
                   RepaintBoundary(
                     child: CustomPaint(
                       size: Size.infinite,
