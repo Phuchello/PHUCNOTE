@@ -1,0 +1,23 @@
+{
+  "units": "600x180 synthetic raster; not a quality score",
+  "stablePressureCompletedTipTrial": [
+    {
+      "preset": "Ballpoint",
+      "differentAlphaPixels": 12,
+      "legacyBounds": "Rect.fromLTRB(18.5, 44.6, 122.8, 95.4)",
+      "trialBounds": "Rect.fromLTRB(18.5, 44.6, 123.1, 95.4)"
+    },
+    {
+      "preset": "Gel Pen",
+      "differentAlphaPixels": 442,
+      "legacyBounds": "Rect.fromLTRB(17.8, 43.8, 123.3, 96.2)",
+      "trialBounds": "Rect.fromLTRB(17.8, 44.2, 123.8, 96.1)"
+    },
+    {
+      "preset": "Fountain Pen",
+      "differentAlphaPixels": 632,
+      "legacyBounds": "Rect.fromLTRB(17.5, 42.9, 124.5, 96.9)",
+      "trialBounds": "Rect.fromLTRB(17.5, 43.7, 124.1, 96.3)"
+    }
+  ]
+}

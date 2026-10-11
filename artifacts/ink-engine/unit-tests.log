@@ -1,0 +1,194 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart
+00:00 +0: C:/Users/lyle3/Music/Phucnote/test/a4_page_layout_test.dart: Page indices use inclusive tops and exclusive bottoms across gaps
+00:00 +1: C:/Users/lyle3/Music/Phucnote/test/a4_page_layout_test.dart: Horizontal page boundaries reject outside starts
+00:00 +2: C:/Users/lyle3/Music/Phucnote/test/a4_page_layout_test.dart: Visible page sequence retains the existing vertical guide bounds
+00:00 +3: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests A4 dimensions strictly maintain the 210:297 aspect ratio
+00:00 +4: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests Page guides remain strictly aligned with canvas coordinates during pan/zoom
+00:00 +5: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ViewPainter renders guides strictly for visible pages in the viewport
+00:00 +6: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests Page numbers retain readable size and footer alignment when zoomed out
+00:00 +7: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests Toggling A4 guides preserves stroke coordinates without alteration
+00:00 +8: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests Drawing, erasing, undo, and redo work with A4 guides enabled
+00:00 +9: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+00:05 +10: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+00:05 +11: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+00:05 +12: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+00:05 +13: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+00:05 +14: C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart: A4 Notebook Guides & Layout Tests ToolbarWidget contains functional A4 page guides toggle button
+
+Warning: A call to tap() with finder "Found 1 widget with widget matching predicate: [
+  RawTooltip-[LabeledGlobalKey<RawTooltipState>#4b3c0]("Giấy liên tục — chạm để bật viết trên giấy A4", hover delay: 0:00:00.000000, touch delay: 0:00:01.500000, dismiss delay: 0:00:00.100000, triggerMode: TooltipTriggerMode.longPress, enableFeedback: true, positionDelegate: Closure: (TooltipPositionContext) => Offset from Function '_getDefaultPositionDelegate@803220820':., state: RawTooltipState#0d3d6),
+]" derived an Offset (Offset(672.0, 564.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: _RenderLayoutSurrogateProxyBox#3306d relayoutBoundary=up40
+The hit test result at that offset is: HitTestResult(RenderPointerListener#62cfb@Offset(160.0, 28.0), RenderSemanticsAnnotations#a0622@Offset(160.0, 28.0), RenderMouseRegion#ed213@Offset(160.0, 28.0), RenderSemanticsAnnotations#60069@Offset(160.0, 28.0), RenderSemanticsAnnotations#78acc@Offset(160.0, 28.0), RenderMergeSemantics#d3533@Offset(160.0, 28.0), RenderAnimatedOpacity#5aab9@Offset(160.0, 28.0), _RenderMenuItem#72138@Offset(160.0, 28.0), RenderListBody#45ded@Offset(160.0, 548.0), RenderPadding#05e19@Offset(160.0, 556.0), _RenderSingleChildViewport#87826@Offset(160.0, 556.0), RenderIgnorePointer#09455@Offset(160.0, 556.0), RenderSemanticsAnnotations#4f9b7@Offset(160.0, 556.0), RenderPointerListener#7de66@Offset(160.0, 556.0), RenderSemanticsGestureHandler#7227b@Offset(160.0, 556.0), RenderPointerListener#21d3d@Offset(160.0, 556.0), _RenderScrollSemantics#2eb24@Offset(160.0, 556.0), RenderClipRect#a6e6e@Offset(160.0, 556.0), RenderSemanticsAnnotations#ec726@Offset(160.0, 556.0), RenderIntrinsicWidth#d47da@Offset(160.0, 556.0), RenderConstrainedBox#d7543@Offset(160.0, 556.0), RenderPositionedBox#beb87@Offset(160.0, 556.0), _RenderInkFeatures#f526f@Offset(160.0, 556.0), RenderCustomPaint#d5312@Offset(160.0, 556.0), RenderPhysicalShape#53ef2@Offset(160.0, 556.0), RenderAnimatedOpacity#eadda@Offset(160.0, 556.0), RenderCustomSingleChildLayoutBox#38b82@Offset(672.0, 564.0), _RenderLayoutBuilder#6a620@Offset(672.0, 564.0), RenderRepaintBoundary#e50b9@Offset(672.0, 564.0), RenderIgnorePointer#62d7e@Offset(672.0, 564.0), RenderRepaintBoundary#44a28@Offset(672.0, 564.0), RenderSemanticsAnnotations#08866@Offset(672.0, 564.0), RenderOffstage#17a80@Offset(672.0, 564.0), RenderSemanticsAnnotations#1d603@Offset(672.0, 564.0), _RenderTheater#e1739@Offset(672.0, 564.0), RenderAbsorbPointer#c21d1@Offset(672.0, 564.0), RenderPointerListener#d89da@Offset(672.0, 564.0), RenderSemanticsAnnotations#90f29@Offset(672.0, 564.0), RenderCustomPaint#429b2@Offset(672.0, 564.0), RenderSemanticsAnnotations#3f7f5@Offset(672.0, 564.0), RenderSemanticsAnnotations#916d4@Offset(672.0, 564.0), RenderSemanticsAnnotations#86d74@Offset(672.0, 564.0), RenderTapRegionSurface#1ddbb@Offset(672.0, 564.0), RenderSemanticsAnnotations#a81c9@Offset(672.0, 564.0), RenderSemanticsAnnotations#d6a90@Offset(672.0, 564.0), HitTestEntry<HitTestTarget>#4d486(_ReusableRenderView#71c5f), HitTestEntry<HitTestTarget>#efbdf(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2165:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1947:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1080:7)
+#3      main.<anonymous closure>.<anonymous closure> (file:///C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart:256:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+
+Warning: A call to tap() with finder "Found 1 widget with widget matching predicate: [
+  RawTooltip-[LabeledGlobalKey<RawTooltipState>#e9937]("Đang viết trên giấy A4 — chạm để tắt\nBắt đầu trong trang; nét có thể đi qua mép trang.", hover delay: 0:00:00.000000, touch delay: 0:00:01.500000, dismiss delay: 0:00:00.100000, triggerMode: TooltipTriggerMode.longPress, enableFeedback: true, positionDelegate: Closure: (TooltipPositionContext) => Offset from Function '_getDefaultPositionDelegate@803220820':., state: RawTooltipState#ed0f6),
+]" derived an Offset (Offset(672.0, 564.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: _RenderLayoutSurrogateProxyBox#72847 relayoutBoundary=up40
+The hit test result at that offset is: HitTestResult(RenderPointerListener#ef536@Offset(160.0, 28.0), RenderSemanticsAnnotations#b8ba2@Offset(160.0, 28.0), RenderMouseRegion#1df75@Offset(160.0, 28.0), RenderSemanticsAnnotations#ed532@Offset(160.0, 28.0), RenderSemanticsAnnotations#ba9bc@Offset(160.0, 28.0), RenderMergeSemantics#b08f8@Offset(160.0, 28.0), RenderAnimatedOpacity#f054e@Offset(160.0, 28.0), _RenderMenuItem#64d6d@Offset(160.0, 28.0), RenderListBody#1c725@Offset(160.0, 548.0), RenderPadding#7769b@Offset(160.0, 556.0), _RenderSingleChildViewport#8db07@Offset(160.0, 556.0), RenderIgnorePointer#f9fae@Offset(160.0, 556.0), RenderSemanticsAnnotations#15163@Offset(160.0, 556.0), RenderPointerListener#5bb6d@Offset(160.0, 556.0), RenderSemanticsGestureHandler#ac949@Offset(160.0, 556.0), RenderPointerListener#06bbc@Offset(160.0, 556.0), _RenderScrollSemantics#d9cfb@Offset(160.0, 556.0), RenderClipRect#c310a@Offset(160.0, 556.0), RenderSemanticsAnnotations#a265d@Offset(160.0, 556.0), RenderIntrinsicWidth#9f8bd@Offset(160.0, 556.0), RenderConstrainedBox#826f8@Offset(160.0, 556.0), RenderPositionedBox#c110e@Offset(160.0, 556.0), _RenderInkFeatures#ddaf2@Offset(160.0, 556.0), RenderCustomPaint#d3859@Offset(160.0, 556.0), RenderPhysicalShape#29109@Offset(160.0, 556.0), RenderAnimatedOpacity#6765a@Offset(160.0, 556.0), RenderCustomSingleChildLayoutBox#e70b8@Offset(672.0, 564.0), _RenderLayoutBuilder#5ca0b@Offset(672.0, 564.0), RenderRepaintBoundary#b3b0c@Offset(672.0, 564.0), RenderIgnorePointer#1538b@Offset(672.0, 564.0), RenderRepaintBoundary#f7c23@Offset(672.0, 564.0), RenderSemanticsAnnotations#a70cf@Offset(672.0, 564.0), RenderOffstage#f4d41@Offset(672.0, 564.0), RenderSemanticsAnnotations#d0996@Offset(672.0, 564.0), _RenderTheater#e1739@Offset(672.0, 564.0), RenderAbsorbPointer#c21d1@Offset(672.0, 564.0), RenderPointerListener#d89da@Offset(672.0, 564.0), RenderSemanticsAnnotations#90f29@Offset(672.0, 564.0), RenderCustomPaint#429b2@Offset(672.0, 564.0), RenderSemanticsAnnotations#3f7f5@Offset(672.0, 564.0), RenderSemanticsAnnotations#916d4@Offset(672.0, 564.0), RenderSemanticsAnnotations#86d74@Offset(672.0, 564.0), RenderTapRegionSurface#1ddbb@Offset(672.0, 564.0), RenderSemanticsAnnotations#a81c9@Offset(672.0, 564.0), RenderSemanticsAnnotations#d6a90@Offset(672.0, 564.0), HitTestEntry<HitTestTarget>#71dbf(_ReusableRenderView#71c5f), HitTestEntry<HitTestTarget>#296da(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2165:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1947:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1080:7)
+#3      main.<anonymous closure>.<anonymous closure> (file:///C:/Users/lyle3/Music/Phucnote/test/a4_notebook_guides_test.dart:264:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+00:05 +15: C:/Users/lyle3/Music/Phucnote/test/a4_page_writing_test.dart: Save/reopen preserves page-aware and legacy out-of-bounds ink exactly
+00:05 +16: C:/Users/lyle3/Music/Phucnote/test/a4_page_writing_test.dart: Existing legacy .bfly fixture remains unchanged when A4 writing is enabled
+00:06 +17: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification Reproduce portrait clipping at 800px width with scale 1.0
+00:06 +18: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification REGRESSION: A4 preview is fully visible when fit-to-width is requested
+00:06 +19: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +20: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +21: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +22: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +23: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +24: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +25: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +26: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +27: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:06 +28: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +29: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +30: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +31: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +32: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +33: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +34: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +35: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +36: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +37: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:07 +38: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:08 +39: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:08 +40: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:08 +41: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+00:08 +42: C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart: A4 Portrait Fit & Clipping Verification ToolbarWidget displays Fit to Width button when A4 guides active
+
+Warning: A call to tap() with finder "Found 1 widget with widget matching predicate: [
+  RawTooltip-[LabeledGlobalKey<RawTooltipState>#ff622]("Giấy liên tục — chạm để bật viết trên giấy A4", hover delay: 0:00:00.000000, touch delay: 0:00:01.500000, dismiss delay: 0:00:00.100000, triggerMode: TooltipTriggerMode.longPress, enableFeedback: true, positionDelegate: Closure: (TooltipPositionContext) => Offset from Function '_getDefaultPositionDelegate@803220820':., state: RawTooltipState#867b6),
+]" derived an Offset (Offset(672.0, 564.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: _RenderLayoutSurrogateProxyBox#a248f relayoutBoundary=up40
+The hit test result at that offset is: HitTestResult(RenderPointerListener#3ed8e@Offset(160.0, 28.0), RenderSemanticsAnnotations#4a5df@Offset(160.0, 28.0), RenderMouseRegion#32a09@Offset(160.0, 28.0), RenderSemanticsAnnotations#31239@Offset(160.0, 28.0), RenderSemanticsAnnotations#a1f5a@Offset(160.0, 28.0), RenderMergeSemantics#ebc02@Offset(160.0, 28.0), RenderAnimatedOpacity#59cfd@Offset(160.0, 28.0), _RenderMenuItem#559fe@Offset(160.0, 28.0), RenderListBody#397ab@Offset(160.0, 548.0), RenderPadding#4c357@Offset(160.0, 556.0), _RenderSingleChildViewport#49f02@Offset(160.0, 556.0), RenderIgnorePointer#ee719@Offset(160.0, 556.0), RenderSemanticsAnnotations#cc843@Offset(160.0, 556.0), RenderPointerListener#e5ad6@Offset(160.0, 556.0), RenderSemanticsGestureHandler#c8891@Offset(160.0, 556.0), RenderPointerListener#4398f@Offset(160.0, 556.0), _RenderScrollSemantics#bc58e@Offset(160.0, 556.0), RenderClipRect#cfa9d@Offset(160.0, 556.0), RenderSemanticsAnnotations#e1c5c@Offset(160.0, 556.0), RenderIntrinsicWidth#344f7@Offset(160.0, 556.0), RenderConstrainedBox#62c55@Offset(160.0, 556.0), RenderPositionedBox#124f3@Offset(160.0, 556.0), _RenderInkFeatures#35104@Offset(160.0, 556.0), RenderCustomPaint#135e8@Offset(160.0, 556.0), RenderPhysicalShape#15404@Offset(160.0, 556.0), RenderAnimatedOpacity#1ef4b@Offset(160.0, 556.0), RenderCustomSingleChildLayoutBox#11bd7@Offset(672.0, 564.0), _RenderLayoutBuilder#f5175@Offset(672.0, 564.0), RenderRepaintBoundary#d5508@Offset(672.0, 564.0), RenderIgnorePointer#024d7@Offset(672.0, 564.0), RenderRepaintBoundary#aac05@Offset(672.0, 564.0), RenderSemanticsAnnotations#74523@Offset(672.0, 564.0), RenderOffstage#73e0a@Offset(672.0, 564.0), RenderSemanticsAnnotations#3bce9@Offset(672.0, 564.0), _RenderTheater#7729b@Offset(672.0, 564.0), RenderAbsorbPointer#51021@Offset(672.0, 564.0), RenderPointerListener#2b985@Offset(672.0, 564.0), RenderSemanticsAnnotations#070aa@Offset(672.0, 564.0), RenderCustomPaint#fcf85@Offset(672.0, 564.0), RenderSemanticsAnnotations#e334d@Offset(672.0, 564.0), RenderSemanticsAnnotations#db406@Offset(672.0, 564.0), RenderSemanticsAnnotations#55adb@Offset(672.0, 564.0), RenderTapRegionSurface#966a8@Offset(672.0, 564.0), RenderSemanticsAnnotations#330fc@Offset(672.0, 564.0), RenderSemanticsAnnotations#aca79@Offset(672.0, 564.0), HitTestEntry<HitTestTarget>#8d2a1(_ReusableRenderView#0867c), HitTestEntry<HitTestTarget>#d480a(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2165:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1947:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1080:7)
+#3      main.<anonymous closure>.<anonymous closure> (file:///C:/Users/lyle3/Music/Phucnote/test/a4_portrait_fit_test.dart:129:20)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+00:09 +43: C:/Users/lyle3/Music/Phucnote/test/continuous_vertical_paper_test.dart: Continuous Vertical Paper & Navigation Tests CanvasView two-finger pinch zoom and single finger pan in stylus-only mode
+00:09 +44: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:09 +45: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:09 +46: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:09 +47: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:09 +48: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:09 +49: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +50: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +51: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +52: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +53: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +54: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +55: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +56: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +57: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +58: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +59: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +60: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +61: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +62: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:10 +63: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:10 +64: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +65: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +66: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +67: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +68: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +69: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:11 +70: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +71: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +72: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +73: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +74: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +75: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:12 +76: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:13 +77: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:13 +78: C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:13 +79: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:13 +80: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:13 +81: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:13 +82: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:13 +83: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:14 +84: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:14 +85: C:/Users/lyle3/Music/Phucnote/test/p0_autosave_test.dart: edits pending after a failed save are retried by autosave
+00:14 +86: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +87: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +88: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +89: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +90: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +91: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +92: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +93: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +94: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +95: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:14 +96: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:15 +97: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:16 +98: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:17 +99: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:17 +100: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:17 +101: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(1024.0, 640.0)
+00:17 +102: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:17 +103: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:17 +104: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:18 +105: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:19 +106: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:19 +107: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:19 +108: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:19 +109: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:19 +110: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:20 +111: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:20 +112: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(1024.0, 640.0) at 1.3 text scale
+00:20 +113: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Studio controls fit and remain accessible at Size(360.0, 640.0)
+00:20 +114: C:/Users/lyle3/Music/Phucnote/test/tablet_ui_test.dart: UI-06: Exit Zen and Android Back restore navigation and save
+00:20 +115: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(640.0, 1024.0) at 1.3 text scale
+00:20 +116: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(640.0, 1024.0) at 1.3 text scale
+00:20 +117: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(640.0, 1024.0) at 1.3 text scale
+00:21 +118: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.light Size(640.0, 1024.0) at 1.3 text scale
+00:21 +119: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Save named preset, reopen studio, select and reset its exact settings
+00:22 +120: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Save named preset, reopen studio, select and reset its exact settings
+00:23 +121: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.dark Size(1024.0, 640.0) at 1.3 text scale
+00:23 +122: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.dark Size(1024.0, 640.0) at 1.3 text scale
+00:23 +123: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Corrupt personal settings disable writes and keep built-in presets usable
+00:23 +124: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Vietnamese chrome, dialogs and targets: ThemeMode.dark Size(640.0, 1024.0) at 1.3 text scale
+00:24 +125: C:/Users/lyle3/Music/Phucnote/test/pen_studio_panel_test.dart: Responsive toolbar exposes Studio without increasing its height or tool targets
+00:24 +126: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: List errors are Vietnamese and do not expose technical exceptions
+00:24 +127: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Localized load error keeps the saved file
+00:25 +128: C:/Users/lyle3/Music/Phucnote/test/vietnamese_localization_test.dart: Localized delete error keeps the saved file
+00:25 +129: All tests passed!

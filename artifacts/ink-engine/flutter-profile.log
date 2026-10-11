@@ -1,0 +1,76 @@
+Running Gradle task 'assembleProfile'...                        
+Warning: SDK processing. This version only understands SDK XML versions up to 3 but an SDK XML file of version 4 was encountered. This can happen if you use versions of Android Studio and the command-line tools that were released at different times.
+Running Gradle task 'assembleProfile'...                           55,7s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (31.9MB)
+Installing build\app\outputs\flutter-apk\app-profile.apk...        712ms
+W/HWUI    ( 7114): Failed to initialize 101010-2 format, error = EGL_SUCCESS
+I/Gralloc4( 7114): mapper 4.x is not supported
+I/Choreographer( 7114): Skipped 49 frames!  The application may be doing too much work on its main thread.
+I/ucnote.phucnote( 7114): Compiler allocated 5174KB to compile void android.view.ViewRootImpl.performTraversals()
+VMServiceFlutterDriver: Connecting to Flutter application at http://127.0.0.1:64088/9ygF9HWap08=/
+VMServiceFlutterDriver: Isolate found with number: 1006204732975711
+VMServiceFlutterDriver: Isolate 1006204732975711 is runnable.
+VMServiceFlutterDriver: Isolate is paused at start.
+VMServiceFlutterDriver: Attempting to resume isolate
+I/flutter ( 7114): 00:00 +0: Isolated baseline A1 A2 profile replay and geometry measurements
+VMServiceFlutterDriver: Connected to Flutter application.
+I/flutter ( 7114): INK_ALLOC_RESET:baseline:isolates/1006204732975711
+D/ProfileInstaller( 7114): Installing profile for com.phucnote.phucnote
+D/EGL_emulation( 7114): app_time_stats: avg=832.45ms min=104.57ms max=2026.67ms count=3
+D/EGL_emulation( 7114): app_time_stats: avg=46.24ms min=22.48ms max=70.05ms count=20
+D/EGL_emulation( 7114): app_time_stats: avg=43.12ms min=15.22ms max=72.29ms count=21
+VMServiceFlutterDriver: request_data message is taking a long time to complete...
+D/EGL_emulation( 7114): app_time_stats: avg=34.30ms min=9.88ms max=54.18ms count=24
+D/EGL_emulation( 7114): app_time_stats: avg=40.38ms min=21.10ms max=62.08ms count=23
+D/EGL_emulation( 7114): app_time_stats: avg=50.09ms min=21.42ms max=85.26ms count=20
+D/EGL_emulation( 7114): app_time_stats: avg=49.08ms min=14.41ms max=75.48ms count=20
+D/EGL_emulation( 7114): app_time_stats: avg=51.91ms min=14.79ms max=79.04ms count=19
+D/EGL_emulation( 7114): app_time_stats: avg=41.52ms min=14.51ms max=64.22ms count=21
+D/EGL_emulation( 7114): app_time_stats: avg=35.29ms min=12.94ms max=67.93ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=45.02ms min=16.68ms max=75.37ms count=21
+D/EGL_emulation( 7114): app_time_stats: avg=42.76ms min=16.55ms max=60.07ms count=21
+D/EGL_emulation( 7114): app_time_stats: avg=48.18ms min=17.80ms max=88.55ms count=20
+D/EGL_emulation( 7114): app_time_stats: avg=38.86ms min=12.95ms max=72.01ms count=22
+I/flutter ( 7114): INK_ALLOC_END:baseline:isolates/1006204732975711
+I/ucnote.phucnote( 7114): Explicit concurrent mark compact GC freed 1838KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 2532KB/5064KB, paused 1.405ms,1.476ms total 32.092ms
+I/flutter ( 7114): INK_ALLOC_RESET:a1_incremental:isolates/1006204732975711
+D/EGL_emulation( 7114): app_time_stats: avg=695.53ms min=39.48ms max=2051.91ms count=4
+D/EGL_emulation( 7114): app_time_stats: avg=51.13ms min=16.85ms max=97.42ms count=20
+D/EGL_emulation( 7114): app_time_stats: avg=53.36ms min=25.20ms max=78.01ms count=19
+D/EGL_emulation( 7114): app_time_stats: avg=49.46ms min=25.51ms max=95.91ms count=21
+D/EGL_emulation( 7114): app_time_stats: avg=45.38ms min=14.77ms max=88.66ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=46.63ms min=12.56ms max=92.20ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=37.31ms min=11.84ms max=88.73ms count=27
+D/EGL_emulation( 7114): app_time_stats: avg=47.59ms min=14.49ms max=95.53ms count=21
+D/EGL_emulation( 7114): app_time_stats: avg=55.78ms min=33.75ms max=88.75ms count=18
+D/EGL_emulation( 7114): app_time_stats: avg=47.01ms min=14.98ms max=86.99ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=44.00ms min=27.32ms max=95.47ms count=23
+D/EGL_emulation( 7114): app_time_stats: avg=41.61ms min=14.64ms max=80.36ms count=24
+D/EGL_emulation( 7114): app_time_stats: avg=46.31ms min=17.25ms max=110.33ms count=23
+D/EGL_emulation( 7114): app_time_stats: avg=49.98ms min=15.91ms max=90.60ms count=20
+I/flutter ( 7114): INK_ALLOC_END:a1_incremental:isolates/1006204732975711
+I/ucnote.phucnote( 7114): Explicit concurrent mark compact GC freed 152KB AllocSpace bytes, 6(292KB) LOS objects, 49% free, 2557KB/5114KB, paused 528us,1.320ms total 11.421ms
+D/EGL_emulation( 7114): app_time_stats: avg=830.62ms min=29.65ms max=3198.16ms count=4
+D/EGL_emulation( 7114): app_time_stats: avg=12899.28ms min=318.59ms max=19246.50ms count=3
+I/flutter ( 7114): INK_ALLOC_RESET:a2_repaint:isolates/1006204732975711
+D/EGL_emulation( 7114): app_time_stats: avg=628.69ms min=36.70ms max=2079.17ms count=4
+D/EGL_emulation( 7114): app_time_stats: avg=54.68ms min=28.89ms max=95.25ms count=19
+D/EGL_emulation( 7114): app_time_stats: avg=54.41ms min=26.63ms max=82.92ms count=19
+D/EGL_emulation( 7114): app_time_stats: avg=44.99ms min=16.64ms max=79.19ms count=23
+D/EGL_emulation( 7114): app_time_stats: avg=43.11ms min=10.76ms max=93.94ms count=24
+D/EGL_emulation( 7114): app_time_stats: avg=47.30ms min=16.87ms max=78.13ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=39.97ms min=16.92ms max=94.00ms count=26
+D/EGL_emulation( 7114): app_time_stats: avg=45.61ms min=16.91ms max=88.05ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=47.50ms min=14.61ms max=76.77ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=43.71ms min=14.79ms max=62.61ms count=24
+D/EGL_emulation( 7114): app_time_stats: avg=40.64ms min=14.50ms max=88.29ms count=25
+D/EGL_emulation( 7114): app_time_stats: avg=45.89ms min=19.39ms max=89.92ms count=22
+D/EGL_emulation( 7114): app_time_stats: avg=48.70ms min=15.25ms max=97.40ms count=21
+I/flutter ( 7114): INK_ALLOC_END:a2_repaint:isolates/1006204732975711
+I/ucnote.phucnote( 7114): Explicit concurrent mark compact GC freed 256KB AllocSpace bytes, 7(312KB) LOS objects, 49% free, 2557KB/5114KB, paused 1.242ms,1.513ms total 13.205ms
+D/EGL_emulation( 7114): app_time_stats: avg=230.68ms min=13.51ms max=3163.59ms count=17
+D/EGL_emulation( 7114): app_time_stats: avg=18852.40ms min=18852.40ms max=18852.40ms count=1
+D/EGL_emulation( 7114): app_time_stats: avg=4547.50ms min=4547.50ms max=4547.50ms count=1
+I/flutter ( 7114): 01:03 +1: (tearDownAll)
+I/flutter ( 7114): 01:03 +2: All tests passed!
+All tests passed.

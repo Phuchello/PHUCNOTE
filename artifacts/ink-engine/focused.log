@@ -1,0 +1,8 @@
+00:00 +0: loading C:/Users/lyle3/Music/Phucnote/test/ink_engine_benchmark_test.dart
+00:00 +0: All catalog prefixes preserve perfect_freehand preprocessing and bounds
+00:01 +1: Wet prefixes, completion, transforms and bfly reopen retain identical pixels
+00:02 +2: Audit reproduces stable-pressure simulation, pressure clamp and unused tilt
+00:02 +3: Dense cache over capacity evicts; no silent geometry/data change
+00:02 +4: Timestamp and tilt are not geometry dynamics; parameter changes are visible
+00:02 +5: Generate reproducible benchmark inputs and visual comparison
+00:02 +6: All tests passed!
