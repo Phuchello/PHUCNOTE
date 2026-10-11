@@ -24,8 +24,13 @@ enum CanvasTool {
 class CanvasController extends ChangeNotifier {
   NoteDocument _document;
   CanvasTool _tool = CanvasTool.pen;
-  Color _color = const Color(0xFF1E1E1E);
-  double _strokeWidth = 3.0;
+  StrokeProperty _penProperty = const StrokeProperty(
+    colorValue: 0xFF1E1E1E,
+    thinning: 0.45,
+    smoothing: 0.55,
+    streamline: 0.40,
+  );
+  StrokeProperty? _activeStrokeProperty;
 
   final List<StrokePoint> _activePoints = [];
   Offset? _eraserPosition;
@@ -68,8 +73,10 @@ class CanvasController extends ChangeNotifier {
   // Getters
   NoteDocument get document => _document;
   CanvasTool get tool => _tool;
-  Color get color => _color;
-  double get strokeWidth => _strokeWidth;
+  Color get color => Color(_penProperty.colorValue);
+  double get strokeWidth => _penProperty.strokeWidth;
+  StrokeProperty get penProperty => _penProperty;
+  StrokeProperty get activeProperty => _activeStrokeProperty ?? currentProperty;
   List<StrokePoint> get activePoints => List.unmodifiable(_activePoints);
   Offset? get eraserPosition => _eraserPosition;
   int get repaintCounter => _repaintCounter;
@@ -113,19 +120,28 @@ class CanvasController extends ChangeNotifier {
     notifyListeners();
   }
 
-  StrokeProperty get currentProperty => StrokeProperty(
-        colorValue: _color.toARGB32(),
-        strokeWidth: _tool == CanvasTool.highlighter ? _strokeWidth * 3.5 : _strokeWidth,
-        thinning: _tool == CanvasTool.highlighter ? 0.0 : 0.45,
-        smoothing: 0.55,
-        streamline: 0.40,
-        isHighlighter: _tool == CanvasTool.highlighter,
-        opacity: _tool == CanvasTool.highlighter ? 0.35 : 1.0,
-      );
+  StrokeProperty get currentProperty => _tool == CanvasTool.highlighter
+      ? _penProperty.copyWith(
+          strokeWidth: strokeWidth * 3.5,
+          thinning: 0,
+          smoothing: 0.55,
+          streamline: 0.40,
+          isHighlighter: true,
+          opacity: 0.35,
+        )
+      : _penProperty;
+
+  void setPenProperty(StrokeProperty property) {
+    _finishEraseSession();
+    _penProperty = property.copyWith(isHighlighter: false);
+    _tool = CanvasTool.pen;
+    notifyListeners();
+  }
 
   void setDocument(NoteDocument doc) {
     _document = doc;
     _activePoints.clear();
+    _activeStrokeProperty = null;
     _eraserPosition = null;
     _undoStack.clear();
     _redoStack.clear();
@@ -149,8 +165,8 @@ class CanvasController extends ChangeNotifier {
   }
 
   void setColor(Color newColor) {
-    if (_color != newColor) {
-      _color = newColor;
+    if (color != newColor) {
+      _penProperty = _penProperty.copyWith(colorValue: newColor.toARGB32());
       if (_tool == CanvasTool.eraser) {
         _finishEraseSession();
         _tool = CanvasTool.pen;
@@ -160,8 +176,8 @@ class CanvasController extends ChangeNotifier {
   }
 
   void setStrokeWidth(double newWidth) {
-    if (_strokeWidth != newWidth) {
-      _strokeWidth = newWidth;
+    if (strokeWidth != newWidth) {
+      _penProperty = _penProperty.copyWith(strokeWidth: newWidth);
       notifyListeners();
     }
   }
@@ -243,6 +259,7 @@ class CanvasController extends ChangeNotifier {
   }
 
   void cancelActivePoints() {
+    _activeStrokeProperty = null;
     if (_activePoints.isNotEmpty) {
       _activePoints.clear();
       _repaintCounter++;
@@ -313,6 +330,8 @@ class CanvasController extends ChangeNotifier {
     }
 
     _finishEraseSession();
+    _activePoints.clear();
+    _activeStrokeProperty = null;
     final canvasPos = _canvasCoordinates(event.localPosition);
     final pressure = event.pressure.clamp(0.1, 1.0);
 
@@ -334,13 +353,13 @@ class CanvasController extends ChangeNotifier {
       return;
     }
 
-    _activePoints.clear();
     if (_showA4Guides && A4PageLayout.pageIndexAt(canvasPos) == null) {
       notifyListeners();
       return;
     }
     // A4 limits only stroke initiation. Once accepted, every sample is retained
     // across page edges/gaps as one global-coordinate stroke and undo action.
+    _activeStrokeProperty = currentProperty;
     _activePoints.add(StrokePoint(
       x: canvasPos.dx,
       y: canvasPos.dy,
@@ -362,7 +381,7 @@ class CanvasController extends ChangeNotifier {
         ? CanvasTool.eraser
         : _tool;
 
-    if (effectiveTool == CanvasTool.eraser) {
+    if (_activeStrokeProperty == null && effectiveTool == CanvasTool.eraser) {
       if (_eraserPosition == null) return;
       _eraserPosition = canvasPos;
       _eraseAt(canvasPos);
@@ -398,11 +417,11 @@ class CanvasController extends ChangeNotifier {
       return;
     }
 
-    if (_activePoints.isNotEmpty) {
+    if (_activePoints.isNotEmpty && _activeStrokeProperty != null) {
       final stroke = StrokeElement(
         id: const Uuid().v4(),
         points: List.of(_activePoints),
-        property: currentProperty,
+        property: _activeStrokeProperty!,
       );
       final action = AddStrokeAction(stroke);
       action.execute(_document);
@@ -413,12 +432,14 @@ class CanvasController extends ChangeNotifier {
     }
 
     _activePoints.clear();
+    _activeStrokeProperty = null;
     notifyListeners();
   }
 
   void handlePointerCancel(PointerCancelEvent event) {
     _isStylusActive = false;
     _activePoints.clear();
+    _activeStrokeProperty = null;
     // Erasures already changed the document; cancellation still needs history.
     _finishEraseSession();
     notifyListeners();

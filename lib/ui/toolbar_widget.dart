@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../core/models/note_document.dart';
 import '../drawing/canvas_controller.dart';
+import 'pen_studio_panel.dart';
 
 /// Primary inking controls stay visible; secondary settings use one menu.
 class ToolbarWidget extends StatelessWidget {
@@ -81,15 +82,10 @@ class ToolbarWidget extends StatelessWidget {
                 onSelected: (label) => controller.setColor(_palette[label]!),
                 itemBuilder: (_) => _colorItems(),
               ),
-              PopupMenuButton<String>(
-                tooltip: 'Stroke Width',
-                icon: Text(
-                  controller.strokeWidth.toString(),
-                  style: theme.textTheme.labelMedium,
-                ),
-                onSelected: (label) =>
-                    controller.setStrokeWidth(_widths[label]!),
-                itemBuilder: (_) => _widthItems(),
+              _button(
+                tooltip: 'Pen Studio',
+                icon: const Icon(Icons.tune),
+                onPressed: () => _openPenStudio(context),
               ),
             ],
             if (constraints.maxWidth >= 560 && controller.showA4Guides)
@@ -226,9 +222,12 @@ class ToolbarWidget extends StatelessWidget {
   ];
 
   List<PopupMenuEntry<String>> _optionItems(bool showInkSettings) => [
+    const PopupMenuItem<String>(value: 'studio', child: Text('Pen Studio')),
     if (!showInkSettings && controller.tool != CanvasTool.eraser) ...[
       ..._colorItems(prefix: 'color:'),
       const PopupMenuDivider(),
+    ],
+    if (controller.tool != CanvasTool.eraser) ...[
       ..._widthItems(prefix: 'width:'),
       const PopupMenuDivider(),
     ],
@@ -299,6 +298,8 @@ class ToolbarWidget extends StatelessWidget {
       );
     } else {
       switch (value) {
+        case 'studio':
+          _openPenStudio(context);
         case 'stylus':
           controller.setStylusOnlyMode(!controller.stylusOnlyMode);
         case 'a4':
@@ -312,6 +313,11 @@ class ToolbarWidget extends StatelessWidget {
       }
     }
   }
+
+  void _openPenStudio(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (_) => PenStudioPanel(controller: controller),
+  );
 
   void _confirmClear(BuildContext context) {
     showDialog(

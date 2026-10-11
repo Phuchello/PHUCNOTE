@@ -199,7 +199,7 @@ class _CanvasViewState extends State<CanvasView> {
                     size: Size.infinite,
                     painter: PhucNoteForegroundPainter(
                       activePoints: widget.controller.activePoints,
-                      property: widget.controller.currentProperty,
+                      property: widget.controller.activeProperty,
                       eraserPosition: widget.controller.eraserPosition,
                       eraserRadius: widget.controller.eraserRadius,
                       viewportOffset: widget.controller.viewportOffset,
