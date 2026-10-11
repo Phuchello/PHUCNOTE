@@ -6,6 +6,9 @@ import '../core/models/stroke_property.dart';
 import '../core/storage/pen_preset_store.dart';
 import '../drawing/canvas_controller.dart';
 import 'pen_preview.dart';
+import '../l10n/l10n.dart';
+import 'configuration_panel.dart';
+import 'ink_palette.dart';
 
 class PenStudioPanel extends StatefulWidget {
   final CanvasController controller;
@@ -48,9 +51,7 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
       });
     } catch (_) {
       if (mounted) {
-        setState(
-          () => _error = 'Personal presets could not be loaded. Existing settings were kept.',
-        );
+        setState(() => _error = context.l10n.presetLoadFailed);
       }
     }
   }
@@ -71,26 +72,44 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
     final name = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Save personal preset'),
+        title: Text(context.l10n.savePersonalTitle),
         content: TextField(
           onChanged: (value) => draftName = value,
           autofocus: true,
           maxLength: 40,
-          decoration: const InputDecoration(labelText: 'Preset name'),
+          decoration: InputDecoration(labelText: context.l10n.presetName),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, draftName.trim()),
-            child: const Text('Save preset'),
+            child: Text(context.l10n.savePreset),
           ),
         ],
       ),
     );
     if (!mounted || name == null) return;
+    final reservedNames = [
+      ...PenPreset.defaults.map((p) => p.name),
+      ...PenPreset.defaults.map(context.presetLabel),
+      ..._personal.map((p) => p.name),
+    ];
+    final validation = name.isEmpty
+        ? context.l10n.presetNameRequired
+        : name.length > 40
+        ? context.l10n.presetNameTooLong
+        : reservedNames.any(
+            (existing) => existing.toLowerCase() == name.toLowerCase(),
+          )
+        ? context.l10n.presetNameExists
+        : null;
+    if (validation != null) {
+      setState(() => _error = validation);
+      return;
+    }
     final preset = PenPreset(name, widget.controller.penProperty);
     setState(() {
       _saving = true;
@@ -103,11 +122,11 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
         _personal.add(preset);
         _selected = preset;
       });
-    } on FormatException catch (error) {
-      if (mounted) setState(() => _error = error.message.toString());
+    } on FormatException catch (_) {
+      if (mounted) setState(() => _error = context.l10n.presetInvalid);
     } catch (_) {
       if (mounted) {
-        setState(() => _error = 'Preset could not be saved. Please try again.');
+        setState(() => _error = context.l10n.presetSaveFailed);
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -115,6 +134,7 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
   }
 
   Widget _slider(
+    String id,
     String label,
     double value,
     double min,
@@ -122,18 +142,18 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
     ValueChanged<double> onChanged,
   ) => Row(
     children: [
-      SizedBox(width: 82, child: Text(label)),
+      SizedBox(width: 110, child: Text(label)),
       Expanded(
         child: Slider(
-          key: ValueKey('pen-$label'),
+          key: ValueKey('pen-$id'),
           value: value.clamp(min, max),
           min: min,
           max: max,
-          label: value.toStringAsFixed(2),
+          label: context.uiDecimal(value),
           onChanged: onChanged,
         ),
       ),
-      SizedBox(width: 38, child: Text(value.toStringAsFixed(2))),
+      SizedBox(width: 48, child: Text(context.uiDecimal(value))),
     ],
   );
 
@@ -145,175 +165,151 @@ class _PenStudioPanelState extends State<PenStudioPanel> {
       final customized =
           _selected == null ||
           !mapEquals(_selected!.property.toJson(), property.toJson());
-      return Dialog(
-        insetPadding: const EdgeInsets.all(16),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 480),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    const Expanded(
-                      child: Text(
-                        'PHUC PEN STUDIO',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      tooltip: 'Close Pen Studio',
-                      constraints: const BoxConstraints.tightFor(
-                        width: 48,
-                        height: 48,
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
-                    ),
-                  ],
-                ),
-                Flexible(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(customized ? 'Preset · customized' : 'Preset'),
-                        DropdownButton<PenPreset>(
-                          key: const ValueKey('pen-preset'),
-                          value: _selected,
-                          isExpanded: true,
-                          hint: const Text('Current pen'),
-                          items: [
-                            for (final preset in [
-                              ...PenPreset.defaults,
-                              ..._personal,
-                            ])
-                              DropdownMenuItem(
-                                value: preset,
-                                child: Text(
-                                  preset.name,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                          ],
-                          onChanged: (preset) {
-                            if (preset == null) return;
-                            setState(() => _selected = preset);
-                            _apply(preset.property);
-                          },
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text(
-                            'Fountain Pen: soft-nib pressure-width simulation with a round tip.',
-                          ),
-                        ),
-                        PenPreview(property: property),
-                        _slider(
-                          'Width',
-                          property.strokeWidth,
-                          0.5,
-                          24,
-                          (v) => _apply(property.copyWith(strokeWidth: v)),
-                        ),
-                        _slider(
-                          'Opacity',
-                          property.opacity,
-                          0,
-                          1,
-                          (v) => _apply(property.copyWith(opacity: v)),
-                        ),
-                        _slider(
-                          'Thinning',
-                          property.thinning,
-                          -1,
-                          1,
-                          (v) => _apply(property.copyWith(thinning: v)),
-                        ),
-                        _slider(
-                          'Smoothing',
-                          property.smoothing,
-                          0,
-                          1,
-                          (v) => _apply(property.copyWith(smoothing: v)),
-                        ),
-                        _slider(
-                          'Streamline',
-                          property.streamline,
-                          0,
-                          1,
-                          (v) => _apply(property.copyWith(streamline: v)),
-                        ),
-                        TextField(
-                          key: const ValueKey('pen-color'),
-                          controller: _color,
-                          maxLength: 6,
-                          decoration: InputDecoration(
-                            labelText: 'Color (RRGGBB)',
-                            prefixText: '#',
-                            suffixIcon: Icon(
-                              Icons.circle,
-                              color: property.color,
-                            ),
-                            helperText: 'Six hex digits; valid colors apply immediately.',
-                          ),
-                          onChanged: (value) {
-                            if (!RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(value)) {
-                              return;
-                            }
-                            widget.controller.setPenProperty(
-                              property.copyWith(
-                                colorValue:
-                                    0xFF000000 | int.parse(value, radix: 16),
-                              ),
-                            );
-                          },
-                        ),
-                        if (_error != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              _error!,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                              ),
-                            ),
-                          ),
-                      ],
+      return ConfigurationPanel(
+        title: context.l10n.penStudioTitle,
+        closeTooltip: context.l10n.closePenStudio,
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              customized ? context.l10n.presetCustomized : context.l10n.preset,
+            ),
+            DropdownButton<PenPreset>(
+              key: const ValueKey('pen-preset'),
+              value: _selected,
+              isExpanded: true,
+              hint: Text(context.l10n.currentPen),
+              items: [
+                for (final preset in [...PenPreset.defaults, ..._personal])
+                  DropdownMenuItem(
+                    value: preset,
+                    child: Text(
+                      context.presetLabel(preset),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-                Wrap(
-                  alignment: WrapAlignment.end,
-                  spacing: 8,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() => _selected ??= PenPreset.defaults.first);
-                        _apply(_selected!.property);
-                      },
-                      style: TextButton.styleFrom(
-                        minimumSize: const Size(48, 48),
-                      ),
-                      child: const Text('Reset preset'),
+              ],
+              onChanged: (preset) {
+                if (preset == null) return;
+                setState(() => _selected = preset);
+                _apply(preset.property);
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(context.l10n.fountainExplanation),
+            ),
+            PenPreview(property: property),
+            _slider(
+              'Width',
+              context.l10n.width,
+              property.strokeWidth,
+              0.5,
+              24,
+              (v) => _apply(property.copyWith(strokeWidth: v)),
+            ),
+            _slider(
+              'Opacity',
+              context.l10n.opacity,
+              property.opacity,
+              0,
+              1,
+              (v) => _apply(property.copyWith(opacity: v)),
+            ),
+            _slider(
+              'Thinning',
+              context.l10n.thinning,
+              property.thinning,
+              -1,
+              1,
+              (v) => _apply(property.copyWith(thinning: v)),
+            ),
+            _slider(
+              'Smoothing',
+              context.l10n.smoothing,
+              property.smoothing,
+              0,
+              1,
+              (v) => _apply(property.copyWith(smoothing: v)),
+            ),
+            _slider(
+              'Streamline',
+              context.l10n.streamline,
+              property.streamline,
+              0,
+              1,
+              (v) => _apply(property.copyWith(streamline: v)),
+            ),
+            Wrap(
+              spacing: 4,
+              children: [
+                for (final entry in inkPalette.entries)
+                  IconButton(
+                    tooltip: inkColorLabel(context.l10n, entry.key),
+                    isSelected:
+                        (property.colorValue & 0xFFFFFF) ==
+                        (entry.value.toARGB32() & 0xFFFFFF),
+                    onPressed: () => _apply(
+                      property.copyWith(colorValue: entry.value.toARGB32()),
                     ),
-                    FilledButton.tonal(
-                      onPressed: _loaded && !_saving ? _savePersonal : null,
-                      style: FilledButton.styleFrom(
-                        minimumSize: const Size(48, 48),
-                      ),
-                      child: Text(_saving ? 'Saving…' : 'Save personal'),
+                    icon: InkSwatch(
+                      color: entry.value,
+                      selected:
+                          (property.colorValue & 0xFFFFFF) ==
+                          (entry.value.toARGB32() & 0xFFFFFF),
                     ),
-                  ],
-                ),
+                  ),
               ],
             ),
-          ),
+            const SizedBox(height: 8),
+            TextField(
+              key: const ValueKey('pen-color'),
+              controller: _color,
+              maxLength: 6,
+              decoration: InputDecoration(
+                labelText: context.l10n.colorHex,
+                prefixText: '#',
+                suffixIcon: Icon(Icons.circle, color: property.color),
+                helperText: context.l10n.colorHexHint,
+              ),
+              onChanged: (value) {
+                if (!RegExp(r'^[0-9a-fA-F]{6}$').hasMatch(value)) {
+                  return;
+                }
+                widget.controller.setPenProperty(
+                  property.copyWith(
+                    colorValue: 0xFF000000 | int.parse(value, radix: 16),
+                  ),
+                );
+              },
+            ),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  _error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+              ),
+          ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() => _selected ??= PenPreset.defaults.first);
+              _apply(_selected!.property);
+            },
+            style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+            child: Text(context.l10n.resetPreset),
+          ),
+          FilledButton.tonal(
+            onPressed: _loaded && !_saving ? _savePersonal : null,
+            style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+            child: Text(
+              _saving ? context.l10n.saving : context.l10n.savePersonal,
+            ),
+          ),
+        ],
       );
     },
   );

@@ -9,6 +9,8 @@ import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/home_screen.dart';
 
+import 'support/localized_app.dart';
+
 class _DelayedStorage extends NoteStorage {
   final snapshots = <NoteDocument>[];
   final completions = <Completer<File>>[];
@@ -36,7 +38,7 @@ void main() {
   Future<void> open(WidgetTester tester) async {
     storage = _DelayedStorage();
     await tester.pumpWidget(
-      MaterialApp(home: HomeScreen(noteStorage: storage)),
+      localizedApp(home: HomeScreen(noteStorage: storage)),
     );
     controller = tester.widget<CanvasView>(find.byType(CanvasView)).controller;
     addTearDown(() async {
@@ -93,10 +95,10 @@ void main() {
     tester,
   ) async {
     await open(tester);
-    await tester.tap(find.text('Untitled Note'));
+    await tester.tap(find.text(vi.untitledNote));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField), 'Renamed');
-    await tester.tap(find.text('Rename'));
+    await tester.tap(find.text(vi.rename));
     await tester.pump();
     expect(controller.isModified, isTrue);
     await tester.pump(const Duration(milliseconds: 1501));
@@ -113,11 +115,11 @@ void main() {
       _draw(controller, 100);
       await tester.pump(const Duration(milliseconds: 1501));
       final oldId = controller.document.id;
-      await tester.tap(find.byTooltip('New Note'));
+      await tester.tap(find.byTooltip(vi.newNote));
       await tester.pump();
-      await tester.tap(find.text('Discard Changes'));
+      await tester.tap(find.text(vi.discardChanges));
       await tester.pump();
-      await tester.tap(find.text('Create'));
+      await tester.tap(find.text(vi.create));
       await tester.pump();
       expect(controller.document.id, isNot(oldId));
       _draw(controller, 200);
@@ -139,14 +141,14 @@ void main() {
     await open(tester);
     _draw(controller, 100);
     await tester.pump(const Duration(milliseconds: 1501));
-    await tester.tap(find.byTooltip('New Note'));
+    await tester.tap(find.byTooltip(vi.newNote));
     await tester.pump();
-    await tester.tap(find.text('Save & Proceed'));
+    await tester.tap(find.text(vi.saveAndProceed));
     await tester.pump();
-    expect(find.text('Create New Note'), findsNothing);
+    expect(find.text(vi.createNote), findsNothing);
     storage.succeed(0);
     await tester.pump();
-    expect(find.text('Create New Note'), findsOneWidget);
+    expect(find.text(vi.createNote), findsOneWidget);
     expect(storage.snapshots.length, 1);
   });
 
@@ -159,8 +161,8 @@ void main() {
     storage.completions[0].completeError(const FileSystemException('failed'));
     await tester.pump();
     expect(controller.isModified, isTrue);
-    expect(find.textContaining('Failed to save note:'), findsOneWidget);
-    await tester.tap(find.text('Save'));
+    expect(find.textContaining(vi.noteSaveFailed), findsOneWidget);
+    await tester.tap(find.text(vi.save));
     await tester.pump();
     expect(storage.snapshots.length, 2);
     storage.succeed(1);

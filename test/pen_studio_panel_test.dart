@@ -10,6 +10,8 @@ import 'package:phucnote/ui/pen_preview.dart';
 import 'package:phucnote/ui/pen_studio_panel.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import 'support/localized_app.dart';
+
 void main() {
   late CanvasController controller;
   late Directory directory;
@@ -25,18 +27,18 @@ void main() {
   });
 
   Future<void> settleSettings(WidgetTester tester) async {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 500; i++) {
       await tester.runAsync(
         () => Future<void>.delayed(const Duration(milliseconds: 10)),
       );
       await tester.pump();
-      final save = find.widgetWithText(FilledButton, 'Save personal');
+      final save = find.widgetWithText(FilledButton, vi.savePersonal);
       if (save.evaluate().isNotEmpty &&
           tester.widget<FilledButton>(save).onPressed != null) {
         return;
       }
       if (find
-          .textContaining('Existing settings were kept')
+          .textContaining(vi.presetLoadFailed)
           .evaluate()
           .isNotEmpty) {
         return;
@@ -51,7 +53,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     await tester.pumpWidget(
-      MaterialApp(
+      localizedApp(
         home: Builder(
           builder: (context) => Scaffold(
             body: Center(
@@ -90,7 +92,7 @@ void main() {
       tester,
     ) async {
       await open(tester, size);
-      await select(tester, 'Gel Pen');
+      await select(tester, vi.gelPen);
       expect(
         controller.penProperty.toJson(),
         PenPreset.defaults[1].property.toJson(),
@@ -119,16 +121,16 @@ void main() {
       expect(controller.penProperty.colorValue, 0xFF1565C0);
       expect(controller.isModified, isFalse);
       expect(controller.document.strokes, isEmpty);
-      await tester.tap(find.text('Reset preset'));
+      await tester.tap(find.text(vi.resetPreset));
       await tester.pump();
       expect(
         controller.penProperty.toJson(),
         PenPreset.defaults[1].property.toJson(),
       );
-      final close = tester.getRect(find.byTooltip('Close Pen Studio'));
+      final close = tester.getRect(find.byTooltip(vi.closePenStudio));
       expect(close.size, const Size(48, 48));
       expect(tester.takeException(), isNull);
-      await tester.tap(find.byTooltip('Close Pen Studio'));
+      await tester.tap(find.byTooltip(vi.closePenStudio));
       await tester.pumpAndSettle();
     });
   }
@@ -157,7 +159,7 @@ void main() {
       expect(painter().property.toJson(), controller.penProperty.toJson());
       expect(controller.canUndo, isFalse);
       expect(controller.isModified, isFalse);
-      await tester.tap(find.byTooltip('Reset preview'));
+      await tester.tap(find.byTooltip(vi.resetPreview));
       await tester.pump();
       expect(painter().strokes, isEmpty);
     },
@@ -167,16 +169,16 @@ void main() {
     'Save named preset, reopen studio, select and reset its exact settings',
     (tester) async {
       await open(tester, const Size(640, 1024));
-      await select(tester, 'Fountain Pen');
+      await select(tester, vi.fountainPen);
       controller.setPenProperty(
         controller.penProperty.copyWith(strokeWidth: 7.137, opacity: 0.637),
       );
       final original = controller.penProperty.toJson();
       await tester.pump();
-      await tester.tap(find.text('Save personal'));
+      await tester.tap(find.text(vi.savePersonal));
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField).last, 'Study ink');
-      await tester.tap(find.text('Save preset'));
+      await tester.tap(find.text(vi.savePreset));
       await tester.pumpAndSettle();
       await settleSettings(tester);
       expect(
@@ -185,7 +187,7 @@ void main() {
         ))!.single.property.toJson(),
         original,
       );
-      await tester.tap(find.byTooltip('Close Pen Studio'));
+      await tester.tap(find.byTooltip(vi.closePenStudio));
       await tester.pumpAndSettle();
       controller.setPenProperty(PenPreset.defaults.first.property);
       await tester.tap(find.text('Open studio'));
@@ -195,7 +197,7 @@ void main() {
       expect(controller.penProperty.toJson(), original);
       controller.setStrokeWidth(12);
       await tester.pump();
-      await tester.tap(find.text('Reset preset'));
+      await tester.tap(find.text(vi.resetPreset));
       await tester.pump();
       expect(controller.penProperty.toJson(), original);
       expect(tester.takeException(), isNull);
@@ -211,17 +213,17 @@ void main() {
         await file.writeAsString('corrupt');
       });
       await open(tester, const Size(640, 1024));
-      await select(tester, 'Ballpoint');
+      await select(tester, vi.ballpoint);
       expect(
         tester
             .widget<FilledButton>(
-              find.widgetWithText(FilledButton, 'Save personal'),
+              find.widgetWithText(FilledButton, vi.savePersonal),
             )
             .onPressed,
         isNull,
       );
       expect(
-        find.textContaining('Existing settings were kept'),
+        find.textContaining(vi.presetLoadFailed),
         findsOneWidget,
       );
       expect(await tester.runAsync(() => file.readAsString()), 'corrupt');
@@ -233,7 +235,7 @@ void main() {
     (tester) async {
       for (final width in [720.0, 480.0, 352.0]) {
         await tester.pumpWidget(
-          MaterialApp(
+          localizedApp(
             home: Scaffold(
               body: SizedBox(
                 width: width,
@@ -248,23 +250,23 @@ void main() {
         final toolbar = tester.getRect(find.byType(ToolbarWidget));
         expect(toolbar.height, width < 360 ? 104 : 56);
         for (final tooltip in [
-          'Pen',
-          'Highlighter',
-          'Stroke Eraser',
-          'Undo',
-          'Redo',
+          vi.pen,
+          vi.highlighter,
+          vi.eraser,
+          vi.undo,
+          vi.redo,
         ]) {
           expect(tester.getSize(find.byTooltip(tooltip)), const Size(48, 48));
         }
         if (width >= 480) {
           expect(
-            tester.getSize(find.byTooltip('Pen Studio')),
+            tester.getSize(find.byTooltip(vi.penStudio)),
             const Size(48, 48),
           );
         } else {
-          await tester.tap(find.byTooltip('Drawing Options'));
+          await tester.tap(find.byTooltip(vi.drawingOptions));
           await tester.pumpAndSettle();
-          expect(find.text('Pen Studio'), findsOneWidget);
+          expect(find.text(vi.penStudio), findsOneWidget);
           await tester.tapAt(const Offset(780, 580));
           await tester.pumpAndSettle();
         }

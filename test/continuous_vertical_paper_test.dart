@@ -15,6 +15,8 @@ import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/drawing/view_painter.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 
+import 'support/localized_app.dart';
+
 /// Minimal test spy canvas verifying that offscreen strokes do not construct or issue drawPath calls.
 class MockRecordingCanvas extends Fake implements Canvas {
   int drawPathCount = 0;
@@ -306,7 +308,7 @@ void main() {
       controller.setStylusOnlyMode(true);
 
       await tester.pumpWidget(
-        MaterialApp(
+        localizedApp(
           home: Scaffold(
             body: CanvasView(controller: controller),
           ),

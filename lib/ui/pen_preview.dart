@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../core/models/stroke_point.dart';
 import '../core/models/stroke_property.dart';
 import '../drawing/stroke_geometry.dart';
+import '../l10n/l10n.dart';
+import 'app_theme.dart';
 
 /// A scratch pad, independent of document input, history and autosave.
 class PenPreview extends StatefulWidget {
@@ -31,9 +33,9 @@ class _PenPreviewState extends State<PenPreview> {
     children: [
       Row(
         children: [
-          const Expanded(child: Text('Write here to preview')),
+          Expanded(child: Text(context.l10n.previewHint)),
           IconButton(
-            tooltip: 'Reset preview',
+            tooltip: context.l10n.resetPreview,
             constraints: const BoxConstraints.tightFor(width: 48, height: 48),
             icon: const Icon(Icons.refresh),
             onPressed: () => setState(() {
@@ -45,10 +47,11 @@ class _PenPreviewState extends State<PenPreview> {
         ],
       ),
       Semantics(
-        label: 'Handwriting preview',
+        label: context.l10n.previewSemantics,
         child: SizedBox(
           height: 132,
-          child: ClipRect(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
             child: GestureDetector(
               onPanStart: (_) {},
               onPanUpdate: (_) {},
@@ -107,10 +110,7 @@ class PenPreviewPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(
-      Offset.zero & size,
-      Paint()..color = const Color(0xFFF8F7F3),
-    );
+    canvas.drawRect(Offset.zero & size, Paint()..color = StudioTokens.paper);
     final guide = Paint()
       ..color = const Color(0xFFD4D3CF)
       ..strokeWidth = 1;

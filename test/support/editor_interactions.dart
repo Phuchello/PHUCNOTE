@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'localized_app.dart';
 
 Future<void> stylusTap(WidgetTester tester, Finder finder) async {
   final gesture = await tester.startGesture(
@@ -10,7 +11,7 @@ Future<void> stylusTap(WidgetTester tester, Finder finder) async {
 }
 
 Future<void> openDrawingOptions(WidgetTester tester) async {
-  await stylusTap(tester, find.byTooltip('Drawing Options'));
+  await stylusTap(tester, find.byTooltip(vi.drawingOptions));
   await tester.pumpAndSettle();
 }
 

@@ -9,6 +9,8 @@ import 'package:phucnote/main.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
+import 'support/localized_app.dart';
+
 void main() {
   testWidgets('PhucNoteApp UI smoke test', (WidgetTester tester) async {
     final noteStorage = NoteStorage();
@@ -18,8 +20,8 @@ void main() {
     // Verify main components are rendered
     expect(find.byType(CanvasView), findsOneWidget);
     expect(find.byType(ToolbarWidget), findsOneWidget);
-    expect(find.text('Untitled Note'), findsOneWidget);
-    expect(find.text('Save'), findsOneWidget);
+    expect(find.text(vi.untitledNote), findsOneWidget);
+    expect(find.text(vi.save), findsOneWidget);
     expect(find.byIcon(Icons.edit_outlined), findsNothing); // Currently selected pen has Icons.edit
     expect(find.byIcon(Icons.edit), findsNWidgets(2));
     expect(find.byIcon(Icons.note_add_outlined), findsOneWidget);

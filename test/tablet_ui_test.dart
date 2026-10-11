@@ -13,6 +13,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import 'support/editor_interactions.dart';
 
+import 'support/localized_app.dart';
+
 class _HeldStorage extends NoteStorage {
   final snapshots = <NoteDocument>[];
   final completions = <Completer<File>>[];
@@ -40,7 +42,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     storage = _HeldStorage();
     await tester.pumpWidget(
-      MaterialApp(home: HomeScreen(noteStorage: storage)),
+      localizedApp(home: HomeScreen(noteStorage: storage)),
     );
     controller = tester.widget<CanvasView>(find.byType(CanvasView)).controller;
     addTearDown(() async {
@@ -63,8 +65,8 @@ void main() {
   void checkToolbar(WidgetTester tester) {
     final toolbar = tester.getRect(find.byType(ToolbarWidget));
     expect(toolbar.height, lessThanOrEqualTo(64));
-    final buttons = ['Pen', 'Highlighter', 'Stroke Eraser', 'Undo', 'Redo'];
-    final y = tester.getCenter(find.byTooltip('Pen')).dy;
+    final buttons = [vi.pen, vi.highlighter, vi.eraser, vi.undo, vi.redo];
+    final y = tester.getCenter(find.byTooltip(vi.pen)).dy;
     for (final tooltip in buttons) {
       final rect = tester.getRect(find.byTooltip(tooltip));
       expect(rect.width, greaterThanOrEqualTo(48));
@@ -91,24 +93,24 @@ void main() {
     await open(tester, const Size(640, 1024));
     checkToolbar(tester);
     await openDrawingOptions(tester);
-    expect(find.byTooltip('Paper Template'), findsOneWidget);
-    await stylusTap(tester, find.text('Grid / Graph Paper'));
+    expect(find.byTooltip(vi.paperTemplate), findsOneWidget);
+    await stylusTap(tester, find.text(vi.paperGrid));
     await tester.pumpAndSettle();
     expect(controller.document.paperTemplate, PaperTemplate.grid);
     tester.view.physicalSize = const Size(360, 640);
     await tester.pumpAndSettle();
     for (final tooltip in [
-      'Pen',
-      'Highlighter',
-      'Stroke Eraser',
-      'Undo',
-      'Redo',
-      'Enter Zen',
+      vi.pen,
+      vi.highlighter,
+      vi.eraser,
+      vi.undo,
+      vi.redo,
+      vi.enterZen,
     ]) {
       await stylusTap(tester, find.byTooltip(tooltip));
       await tester.pump();
-      if (tooltip == 'Enter Zen') {
-        await tester.tap(find.byTooltip('Exit Zen'));
+      if (tooltip == vi.enterZen) {
+        await tester.tap(find.byTooltip(vi.exitZen));
         await tester.pump();
       }
     }
@@ -120,9 +122,9 @@ void main() {
   ) async {
     await open(tester);
     for (final entry in {
-      'Highlighter': CanvasTool.highlighter,
-      'Stroke Eraser': CanvasTool.eraser,
-      'Pen': CanvasTool.pen,
+      vi.highlighter: CanvasTool.highlighter,
+      vi.eraser: CanvasTool.eraser,
+      vi.pen: CanvasTool.pen,
     }.entries) {
       await stylusTap(tester, find.byTooltip(entry.key));
       await tester.pump();
@@ -143,10 +145,10 @@ void main() {
     stroke(100);
     final original = controller.document.strokes.single.toJson();
     await tester.pump();
-    await stylusTap(tester, find.byTooltip('Undo'));
+    await stylusTap(tester, find.byTooltip(vi.undo));
     await tester.pump();
     expect(controller.document.strokes, isEmpty);
-    await stylusTap(tester, find.byTooltip('Redo'));
+    await stylusTap(tester, find.byTooltip(vi.redo));
     await tester.pump();
     expect(controller.document.strokes.single.toJson(), original);
   });
@@ -157,11 +159,11 @@ void main() {
     await open(tester);
     final state = tester.state(find.byType(CanvasView));
     final height = tester.getSize(find.byType(CanvasView)).height;
-    await tester.tap(find.byTooltip('Enter Zen'));
+    await tester.tap(find.byTooltip(vi.enterZen));
     await tester.pump();
     expect(find.byType(AppBar), findsNothing);
     expect(find.byType(ToolbarWidget), findsNothing);
-    expect(find.byTooltip('Exit Zen'), findsOneWidget);
+    expect(find.byTooltip(vi.exitZen), findsOneWidget);
     expect(tester.getSize(find.byType(CanvasView)).height, greaterThan(height));
     expect(tester.state(find.byType(CanvasView)), same(state));
   });
@@ -171,19 +173,19 @@ void main() {
   ) async {
     await open(tester);
     for (final useBack in [false, true]) {
-      await tester.tap(find.byTooltip('Enter Zen'));
+      await tester.tap(find.byTooltip(vi.enterZen));
       await tester.pump();
       if (useBack) {
         await tester.binding.handlePopRoute();
       } else {
-        await stylusTap(tester, find.byTooltip('Exit Zen'));
+        await stylusTap(tester, find.byTooltip(vi.exitZen));
       }
       await tester.pump();
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byType(ToolbarWidget), findsOneWidget);
-      expect(find.byTooltip('New Note'), findsOneWidget);
-      expect(find.byTooltip('Open Notes'), findsOneWidget);
-      expect(find.text('Save'), findsOneWidget);
+      expect(find.byTooltip(vi.newNote), findsOneWidget);
+      expect(find.byTooltip(vi.openNotes), findsOneWidget);
+      expect(find.text(vi.save), findsOneWidget);
     }
   });
 
@@ -204,7 +206,7 @@ void main() {
         ),
       );
       final active = controller.activePoints.map((p) => p.toJson()).toList();
-      for (final tooltip in ['Enter Zen', 'Exit Zen']) {
+      for (final tooltip in [vi.enterZen, vi.exitZen]) {
         await tester.tap(find.byTooltip(tooltip));
         await tester.pump();
         expect(controller.document, same(document));
@@ -244,14 +246,14 @@ void main() {
     final gesture = await tester.startGesture(
       tester.getCenter(find.byType(CanvasView)),
     );
-    await tester.tap(find.byTooltip('Enter Zen'));
+    await tester.tap(find.byTooltip(vi.enterZen));
     await tester.pump();
     expect(controller.zoomScale, zoom);
     expect(controller.viewportOffset, offset);
     await gesture.moveBy(const Offset(20, -30));
     await gesture.up();
     expect(controller.viewportOffset, offset + const Offset(20, -30));
-    await tester.tap(find.byTooltip('Exit Zen'));
+    await tester.tap(find.byTooltip(vi.exitZen));
     await tester.pump();
     expect(controller.zoomScale, zoom);
     expect(controller.viewportOffset, offset + const Offset(20, -30));
@@ -261,9 +263,9 @@ void main() {
     'UI-09: secondary options preserve A4 Fit, reset and Continuous Paper',
     (tester) async {
       await open(tester, const Size(640, 1024));
-      await tapDrawingOption(tester, ToolbarWidget.continuousPaperTooltip);
+      await tapDrawingOption(tester, vi.continuousPaperHint);
       expect(controller.showA4Guides, isTrue);
-      await tapDrawingOption(tester, 'Fit to Width');
+      await tapDrawingOption(tester, vi.fitToWidth);
       expect(controller.zoomScale, closeTo(640 / 840, 1e-6));
       await openDrawingOptions(tester);
       expect(
@@ -274,10 +276,10 @@ void main() {
             .checked,
         isTrue,
       );
-      await tester.tap(find.byTooltip('Reset View'));
+      await tester.tap(find.byTooltip(vi.resetView));
       await tester.pumpAndSettle();
       expect(controller.zoomScale, 1);
-      await tapDrawingOption(tester, ToolbarWidget.a4WritingTooltip);
+      await tapDrawingOption(tester, vi.a4WritingHint);
       expect(controller.showA4Guides, isFalse);
       controller.handlePointerDown(
         const PointerDownEvent(position: Offset(900, 1200)),
@@ -292,7 +294,7 @@ void main() {
     (tester) async {
       await open(tester);
       stroke(100);
-      await tester.tap(find.byTooltip('Enter Zen'));
+      await tester.tap(find.byTooltip(vi.enterZen));
       await tester.pump(const Duration(milliseconds: 1501));
       expect(storage.snapshots, hasLength(1));
       stroke(200);
@@ -310,9 +312,9 @@ void main() {
       storage.completions[2].complete(File('note.bfly'));
       await tester.pump();
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.tap(find.byTooltip('Exit Zen'));
+      await tester.tap(find.byTooltip(vi.exitZen));
       await tester.pump();
-      await tester.tap(find.text('Save'));
+      await tester.tap(find.text(vi.save));
       await tester.pump();
       expect(storage.snapshots, hasLength(4));
       storage.completions[3].complete(File('note.bfly'));

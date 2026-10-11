@@ -18,6 +18,8 @@ class PhucNoteViewPainter extends CustomPainter {
   final Offset viewportOffset;
   final double zoomScale;
   final bool showA4Guides;
+  final String Function(int)? pageLabel;
+  final String? localeName;
 
   PhucNoteViewPainter({
     required this.document,
@@ -26,6 +28,8 @@ class PhucNoteViewPainter extends CustomPainter {
     this.viewportOffset = Offset.zero,
     this.zoomScale = 1.0,
     this.showA4Guides = false,
+    this.pageLabel,
+    this.localeName,
   });
 
   @override
@@ -164,9 +168,9 @@ class PhucNoteViewPainter extends CustomPainter {
         final labelScale = min(zoomScale, 1.0);
         final textPainter = TextPainter(
           text: TextSpan(
-            text: 'Page $k',
+            text: pageLabel?.call(k) ?? k.toString(),
             style: TextStyle(
-              color: const Color(0xFF78909C),
+              color: const Color(0xFF5D6D7D),
               fontSize: 12.0 / labelScale,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.5 / labelScale,
@@ -198,7 +202,8 @@ class PhucNoteViewPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(PhucNoteViewPainter oldDelegate) {
-    return oldDelegate.repaintCounter != repaintCounter ||
+    return oldDelegate.localeName != localeName ||
+        oldDelegate.repaintCounter != repaintCounter ||
         oldDelegate.document != document ||
         oldDelegate.backgroundColor != backgroundColor ||
         oldDelegate.viewportOffset != viewportOffset ||

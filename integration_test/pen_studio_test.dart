@@ -14,6 +14,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import '../test/support/editor_interactions.dart';
 
+import '../test/support/localized_app.dart';
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   for (final landscape in [true, false]) {
@@ -52,11 +54,11 @@ void main() {
       final state = tester.state(canvas);
       final document = controller.document;
       final revision = controller.revision;
-      await stylusTap(tester, find.byTooltip('Pen Studio'));
+      await stylusTap(tester, find.byTooltip(vi.penStudio));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const ValueKey('pen-preset')));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Fountain Pen').last);
+      await tester.tap(find.text(vi.fountainPen).last);
       await tester.pumpAndSettle();
       final preview = find.byKey(const ValueKey('pen-preview'));
       final previewGesture = await tester.startGesture(
@@ -103,27 +105,27 @@ void main() {
       expect(controller.isModified, isFalse);
       final custom = controller.penProperty.toJson();
       final name = 'CP10 $orientation ${DateTime.now().millisecondsSinceEpoch}';
-      await tester.tap(find.text('Save personal'));
+      await tester.tap(find.text(vi.savePersonal));
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextField).last, name);
-      await tester.tap(find.text('Save preset'));
+      await tester.tap(find.text(vi.savePreset));
       await tester.pumpAndSettle();
       for (
         var i = 0;
-        i < 30 && find.text('Saving…').evaluate().isNotEmpty;
+        i < 30 && find.text(vi.saving).evaluate().isNotEmpty;
         i++
       ) {
         await tester.pump(const Duration(milliseconds: 100));
       }
-      expect(find.text('Saving…'), findsNothing);
+      expect(find.text(vi.saving), findsNothing);
       final personal = await PenPresetStore().load();
       expect(
         personal.singleWhere((p) => p.name == name).property.toJson(),
         custom,
       );
-      await tester.tap(find.byTooltip('Close Pen Studio'));
+      await tester.tap(find.byTooltip(vi.closePenStudio));
       await tester.pumpAndSettle();
-      await stylusTap(tester, find.byTooltip('Pen Studio'));
+      await stylusTap(tester, find.byTooltip(vi.penStudio));
       await tester.pumpAndSettle();
       for (var i = 0; i < 30; i++) {
         final dropdown = tester.widget<DropdownButton>(
@@ -139,7 +141,7 @@ void main() {
       await tester.tap(find.text(name).last);
       await tester.pumpAndSettle();
       expect(controller.penProperty.toJson(), custom);
-      await tester.tap(find.byTooltip('Close Pen Studio'));
+      await tester.tap(find.byTooltip(vi.closePenStudio));
       await tester.pumpAndSettle();
       final property = controller.penProperty.toJson();
       final origin = tester.getTopLeft(canvas);
@@ -154,16 +156,16 @@ void main() {
       await tester.pumpAndSettle();
       expect(controller.document.strokes.single.property.toJson(), property);
       final original = controller.document.strokes.single.toJson();
-      await stylusTap(tester, find.byTooltip('Undo'));
+      await stylusTap(tester, find.byTooltip(vi.undo));
       await tester.pump();
-      await stylusTap(tester, find.byTooltip('Redo'));
+      await stylusTap(tester, find.byTooltip(vi.redo));
       await tester.pump();
       expect(controller.document.strokes.single.toJson(), original);
-      await tapDrawingOption(tester, ToolbarWidget.continuousPaperTooltip);
-      await tapDrawingOption(tester, 'Fit to Width');
+      await tapDrawingOption(tester, vi.continuousPaperHint);
+      await tapDrawingOption(tester, vi.fitToWidth);
       final zoom = controller.zoomScale;
       final offset = controller.viewportOffset;
-      await stylusTap(tester, find.byTooltip('Enter Zen'));
+      await stylusTap(tester, find.byTooltip(vi.enterZen));
       await tester.pumpAndSettle();
       expect(find.byType(ToolbarWidget), findsNothing);
       expect(tester.state(canvas), same(state));
@@ -171,7 +173,7 @@ void main() {
       expect(controller.zoomScale, zoom);
       expect(controller.viewportOffset, offset);
       await binding.takeScreenshot('pen_zen_$orientation');
-      await stylusTap(tester, find.byTooltip('Exit Zen'));
+      await stylusTap(tester, find.byTooltip(vi.exitZen));
       await tester.pumpAndSettle();
       for (var i = 0; i < 30 && controller.isModified; i++) {
         await tester.pump(const Duration(milliseconds: 200));

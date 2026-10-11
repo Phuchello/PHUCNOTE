@@ -12,6 +12,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import 'support/editor_interactions.dart';
 
+import 'support/localized_app.dart';
+
 /// Test spy canvas tracking drawRect and drawPath invocations.
 class A4SpyCanvas extends Fake implements Canvas {
   final List<Rect> drawnRects = [];
@@ -238,7 +240,7 @@ void main() {
       expect(controller.showA4Guides, isFalse);
 
       await tester.pumpWidget(
-        MaterialApp(
+        localizedApp(
           home: Scaffold(
             body: ToolbarWidget(controller: controller),
           ),
@@ -247,7 +249,7 @@ void main() {
       await tester.pumpAndSettle();
 
       await openDrawingOptions(tester);
-      final a4Button = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
+      final a4Button = find.byTooltip(vi.continuousPaperHint);
       expect(a4Button, findsOneWidget);
 
       // Tap to enable A4 guides
@@ -256,15 +258,15 @@ void main() {
 
       expect(controller.showA4Guides, isTrue);
       await openDrawingOptions(tester);
-      expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
+      expect(find.byTooltip(vi.a4WritingHint), findsOneWidget);
 
       // Tap to disable A4 guides
-      await tester.tap(find.byTooltip(ToolbarWidget.a4WritingTooltip));
+      await tester.tap(find.byTooltip(vi.a4WritingHint));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isFalse);
       await openDrawingOptions(tester);
-      expect(find.byTooltip(ToolbarWidget.continuousPaperTooltip), findsOneWidget);
+      expect(find.byTooltip(vi.continuousPaperHint), findsOneWidget);
     });
   });
 }

@@ -13,9 +13,10 @@ import 'package:phucnote/core/storage/note_storage.dart';
 import 'package:phucnote/drawing/a4_page_layout.dart';
 import 'package:phucnote/main.dart';
 import 'package:phucnote/ui/canvas_view.dart';
-import 'package:phucnote/ui/toolbar_widget.dart';
 
 import '../test/support/editor_interactions.dart';
+
+import '../test/support/localized_app.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -53,9 +54,9 @@ void main() {
 
       final canvasFinder = find.byType(CanvasView);
       final controller = tester.widget<CanvasView>(canvasFinder).controller;
-      await tapDrawingOption(tester, ToolbarWidget.continuousPaperTooltip);
+      await tapDrawingOption(tester, vi.continuousPaperHint);
       await tester.pumpAndSettle();
-      await tapDrawingOption(tester, 'Fit to Width');
+      await tapDrawingOption(tester, vi.fitToWidth);
       await tester.pumpAndSettle();
       final width = tester.getSize(canvasFinder).width;
       expect(controller.zoomScale, closeTo(width / A4PageLayout.width, 1e-6));
@@ -147,19 +148,19 @@ void main() {
       controller.zoomAt(Offset.zero, 0.8);
       showY(1180, 300);
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Stroke Eraser'));
+      await tester.tap(find.byTooltip(vi.eraser));
       await tester.pumpAndSettle();
       await ink([const Offset(800, 1180)]);
       expect(controller.document.strokes.length, 2);
-      await tester.tap(find.byTooltip('Undo'));
+      await tester.tap(find.byTooltip(vi.undo));
       await tester.pumpAndSettle();
       expect(controller.document.strokes.map((s) => s.toJson()), strokes);
-      await tester.tap(find.byTooltip('Redo'));
+      await tester.tap(find.byTooltip(vi.redo));
       await tester.pumpAndSettle();
       expect(controller.document.strokes.length, 2);
-      await tester.tap(find.byTooltip('Undo'));
+      await tester.tap(find.byTooltip(vi.undo));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Pen'));
+      await tester.tap(find.byTooltip(vi.pen));
       await tester.pumpAndSettle();
 
       for (var attempt = 0; attempt < 40 && controller.isModified; attempt++) {
@@ -173,7 +174,7 @@ void main() {
         (await storage.loadNote(saved.single)).strokes.map((s) => s.toJson()),
         strokes,
       );
-      await tester.tap(find.byTooltip('Open Notes'));
+      await tester.tap(find.byTooltip(vi.openNotes));
       await tester.pumpAndSettle();
       await tester.tap(
         find.descendant(
@@ -183,7 +184,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(controller.document.strokes.map((s) => s.toJson()), strokes);
-      await tapDrawingOption(tester, 'Fit to Width');
+      await tapDrawingOption(tester, vi.fitToWidth);
       await tester.pumpAndSettle();
       showY(1180, 300);
       await tester.pumpAndSettle();

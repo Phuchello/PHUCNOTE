@@ -9,6 +9,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import 'support/editor_interactions.dart';
 
+import 'support/localized_app.dart';
+
 void main() {
   group('A4 Portrait Fit & Clipping Verification', () {
     test('Reproduce portrait clipping at 800px width with scale 1.0', () {
@@ -113,7 +115,7 @@ void main() {
       final controller = CanvasController();
       controller.resetViewport();
 
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(localizedApp(
         home: Scaffold(
           body: ToolbarWidget(controller: controller),
         ),
@@ -121,18 +123,18 @@ void main() {
 
       // Initially A4 guides are inactive -> Fit to Width button not present
       await openDrawingOptions(tester);
-      expect(find.byTooltip('Fit to Width'), findsNothing);
+      expect(find.byTooltip(vi.fitToWidth), findsNothing);
 
       // Toggle A4 guides active
-      await tester.tap(find.byTooltip(ToolbarWidget.continuousPaperTooltip));
+      await tester.tap(find.byTooltip(vi.continuousPaperHint));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
       await openDrawingOptions(tester);
-      expect(find.byTooltip('Fit to Width'), findsOneWidget);
+      expect(find.byTooltip(vi.fitToWidth), findsOneWidget);
 
       // Tap Fit to Width
-      await tester.tap(find.byTooltip('Fit to Width'));
+      await tester.tap(find.byTooltip(vi.fitToWidth));
       await tester.pumpAndSettle();
 
       expect(controller.zoomScale, closeTo(800.0 / 840.0, 1e-4));

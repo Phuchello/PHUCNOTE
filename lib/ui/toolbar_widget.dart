@@ -7,26 +7,17 @@ import 'package:flutter/material.dart';
 import '../core/models/note_document.dart';
 import '../drawing/canvas_controller.dart';
 import 'pen_studio_panel.dart';
+import '../l10n/l10n.dart';
+import 'app_theme.dart';
+import 'ink_palette.dart';
 
 /// Primary inking controls stay visible; secondary settings use one menu.
 class ToolbarWidget extends StatelessWidget {
   final CanvasController controller;
   final VoidCallback? onEnterZen;
 
-  static const continuousPaperTooltip = 'Continuous Paper (Tap for A4 Writing)';
-  static const a4WritingTooltip =
-      'A4 Writing (Tap to disable)\nStart inside a page; strokes may cross edges.';
-
   const ToolbarWidget({super.key, required this.controller, this.onEnterZen});
 
-  static const _palette = <String, Color>{
-    'Black': Color(0xFF1E1E1E),
-    'Blue': Color(0xFF1565C0),
-    'Red': Color(0xFFC62828),
-    'Green': Color(0xFF2E7D32),
-    'Orange': Color(0xFFEF6C00),
-    'Purple': Color(0xFF6A1B9A),
-  };
   static const _widths = <String, double>{'Fine': 2, 'Normal': 3.5, 'Bold': 6};
 
   @override
@@ -44,46 +35,46 @@ class ToolbarWidget extends StatelessWidget {
               CanvasTool.pen,
               Icons.edit_outlined,
               Icons.edit,
-              'Pen',
+              context.l10n.pen,
             ),
             _toolButton(
               context,
               CanvasTool.highlighter,
               Icons.highlight_outlined,
               Icons.highlight,
-              'Highlighter',
+              context.l10n.highlighter,
             ),
             _toolButton(
               context,
               CanvasTool.eraser,
               Icons.auto_fix_normal_outlined,
               Icons.auto_fix_normal,
-              'Stroke Eraser',
+              context.l10n.eraser,
             ),
           ];
           final history = [
             _button(
               icon: const Icon(Icons.undo),
-              tooltip: 'Undo',
+              tooltip: context.l10n.undo,
               onPressed: controller.canUndo ? controller.undo : null,
             ),
             _button(
               icon: const Icon(Icons.redo),
-              tooltip: 'Redo',
+              tooltip: context.l10n.redo,
               onPressed: controller.canRedo ? controller.redo : null,
             ),
           ];
           final settings = [
             if (showInkSettings && controller.tool != CanvasTool.eraser) ...[
               PopupMenuButton<String>(
-                tooltip: 'Ink Color',
+                tooltip: context.l10n.inkColor,
                 constraints: const BoxConstraints(minWidth: 180),
-                icon: Icon(Icons.circle, color: controller.color, size: 22),
-                onSelected: (label) => controller.setColor(_palette[label]!),
-                itemBuilder: (_) => _colorItems(),
+                icon: InkSwatch(color: controller.color, selected: true),
+                onSelected: (label) => controller.setColor(inkPalette[label]!),
+                itemBuilder: (_) => _colorItems(context),
               ),
               _button(
-                tooltip: 'Pen Studio',
+                tooltip: context.l10n.penStudio,
                 icon: const Icon(Icons.tune),
                 onPressed: () => _openPenStudio(context),
               ),
@@ -92,19 +83,22 @@ class ToolbarWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  'A4',
+                  context.l10n.a4Badge,
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: theme.colorScheme.primary,
                   ),
                 ),
               ),
             if (constraints.maxWidth >= 560 && controller.stylusOnlyMode)
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(Icons.draw, size: 18),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Semantics(
+                  label: context.l10n.stylusOnlyActive,
+                  child: const Icon(Icons.draw, size: 18),
+                ),
               ),
             PopupMenuButton<String>(
-              tooltip: 'Drawing Options',
+              tooltip: context.l10n.drawingOptions,
               icon: Icon(
                 Icons.more_horiz,
                 color: controller.showA4Guides || controller.stylusOnlyMode
@@ -112,24 +106,23 @@ class ToolbarWidget extends StatelessWidget {
                     : null,
               ),
               onSelected: (value) => _selectOption(context, value),
-              itemBuilder: (_) => _optionItems(showInkSettings),
+              itemBuilder: (_) => _optionItems(context, showInkSettings),
             ),
             if (onEnterZen != null)
               _button(
                 icon: const Icon(Icons.fullscreen),
-                tooltip: 'Enter Zen',
+                tooltip: context.l10n.enterZen,
                 onPressed: onEnterZen,
               ),
           ];
           return Card(
             margin: EdgeInsets.zero,
-            elevation: 4,
+            elevation: 2,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(StudioTokens.toolbarRadius),
+              side: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
-            color: theme.colorScheme.surfaceContainerHighest.withValues(
-              alpha: 0.95,
-            ),
+            color: theme.colorScheme.surface,
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: narrow
@@ -144,7 +137,14 @@ class ToolbarWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ...tools,
-                        const SizedBox(width: 8),
+                        SizedBox(
+                          width: 8,
+                          height: 28,
+                          child: VerticalDivider(
+                            width: 8,
+                            color: theme.colorScheme.outlineVariant,
+                          ),
+                        ),
                         ...history,
                         const Spacer(),
                         ...settings,
@@ -197,48 +197,86 @@ class ToolbarWidget extends StatelessWidget {
     );
   }
 
-  List<PopupMenuEntry<String>> _colorItems({String prefix = ''}) => [
-    for (final entry in _palette.entries)
+  List<PopupMenuEntry<String>> _colorItems(
+    BuildContext context, {
+    String prefix = '',
+  }) => [
+    for (final entry in inkPalette.entries)
       CheckedPopupMenuItem(
         value: '$prefix${entry.key}',
         checked: controller.color.toARGB32() == entry.value.toARGB32(),
         child: Row(
           children: [
-            Icon(Icons.circle, size: 18, color: entry.value),
+            InkSwatch(
+              color: entry.value,
+              selected: controller.color.toARGB32() == entry.value.toARGB32(),
+            ),
             const SizedBox(width: 12),
-            Text(entry.key),
+            Text(inkColorLabel(context.l10n, entry.key)),
           ],
         ),
       ),
   ];
 
-  List<PopupMenuEntry<String>> _widthItems({String prefix = ''}) => [
+  List<PopupMenuEntry<String>> _widthItems(
+    BuildContext context, {
+    String prefix = '',
+  }) => [
     for (final entry in _widths.entries)
       CheckedPopupMenuItem(
         value: '$prefix${entry.key}',
         checked: (controller.strokeWidth - entry.value).abs() < 0.1,
-        child: Text(entry.key),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 32,
+              child: Container(
+                height: entry.value,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(switch (entry.key) {
+              'Fine' => context.l10n.widthFine,
+              'Normal' => context.l10n.widthNormal,
+              _ => context.l10n.widthBold,
+            }),
+          ],
+        ),
       ),
   ];
 
-  List<PopupMenuEntry<String>> _optionItems(bool showInkSettings) => [
-    const PopupMenuItem<String>(value: 'studio', child: Text('Pen Studio')),
+  List<PopupMenuEntry<String>> _optionItems(
+    BuildContext context,
+    bool showInkSettings,
+  ) => [
+    PopupMenuItem<String>(value: 'studio', child: Text(context.l10n.penStudio)),
     if (!showInkSettings && controller.tool != CanvasTool.eraser) ...[
-      ..._colorItems(prefix: 'color:'),
+      ..._colorItems(context, prefix: 'color:'),
       const PopupMenuDivider(),
     ],
     if (controller.tool != CanvasTool.eraser) ...[
-      ..._widthItems(prefix: 'width:'),
+      ..._widthItems(context, prefix: 'width:'),
       const PopupMenuDivider(),
     ],
-    const PopupMenuItem<String>(
+    PopupMenuItem<String>(
       enabled: false,
-      child: Tooltip(message: 'Paper Template', child: Text('Paper Template')),
+      child: Tooltip(
+        message: context.l10n.paperTemplate,
+        child: Text(
+          context.l10n.paperTemplate,
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+        ),
+      ),
     ),
     for (final entry in <PaperTemplate, String>{
-      PaperTemplate.ruled: 'Ruled Paper',
-      PaperTemplate.grid: 'Grid / Graph Paper',
-      PaperTemplate.blank: 'Blank Canvas',
+      PaperTemplate.ruled: context.l10n.paperRuled,
+      PaperTemplate.grid: context.l10n.paperGrid,
+      PaperTemplate.blank: context.l10n.paperBlank,
     }.entries)
       CheckedPopupMenuItem(
         value: 'paper:${entry.key.name}',
@@ -251,9 +289,9 @@ class ToolbarWidget extends StatelessWidget {
       checked: controller.stylusOnlyMode,
       child: Tooltip(
         message: controller.stylusOnlyMode
-            ? 'Stylus-Only Active (Fingers Pan Canvas)'
-            : 'Finger Inking Allowed (Tap to enable Stylus-Only)',
-        child: const Text('Stylus-only input'),
+            ? context.l10n.stylusOnlyActive
+            : context.l10n.fingerInkingAllowed,
+        child: Text(context.l10n.stylusOnly),
       ),
     ),
     CheckedPopupMenuItem<String>(
@@ -262,34 +300,42 @@ class ToolbarWidget extends StatelessWidget {
       checked: controller.showA4Guides,
       child: Tooltip(
         message: controller.showA4Guides
-            ? a4WritingTooltip
-            : continuousPaperTooltip,
-        child: const Text('A4 Writing'),
+            ? context.l10n.a4WritingHint
+            : context.l10n.continuousPaperHint,
+        child: Text(context.l10n.a4Mode),
       ),
     ),
     if (controller.showA4Guides)
-      const PopupMenuItem<String>(
+      PopupMenuItem<String>(
         value: 'fit',
-        child: Tooltip(message: 'Fit to Width', child: Text('Fit to Width')),
+        child: Tooltip(
+          message: context.l10n.fitToWidth,
+          child: Text(context.l10n.fitToWidth),
+        ),
       ),
     if (controller.zoomScale != 1 || controller.viewportOffset != Offset.zero)
       PopupMenuItem<String>(
         value: 'reset',
         child: Tooltip(
-          message: 'Reset View',
-          child: Text('Reset View (${(controller.zoomScale * 100).round()}%)'),
+          message: context.l10n.resetView,
+          child: Text(
+            context.l10n.resetViewAt((controller.zoomScale * 100).round()),
+          ),
         ),
       ),
     const PopupMenuDivider(),
-    const PopupMenuItem<String>(
+    PopupMenuItem<String>(
       value: 'clear',
-      child: Tooltip(message: 'Clear Canvas', child: Text('Clear Canvas')),
+      child: Tooltip(
+        message: context.l10n.clearCanvas,
+        child: Text(context.l10n.clearCanvas),
+      ),
     ),
   ];
 
   void _selectOption(BuildContext context, String value) {
     if (value.startsWith('color:')) {
-      controller.setColor(_palette[value.substring(6)]!);
+      controller.setColor(inkPalette[value.substring(6)]!);
     } else if (value.startsWith('width:')) {
       controller.setStrokeWidth(_widths[value.substring(6)]!);
     } else if (value.startsWith('paper:')) {
@@ -323,21 +369,19 @@ class ToolbarWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Clear Canvas'),
-        content: const Text(
-          'Are you sure you want to clear all strokes? This can be undone.',
-        ),
+        title: Text(context.l10n.clearCanvas),
+        content: Text(context.l10n.clearCanvasBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
               controller.clearCanvas();
             },
-            child: const Text('Clear'),
+            child: Text(context.l10n.clear),
           ),
         ],
       ),

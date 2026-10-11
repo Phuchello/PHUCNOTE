@@ -16,6 +16,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import '../test/support/editor_interactions.dart';
 
+import '../test/support/localized_app.dart';
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -49,8 +51,8 @@ void main() {
       expect(find.byType(HomeScreen), findsOneWidget);
       expect(find.byType(CanvasView), findsOneWidget);
       expect(find.byType(ToolbarWidget), findsOneWidget);
-      expect(find.text('Untitled Note'), findsOneWidget);
-      expect(find.text('Save'), findsOneWidget);
+      expect(find.text(vi.untitledNote), findsOneWidget);
+      expect(find.text(vi.save), findsOneWidget);
     });
 
     // TC-02: Create notebook
@@ -58,20 +60,20 @@ void main() {
       await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
       await tester.pumpAndSettle();
 
-      // Tap 'New Note' action
-      final newNoteButton = find.byTooltip('New Note');
+      // Tap vi.newNote action
+      final newNoteButton = find.byTooltip(vi.newNote);
       expect(newNoteButton, findsOneWidget);
       await tester.tap(newNoteButton);
       await tester.pumpAndSettle();
 
       // Fill in note title
-      final titleField = find.widgetWithText(TextField, 'Note Title');
+      final titleField = find.widgetWithText(TextField, vi.noteTitle);
       expect(titleField, findsOneWidget);
       await tester.enterText(titleField, 'Physics Mechanics 101');
       await tester.pumpAndSettle();
 
-      // Tap 'Create'
-      final createButton = find.widgetWithText(FilledButton, 'Create');
+      // Tap vi.create
+      final createButton = find.widgetWithText(FilledButton, vi.create);
       expect(createButton, findsOneWidget);
       await tester.tap(createButton);
       await tester.pumpAndSettle();
@@ -117,7 +119,7 @@ void main() {
       expect(controller.tool, equals(CanvasTool.pen));
 
       // Switch to Highlighter
-      final highlighterBtn = find.byTooltip('Highlighter');
+      final highlighterBtn = find.byTooltip(vi.highlighter);
       expect(highlighterBtn, findsOneWidget);
       await tester.tap(highlighterBtn);
       await tester.pumpAndSettle();
@@ -133,7 +135,7 @@ void main() {
       expect(controller.document.strokes.first.property.isHighlighter, isTrue);
 
       // Switch to Eraser
-      final eraserBtn = find.byTooltip('Stroke Eraser');
+      final eraserBtn = find.byTooltip(vi.eraser);
       expect(eraserBtn, findsOneWidget);
       await tester.tap(eraserBtn);
       await tester.pumpAndSettle();
@@ -148,7 +150,7 @@ void main() {
       expect(controller.document.strokes.length, equals(0));
 
       // Switch back to Pen
-      final penBtn = find.byTooltip('Pen');
+      final penBtn = find.byTooltip(vi.pen);
       expect(penBtn, findsOneWidget);
       await tester.tap(penBtn);
       await tester.pumpAndSettle();
@@ -171,7 +173,7 @@ void main() {
       expect(controller.document.strokes.length, equals(1));
 
       // Undo
-      final undoBtn = find.byTooltip('Undo');
+      final undoBtn = find.byTooltip(vi.undo);
       expect(undoBtn, findsOneWidget);
       await tester.tap(undoBtn);
       await tester.pumpAndSettle();
@@ -179,7 +181,7 @@ void main() {
       expect(controller.canRedo, isTrue);
 
       // Redo
-      final redoBtn = find.byTooltip('Redo');
+      final redoBtn = find.byTooltip(vi.redo);
       expect(redoBtn, findsOneWidget);
       await tester.tap(redoBtn);
       await tester.pumpAndSettle();
@@ -202,7 +204,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap Save
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();
 
@@ -210,11 +212,11 @@ void main() {
       expect(savedFiles.isNotEmpty, isTrue);
 
       // Open notes dialog
-      final openBtn = find.byTooltip('Open Notes');
+      final openBtn = find.byTooltip(vi.openNotes);
       await tester.tap(openBtn);
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Saved Notes'), findsOneWidget);
+      expect(find.text(vi.savedNotes(1)), findsOneWidget);
       // Tap on the saved note tile inside the bottom sheet list
       final noteTile = find.descendant(
         of: find.byType(ListTile),
@@ -270,7 +272,7 @@ void main() {
       await g1.up();
       await tester.pumpAndSettle();
 
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pump(const Duration(milliseconds: 5));
 
@@ -303,7 +305,7 @@ void main() {
       await g1.up();
       await tester.pumpAndSettle();
 
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();
 
@@ -316,7 +318,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Open saved note
-      final openBtn = find.byTooltip('Open Notes');
+      final openBtn = find.byTooltip(vi.openNotes);
       await tester.tap(openBtn);
       await tester.pumpAndSettle();
 
@@ -339,17 +341,17 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap title to trigger rename
-      final titleWidget = find.text('Untitled Note');
+      final titleWidget = find.text(vi.untitledNote);
       expect(titleWidget, findsOneWidget);
       await tester.tap(titleWidget);
       await tester.pumpAndSettle();
 
-      expect(find.text('Rename Note'), findsOneWidget);
-      final renameField = find.widgetWithText(TextField, 'Title');
+      expect(find.text(vi.renameNote), findsOneWidget);
+      final renameField = find.widgetWithText(TextField, vi.noteTitle);
       await tester.enterText(renameField, 'Renamed Academic Paper');
       await tester.pumpAndSettle();
 
-      final confirmRenameBtn = find.widgetWithText(FilledButton, 'Rename');
+      final confirmRenameBtn = find.widgetWithText(FilledButton, vi.rename);
       await tester.tap(confirmRenameBtn);
       await tester.pumpAndSettle();
 
@@ -358,7 +360,7 @@ void main() {
       expect(controller.document.title, equals('Renamed Academic Paper'));
 
       // Save and verify file name contains new title
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();
 
@@ -406,7 +408,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Local save
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();
 
@@ -425,7 +427,7 @@ void main() {
 
       // Enable stylus-only mode
       await openDrawingOptions(tester);
-      final stylusToggle = find.byTooltip('Finger Inking Allowed (Tap to enable Stylus-Only)');
+      final stylusToggle = find.byTooltip(vi.fingerInkingAllowed);
       expect(stylusToggle, findsOneWidget);
       await tester.tap(stylusToggle);
       await tester.pumpAndSettle();
@@ -457,7 +459,7 @@ void main() {
 
       // Enable Stylus-Only mode
       await openDrawingOptions(tester);
-      final stylusToggle = find.byTooltip('Finger Inking Allowed (Tap to enable Stylus-Only)');
+      final stylusToggle = find.byTooltip(vi.fingerInkingAllowed);
       await tester.tap(stylusToggle);
       await tester.pumpAndSettle();
       expect(controller.stylusOnlyMode, isTrue);
@@ -480,7 +482,7 @@ void main() {
 
       // 3. Disable Stylus-Only mode -> touch event MUST now ink
       await openDrawingOptions(tester);
-      final stylusOnlyToggle = find.byTooltip('Stylus-Only Active (Fingers Pan Canvas)');
+      final stylusOnlyToggle = find.byTooltip(vi.stylusOnlyActive);
       await tester.tap(stylusOnlyToggle);
       await tester.pumpAndSettle();
       expect(controller.stylusOnlyMode, isFalse);
@@ -526,7 +528,7 @@ void main() {
       expect(bottomStrokeY, greaterThan(topStrokeY + 2500));
 
       // Save document
-      final saveBtn = find.widgetWithText(FilledButton, 'Save');
+      final saveBtn = find.widgetWithText(FilledButton, vi.save);
       await tester.tap(saveBtn);
       await tester.pumpAndSettle();
 
@@ -563,10 +565,10 @@ void main() {
 
       expect(controller.zoomScale, greaterThan(1.5));
       await openDrawingOptions(tester);
-      expect(find.byTooltip('Reset View'), findsOneWidget);
+      expect(find.byTooltip(vi.resetView), findsOneWidget);
 
       // Tap Reset View
-      await tester.tap(find.byTooltip('Reset View'));
+      await tester.tap(find.byTooltip(vi.resetView));
       await tester.pumpAndSettle();
 
       expect(controller.zoomScale, equals(1.0));
@@ -582,7 +584,7 @@ void main() {
       expect(controller.showA4Guides, isFalse);
 
       await openDrawingOptions(tester);
-      final a4Toggle = find.byTooltip(ToolbarWidget.continuousPaperTooltip);
+      final a4Toggle = find.byTooltip(vi.continuousPaperHint);
       expect(a4Toggle, findsOneWidget);
 
       await tester.tap(a4Toggle);
@@ -590,9 +592,9 @@ void main() {
 
       expect(controller.showA4Guides, isTrue);
       await openDrawingOptions(tester);
-      expect(find.byTooltip(ToolbarWidget.a4WritingTooltip), findsOneWidget);
+      expect(find.byTooltip(vi.a4WritingHint), findsOneWidget);
 
-      await tester.tap(find.byTooltip(ToolbarWidget.a4WritingTooltip));
+      await tester.tap(find.byTooltip(vi.a4WritingHint));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isFalse);

@@ -13,6 +13,8 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 
 import '../test/support/editor_interactions.dart';
 
+import '../test/support/localized_app.dart';
+
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   for (final landscape in [true, false]) {
@@ -56,23 +58,23 @@ void main() {
       expect(tester.getSize(find.byType(ToolbarWidget)).height, 56);
 
       for (final entry in {
-        'Highlighter': CanvasTool.highlighter,
-        'Stroke Eraser': CanvasTool.eraser,
-        'Pen': CanvasTool.pen,
+        vi.highlighter: CanvasTool.highlighter,
+        vi.eraser: CanvasTool.eraser,
+        vi.pen: CanvasTool.pen,
       }.entries) {
         await stylusTap(tester, find.byTooltip(entry.key));
         await tester.pumpAndSettle();
         expect(controller.tool, entry.value);
       }
-      await tapDrawingOption(tester, ToolbarWidget.continuousPaperTooltip);
-      await tapDrawingOption(tester, 'Fit to Width');
+      await tapDrawingOption(tester, vi.continuousPaperHint);
+      await tapDrawingOption(tester, vi.fitToWidth);
       expect(
         controller.zoomScale,
         closeTo(tester.getSize(canvas).width / 840, 1e-6),
       );
-      await tapDrawingOption(tester, 'Clear Canvas');
+      await tapDrawingOption(tester, vi.clearCanvas);
       expect(find.byType(AlertDialog), findsOneWidget);
-      await tester.tap(find.text('Cancel'));
+      await tester.tap(find.text(vi.cancel));
       await tester.pumpAndSettle();
       expect(controller.document, same(document));
 
@@ -89,10 +91,10 @@ void main() {
 
       await ink(const Offset(200, 250));
       final original = controller.document.strokes.single.toJson();
-      await stylusTap(tester, find.byTooltip('Undo'));
+      await stylusTap(tester, find.byTooltip(vi.undo));
       await tester.pumpAndSettle();
       expect(controller.document.strokes, isEmpty);
-      await stylusTap(tester, find.byTooltip('Redo'));
+      await stylusTap(tester, find.byTooltip(vi.redo));
       await tester.pumpAndSettle();
       expect(controller.document.strokes.single.toJson(), original);
       await binding.convertFlutterSurfaceToImage();
@@ -109,11 +111,11 @@ void main() {
         kind: PointerDeviceKind.stylus,
       );
       final active = controller.activePoints.map((p) => p.toJson()).toList();
-      await stylusTap(tester, find.byTooltip('Enter Zen'));
+      await stylusTap(tester, find.byTooltip(vi.enterZen));
       await tester.pumpAndSettle();
       expect(find.byType(AppBar), findsNothing);
       expect(find.byType(ToolbarWidget), findsNothing);
-      expect(find.byTooltip('Exit Zen'), findsOneWidget);
+      expect(find.byTooltip(vi.exitZen), findsOneWidget);
       expect(tester.state(canvas), same(state));
       expect(tester.getSize(canvas).height, greaterThan(normalHeight));
       expect(controller.document, same(document));
@@ -140,16 +142,16 @@ void main() {
         (await storage.loadNote(files.single)).strokes.map((s) => s.toJson()),
         controller.document.strokes.map((s) => s.toJson()),
       );
-      await stylusTap(tester, find.byTooltip('Exit Zen'));
+      await stylusTap(tester, find.byTooltip(vi.exitZen));
       await tester.pumpAndSettle();
       expect(find.byType(ToolbarWidget), findsOneWidget);
-      expect(find.byTooltip('Open Notes'), findsOneWidget);
-      expect(find.text('Save'), findsOneWidget);
+      expect(find.byTooltip(vi.openNotes), findsOneWidget);
+      expect(find.text(vi.save), findsOneWidget);
       expect(controller.zoomScale, zoom);
       expect(controller.viewportOffset, offset);
       await ink(const Offset(300, 450));
       expect(controller.document.strokes, hasLength(3));
-      await tester.tap(find.text('Save'));
+      await tester.tap(find.text(vi.save));
       await tester.pumpAndSettle();
       expect(controller.isModified, isFalse);
       expect(tester.takeException(), isNull);

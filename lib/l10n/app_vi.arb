@@ -1,0 +1,184 @@
+{
+  "@@locale": "vi",
+  "appName": "PHUCNOTE",
+  "untitledNote": "Ghi chú mới",
+  "pen": "Bút viết",
+  "highlighter": "Bút đánh dấu",
+  "eraser": "Tẩy nét",
+  "undo": "Hoàn tác",
+  "redo": "Làm lại",
+  "save": "Lưu",
+  "cancel": "Hủy",
+  "close": "Đóng",
+  "newNote": "Tạo ghi chú",
+  "openNotes": "Mở ghi chú",
+  "createNote": "Tạo ghi chú mới",
+  "create": "Tạo",
+  "noteTitle": "Tên ghi chú",
+  "renameNote": "Đổi tên ghi chú",
+  "rename": "Đổi tên",
+  "renameHint": "Chạm để đổi tên ghi chú",
+  "drawingOptions": "Công cụ khác",
+  "inkColor": "Màu mực",
+  "colorBlack": "Đen",
+  "colorBlue": "Xanh dương",
+  "colorRed": "Đỏ",
+  "colorGreen": "Xanh lá",
+  "colorOrange": "Cam",
+  "colorPurple": "Tím",
+  "widthFine": "Nét mảnh",
+  "widthNormal": "Nét vừa",
+  "widthBold": "Nét đậm",
+  "paperTemplate": "Mẫu giấy",
+  "paperRuled": "Giấy kẻ dòng",
+  "paperGrid": "Giấy ô vuông",
+  "paperBlank": "Giấy trắng",
+  "stylusOnly": "Chỉ viết bằng bút cảm ứng",
+  "stylusOnlyActive": "Đang dùng bút cảm ứng; dùng ngón tay để di chuyển giấy",
+  "fingerInkingAllowed": "Có thể viết bằng ngón tay; chạm để chỉ dùng bút cảm ứng",
+  "a4Mode": "Viết trên giấy A4",
+  "a4Badge": "A4",
+  "continuousPaperHint": "Giấy liên tục — chạm để bật viết trên giấy A4",
+  "a4WritingHint": "Đang viết trên giấy A4 — chạm để tắt\nBắt đầu trong trang; nét có thể đi qua mép trang.",
+  "fitToWidth": "Vừa chiều rộng",
+  "resetView": "Đặt lại góc nhìn",
+  "resetViewAt": "Đặt lại góc nhìn ({percent}%)",
+  "@resetViewAt": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "enterZen": "Chế độ tập trung",
+  "exitZen": "Thoát tập trung",
+  "clearCanvas": "Xóa toàn bộ nét",
+  "clearCanvasBody": "Xóa tất cả nét trên ghi chú này? Bạn có thể hoàn tác thao tác này.",
+  "clear": "Xóa nét",
+  "unsavedTitle": "Có thay đổi chưa lưu",
+  "unsavedBody": "Ghi chú “{title}” có thay đổi chưa lưu. Bạn muốn làm gì trước khi {action}?",
+  "@unsavedBody": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "discardChanges": "Bỏ thay đổi",
+  "saveAndProceed": "Lưu và tiếp tục",
+  "actionCreateNote": "tạo ghi chú mới",
+  "actionOpenNote": "mở ghi chú khác",
+  "actionExitApp": "thoát ứng dụng",
+  "unsaved": "Chưa lưu thay đổi",
+  "saved": "Đã lưu",
+  "saving": "Đang lưu…",
+  "savedAt": "Đã lưu lúc {time}",
+  "@savedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "savedTo": "Đã lưu: {filename}",
+  "@savedTo": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      }
+    }
+  },
+  "noteSaveFailed": "Không thể lưu ghi chú. Thay đổi vẫn được giữ lại; hãy thử lưu lần nữa.",
+  "noteListFailed": "Không thể mở danh sách ghi chú. Vui lòng thử lại.",
+  "noteLoadFailed": "Không thể mở ghi chú này. Vui lòng kiểm tra tệp và thử lại.",
+  "noteDeleteFailed": "Không thể xóa ghi chú. Vui lòng thử lại.",
+  "createdNote": "Đã tạo ghi chú “{title}”.",
+  "@createdNote": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "loadedNote": "Đã mở ghi chú “{title}”.",
+  "@loadedNote": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "generatedNoteTitle": "Ghi chú {date}",
+  "@generatedNoteTitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "savedNotes": "Ghi chú đã lưu ({count})",
+  "@savedNotes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "emptyNotes": "Chưa có ghi chú đã lưu. Hãy tạo một ghi chú và lưu lại.",
+  "noteModified": "Cập nhật {date} · {size} kB",
+  "@noteModified": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteNote": "Xóa ghi chú",
+  "pageNumber": "Trang {page}",
+  "@pageNumber": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "penStudio": "Xưởng bút",
+  "penStudioTitle": "Xưởng bút PHUCNOTE",
+  "closePenStudio": "Đóng xưởng bút",
+  "ballpoint": "Bút bi",
+  "gelPen": "Bút gel",
+  "fountainPen": "Bút máy",
+  "preset": "Mẫu bút",
+  "presetCustomized": "Mẫu bút · đã tùy chỉnh",
+  "currentPen": "Bút hiện tại",
+  "fountainExplanation": "Bút máy mô phỏng ngòi mềm bằng độ rộng theo lực nhấn; đầu nét vẫn là đầu tròn.",
+  "width": "Độ rộng nét",
+  "opacity": "Độ đậm mực",
+  "thinning": "Độ biến thiên",
+  "smoothing": "Độ mượt",
+  "streamline": "Ổn định nét",
+  "colorHex": "Màu mực (mã RGB)",
+  "colorHexHint": "Nhập 6 ký tự mã màu; màu hợp lệ được áp dụng ngay.",
+  "previewHint": "Viết thử tại đây",
+  "previewSemantics": "Vùng viết thử nét bút",
+  "resetPreview": "Xóa nét viết thử",
+  "resetPreset": "Đặt lại mẫu",
+  "savePersonal": "Lưu mẫu riêng",
+  "savePersonalTitle": "Lưu mẫu bút riêng",
+  "presetName": "Tên mẫu bút",
+  "savePreset": "Lưu mẫu",
+  "presetLoadFailed": "Không thể tải mẫu bút riêng. Các thiết lập đã có vẫn được giữ nguyên.",
+  "presetSaveFailed": "Không thể lưu mẫu bút. Vui lòng thử lại.",
+  "presetInvalid": "Tên hoặc thông số mẫu bút không hợp lệ.",
+  "presetNameRequired": "Vui lòng nhập tên mẫu bút.",
+  "presetNameExists": "Tên mẫu bút đã được dùng. Vui lòng chọn tên khác.",
+  "presetNameTooLong": "Tên mẫu bút không được dài quá 40 ký tự.",
+  "writingCanvas": "Vùng viết ghi chú",
+  "noChanges": "Chưa có thay đổi"
+}

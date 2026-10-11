@@ -5,6 +5,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../l10n/l10n.dart';
+
 import '../drawing/canvas_controller.dart';
 import '../drawing/foreground_painter.dart';
 import '../drawing/view_painter.dart';
@@ -166,49 +169,54 @@ class _CanvasViewState extends State<CanvasView> {
     return ListenableBuilder(
       listenable: widget.controller,
       builder: (context, _) {
-        return ClipRect(
-          child: Listener(
-            onPointerDown: _onPointerDown,
-            onPointerMove: _onPointerMove,
-            onPointerUp: _onPointerUp,
-            onPointerCancel: _onPointerCancel,
-            onPointerSignal: _onPointerSignal,
-            behavior: HitTestBehavior.opaque,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // Layer 1: Static background and committed strokes (cached raster)
-                RepaintBoundary(
-                  child: CustomPaint(
-                    size: Size.infinite,
-                    painter: PhucNoteViewPainter(
-                      document: widget.controller.document,
-                      backgroundColor: widget.paperColor,
-                      repaintCounter: widget.controller.repaintCounter,
-                      viewportOffset: widget.controller.viewportOffset,
-                      zoomScale: widget.controller.zoomScale,
-                      showA4Guides: widget.controller.showA4Guides,
+        return Semantics(
+          label: context.l10n.writingCanvas,
+          child: ClipRect(
+            child: Listener(
+              onPointerDown: _onPointerDown,
+              onPointerMove: _onPointerMove,
+              onPointerUp: _onPointerUp,
+              onPointerCancel: _onPointerCancel,
+              onPointerSignal: _onPointerSignal,
+              behavior: HitTestBehavior.opaque,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Layer 1: Static background and committed strokes (cached raster)
+                  RepaintBoundary(
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: PhucNoteViewPainter(
+                        pageLabel: context.l10n.pageNumber,
+                        localeName: context.l10n.localeName,
+                        document: widget.controller.document,
+                        backgroundColor: widget.paperColor,
+                        repaintCounter: widget.controller.repaintCounter,
+                        viewportOffset: widget.controller.viewportOffset,
+                        zoomScale: widget.controller.zoomScale,
+                        showA4Guides: widget.controller.showA4Guides,
+                      ),
+                      isComplex: true,
                     ),
-                    isComplex: true,
                   ),
-                ),
 
-                // Layer 2: Fast in-flight active stroke / eraser indicator (120-165Hz render loop)
-                RepaintBoundary(
-                  child: CustomPaint(
-                    size: Size.infinite,
-                    painter: PhucNoteForegroundPainter(
-                      activePoints: widget.controller.activePoints,
-                      property: widget.controller.activeProperty,
-                      eraserPosition: widget.controller.eraserPosition,
-                      eraserRadius: widget.controller.eraserRadius,
-                      viewportOffset: widget.controller.viewportOffset,
-                      zoomScale: widget.controller.zoomScale,
+                  // Layer 2: Fast in-flight active stroke / eraser indicator (120-165Hz render loop)
+                  RepaintBoundary(
+                    child: CustomPaint(
+                      size: Size.infinite,
+                      painter: PhucNoteForegroundPainter(
+                        activePoints: widget.controller.activePoints,
+                        property: widget.controller.activeProperty,
+                        eraserPosition: widget.controller.eraserPosition,
+                        eraserRadius: widget.controller.eraserRadius,
+                        viewportOffset: widget.controller.viewportOffset,
+                        zoomScale: widget.controller.zoomScale,
+                      ),
+                      willChange: true,
                     ),
-                    willChange: true,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

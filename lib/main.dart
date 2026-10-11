@@ -4,8 +4,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'core/storage/note_storage.dart';
 import 'ui/home_screen.dart';
+import 'ui/app_theme.dart';
+import 'l10n/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,46 +29,25 @@ void main() async {
 
 class PhucNoteApp extends StatelessWidget {
   final NoteStorage noteStorage;
+  final ThemeMode themeMode;
 
   const PhucNoteApp({
     super.key,
     required this.noteStorage,
+    this.themeMode = ThemeMode.system,
   });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PHUCNOTE',
+      onGenerateTitle: (context) => context.l10n.appName,
+      locale: const Locale('vi', 'VN'),
+      supportedLocales: const [Locale('vi', 'VN')],
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF1565C0),
-          brightness: Brightness.light,
-          surface: const Color(0xFFFBFBF9), // Warm Paper Ivory
-        ),
-        scaffoldBackgroundColor: const Color(0xFFFBFBF9),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          backgroundColor: Color(0xFFF5F5F0),
-          foregroundColor: Color(0xFF1E1E1E),
-        ),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF90CAF9),
-          brightness: Brightness.dark,
-          surface: const Color(0xFF1E1E1E),
-        ),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          backgroundColor: Color(0xFF1E1E1E),
-          foregroundColor: Colors.white,
-        ),
-      ),
+      themeMode: themeMode,
+      theme: academicTheme(Brightness.light),
+      darkTheme: academicTheme(Brightness.dark),
       home: HomeScreen(noteStorage: noteStorage),
     );
   }

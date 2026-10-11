@@ -4,6 +4,7 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:phucnote/core/storage/note_storage.dart';
@@ -13,6 +14,8 @@ import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/toolbar_widget.dart';
 
 import '../test/support/editor_interactions.dart';
+
+import '../test/support/localized_app.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -44,19 +47,33 @@ void main() {
     return tester.widget<CanvasView>(find.byType(CanvasView)).controller;
   }
 
+  Future<void> openPortrait(WidgetTester tester) async {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    addTearDown(() => SystemChrome.setPreferredOrientations([]));
+    await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
+    for (var i = 0; i < 40; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      if (tester.view.physicalSize.height > tester.view.physicalSize.width) {
+        break;
+      }
+    }
+    await tester.pumpAndSettle();
+    expect(tester.view.physicalSize.height, greaterThan(tester.view.physicalSize.width));
+  }
+
   group('PHUCNOTE A4 Portrait Visual Acceptance (V-03, V-04)', () {
     testWidgets('V-03: Portrait with fit-to-width', (tester) async {
-      await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
-      await tester.pumpAndSettle();
+      await openPortrait(tester);
 
       final controller = getController(tester);
+      final viewportWidth = MediaQuery.sizeOf(tester.element(find.byType(CanvasView))).width;
       controller.setShowA4Guides(true);
       controller.resetViewport();
       await tester.pumpAndSettle();
 
       // Find and tap the Fit to Width button on toolbar
       await openDrawingOptions(tester);
-      final fitBtn = find.byTooltip('Fit to Width');
+      final fitBtn = find.byTooltip(vi.fitToWidth);
       expect(fitBtn, findsOneWidget);
       await tester.tap(fitBtn);
       await tester.pumpAndSettle();
@@ -68,26 +85,25 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
-      expect(controller.zoomScale, closeTo(800.0 / 840.0, 1e-4));
+      expect(controller.zoomScale, closeTo(viewportWidth / 840.0, 1e-4));
       expect(find.byType(ToolbarWidget), findsOneWidget);
       expect(find.byType(CanvasView), findsOneWidget);
 
-      // Verify page boundaries on 800px wide screen
+      // Verify page boundaries against the actual portrait viewport
       final pageLeft = controller.canvasToScreen(const Offset(0, 0)).dx;
       final pageRight = controller.canvasToScreen(const Offset(CanvasController.a4Width, 0)).dx;
       final footerRight = controller.canvasToScreen(const Offset(CanvasController.a4Width - 24.0, 0)).dx;
 
       expect(pageLeft, greaterThanOrEqualTo(0.0));
-      expect(pageRight, lessThanOrEqualTo(800.01));
-      expect(footerRight, lessThanOrEqualTo(800.0));
+      expect(pageRight, lessThanOrEqualTo(viewportWidth + 0.01));
+      expect(footerRight, lessThanOrEqualTo(viewportWidth));
       expect(tester.takeException(), isNull);
 
       await capture(tester, '03_portrait_1x');
     });
 
     testWidgets('V-04: Portrait at 0.5x', (tester) async {
-      await tester.pumpWidget(PhucNoteApp(noteStorage: noteStorage));
-      await tester.pumpAndSettle();
+      await openPortrait(tester);
 
       final controller = getController(tester);
       controller.setShowA4Guides(true);

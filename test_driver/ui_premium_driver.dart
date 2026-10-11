@@ -1,0 +1,14 @@
+import 'dart:io';
+
+import 'package:integration_test/integration_test_driver_extended.dart';
+
+Future<void> main() async => integrationDriver(
+  responseDataCallback: null,
+  onScreenshot: (name, bytes, [args]) async {
+    if (bytes.isEmpty) return false;
+    final directory = Directory('artifacts/ui-premium-validation');
+    await directory.create(recursive: true);
+    await File('${directory.path}/$name.png').writeAsBytes(bytes, flush: true);
+    return true;
+  },
+);
