@@ -2,7 +2,7 @@
 
 Authorization: Prompt/PHUCNOTE_P0_AUTONOMOUS.txt (read completely). Lead/auditor: Codex; implementer: Antigravity CLI; orchestration: Hermes. User rating remains 2/10. No physical quality certification.
 
-Base: develop at 640be788f008809421b1788e957207dbc86950d5. Integration branch: p0/autonomous-20261012. Original untracked Prompt/ is user work: never stage, edit or remove it. Serial workers only. No merges, migration, signing changes, release distribution or destructive actions. Local reviewed commits authorized; remote push optional after privacy scan.
+Base: develop at 640be788f008809421b1788e957207dbc86950d5. Integration branch: p0/autonomous-20261012. Original untracked Prompt/ is user work: never stage, edit or remove it. Serial workers only. No merges, migration, signing changes, release distribution or destructive actions. Local reviewed commits authorized; user now requires automatic normal push of the dedicated P0 branch after every audited PASS checkpoint, after privacy scan and with remote SHA read-back recorded. Never force push, merge develop/main or publish Releases.
 
 Existing toolchain: Flutter 3.47.7 / Dart 3.13.5 at C:/Users/lyle3/.codex/visualizations/2026/10/10/01a12533-6d39-7542-8205-9c33fb77fb75/p0-toolchain/flutter/bin/flutter.bat; Java scratch/toolchain/jdk-17.0.20.1+1; Android SDK scratch/toolchain/android-sdk; Gradle scratch/toolchain/gradle. Use existing caches; no SDK installation. Initial adb devices -l: no connected devices. Existing release build signs with debug configuration; do not create/change keys.
 

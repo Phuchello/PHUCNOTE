@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:phucnote/core/models/pen_preset.dart';
+
 import 'package:phucnote/core/models/stroke_point.dart';
 import 'package:phucnote/core/models/stroke_property.dart';
 import 'package:phucnote/drawing/stroke_geometry.dart';
@@ -11,7 +11,7 @@ import '../tool/ink_benchmark/traces.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('generate BEFORE/AFTER PNG grid identical traceCatalog samples', () async {
+  test('generate baseline/rejected-candidate PNG from frozen identical traces', () async {
     final traces = [
       ...traceCatalog(),
       InkTrace('vietnamese_tone_marks', 'acute_grave_hook_tilde_dot', [
@@ -38,10 +38,16 @@ void main() {
       StrokeProperty(colorValue: 0xff1e1e1e, strokeWidth: 4.5, thinning: .2, smoothing: .7, streamline: .55),
       StrokeProperty(colorValue: 0xff1e1e1e, strokeWidth: 5, thinning: .8, smoothing: .55, streamline: .4),
     ];
+    // Experimental values are frozen only as evidence; NOT production defaults.
+    const experimentalProps = [
+      StrokeProperty(colorValue: 0xFF1E1E1E, strokeWidth: 2.8, thinning: 0, smoothing: .35, streamline: .20),
+      StrokeProperty(colorValue: 0xFF1E1E1E, strokeWidth: 3.8, thinning: .15, smoothing: .50, streamline: .35),
+      StrokeProperty(colorValue: 0xFF1E1E1E, strokeWidth: 4.8, thinning: .60, smoothing: .45, streamline: .30),
+    ];
     final columns = [
-      oldProps[0], PenPreset.defaults[0].property,
-      oldProps[1], PenPreset.defaults[1].property,
-      oldProps[2], PenPreset.defaults[2].property,
+      oldProps[0], experimentalProps[0],
+      oldProps[1], experimentalProps[1],
+      oldProps[2], experimentalProps[2],
     ];
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble()));
@@ -55,6 +61,8 @@ void main() {
           final path = StrokeGeometry.generatePath(samples.map((s) => s.point).toList(), columns[col]);
           final b = path.getBounds();
           expect(b.left.isFinite && b.top.isFinite && b.right.isFinite && b.bottom.isFinite, isTrue);
+          expect(b.width, greaterThan(0));
+          expect(b.height, greaterThan(0));
           canvas.drawPath(path, Paint()..color = columns[col].color);
         }
         canvas.restore();

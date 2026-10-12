@@ -1,0 +1,1220 @@
+{
+  "verdict": "REJECT_EXPERIMENTAL_PRESETS_RETAIN_EXACT_BASELINE",
+  "scope": "Software-rendered emulator; not physical latency/quality",
+  "phases": [
+    {
+      "capture": "rep0_old_d32_w128",
+      "repeat": 0,
+      "phase": "old",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 16,
+      "build": {
+        "p50": 1.093,
+        "p95": 4.71,
+        "p99": 9.023
+      },
+      "raster": {
+        "p50": 22.473,
+        "p95": 52.341,
+        "p99": 55.951
+      },
+      "total": {
+        "p50": 27.704,
+        "p95": 86.273,
+        "p99": 94.805
+      }
+    },
+    {
+      "capture": "rep0_new_d32_w128",
+      "repeat": 0,
+      "phase": "new",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 21,
+      "build": {
+        "p50": 1.26,
+        "p95": 8.12,
+        "p99": 55.802
+      },
+      "raster": {
+        "p50": 24.73,
+        "p95": 46.251,
+        "p99": 53.066
+      },
+      "total": {
+        "p50": 41.902,
+        "p95": 76.623,
+        "p99": 76.716
+      }
+    },
+    {
+      "capture": "rep0_old_d128_w512",
+      "repeat": 0,
+      "phase": "old",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 2.517,
+        "p95": 10.946,
+        "p99": 14.545
+      },
+      "raster": {
+        "p50": 35.546,
+        "p95": 52.181,
+        "p99": 55.302
+      },
+      "total": {
+        "p50": 57.701,
+        "p95": 78.622,
+        "p99": 80.919
+      }
+    },
+    {
+      "capture": "rep0_new_d128_w512",
+      "repeat": 0,
+      "phase": "new",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 23,
+      "build": {
+        "p50": 2.75,
+        "p95": 11.062,
+        "p99": 30.402
+      },
+      "raster": {
+        "p50": 41.287,
+        "p95": 67.597,
+        "p99": 93.448
+      },
+      "total": {
+        "p50": 74.785,
+        "p95": 121.024,
+        "p99": 131.816
+      }
+    },
+    {
+      "capture": "rep0_old_d256_w2048",
+      "repeat": 0,
+      "phase": "old",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 36.463,
+        "p95": 58.418,
+        "p99": 64.459
+      },
+      "raster": {
+        "p50": 25.238,
+        "p95": 38.121,
+        "p99": 50.31
+      },
+      "total": {
+        "p50": 68.558,
+        "p95": 97.26,
+        "p99": 117.251
+      }
+    },
+    {
+      "capture": "rep0_new_d256_w2048",
+      "repeat": 0,
+      "phase": "new",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 36.72,
+        "p95": 56.481,
+        "p99": 101.943
+      },
+      "raster": {
+        "p50": 27.042,
+        "p95": 76.531,
+        "p99": 77.582
+      },
+      "total": {
+        "p50": 71.912,
+        "p95": 139.993,
+        "p99": 141.055
+      }
+    },
+    {
+      "capture": "rep0_old_d512_w4096",
+      "repeat": 0,
+      "phase": "old",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 63.421,
+        "p95": 83.989,
+        "p99": 101.148
+      },
+      "raster": {
+        "p50": 46.393,
+        "p95": 63.079,
+        "p99": 95.417
+      },
+      "total": {
+        "p50": 120.892,
+        "p95": 162.409,
+        "p99": 168.736
+      }
+    },
+    {
+      "capture": "rep0_new_d512_w4096",
+      "repeat": 0,
+      "phase": "new",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 76.167,
+        "p95": 106.983,
+        "p99": 114.207
+      },
+      "raster": {
+        "p50": 56.306,
+        "p95": 133.892,
+        "p99": 167.662
+      },
+      "total": {
+        "p50": 154.552,
+        "p95": 282.57,
+        "p99": 300.847
+      }
+    },
+    {
+      "capture": "rep1_new_d512_w4096",
+      "repeat": 1,
+      "phase": "new",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 70.917,
+        "p95": 99.973,
+        "p99": 132.351
+      },
+      "raster": {
+        "p50": 59.769,
+        "p95": 151.458,
+        "p99": 158.895
+      },
+      "total": {
+        "p50": 135.973,
+        "p95": 223.427,
+        "p99": 255.727
+      }
+    },
+    {
+      "capture": "rep1_old_d512_w4096",
+      "repeat": 1,
+      "phase": "old",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 62.986,
+        "p95": 87.486,
+        "p99": 97.638
+      },
+      "raster": {
+        "p50": 48.427,
+        "p95": 115.728,
+        "p99": 155.904
+      },
+      "total": {
+        "p50": 116.811,
+        "p95": 248.712,
+        "p99": 266.372
+      }
+    },
+    {
+      "capture": "rep1_new_d256_w2048",
+      "repeat": 1,
+      "phase": "new",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 31.76,
+        "p95": 41.267,
+        "p99": 52.019
+      },
+      "raster": {
+        "p50": 24.603,
+        "p95": 41.002,
+        "p99": 43.012
+      },
+      "total": {
+        "p50": 64.46,
+        "p95": 96.248,
+        "p99": 100.259
+      }
+    },
+    {
+      "capture": "rep1_old_d256_w2048",
+      "repeat": 1,
+      "phase": "old",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 32.195,
+        "p95": 53.043,
+        "p99": 67.02
+      },
+      "raster": {
+        "p50": 28.482,
+        "p95": 63.782,
+        "p99": 73.163
+      },
+      "total": {
+        "p50": 67.485,
+        "p95": 116.29,
+        "p99": 143.262
+      }
+    },
+    {
+      "capture": "rep1_new_d128_w512",
+      "repeat": 1,
+      "phase": "new",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 2.296,
+        "p95": 21.785,
+        "p99": 26.183
+      },
+      "raster": {
+        "p50": 33.309,
+        "p95": 81.306,
+        "p99": 88.124
+      },
+      "total": {
+        "p50": 55.127,
+        "p95": 137.396,
+        "p99": 137.533
+      }
+    },
+    {
+      "capture": "rep1_old_d128_w512",
+      "repeat": 1,
+      "phase": "old",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 2.333,
+        "p95": 8.06,
+        "p99": 16.597
+      },
+      "raster": {
+        "p50": 34.903,
+        "p95": 64.947,
+        "p99": 71.524
+      },
+      "total": {
+        "p50": 51.91,
+        "p95": 86.869,
+        "p99": 101.312
+      }
+    },
+    {
+      "capture": "rep1_new_d32_w128",
+      "repeat": 1,
+      "phase": "new",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 7,
+      "build": {
+        "p50": 1.078,
+        "p95": 1.74,
+        "p99": 10.919
+      },
+      "raster": {
+        "p50": 8.69,
+        "p95": 36.965,
+        "p99": 68.14
+      },
+      "total": {
+        "p50": 12.989,
+        "p95": 76.049,
+        "p99": 87.766
+      }
+    },
+    {
+      "capture": "rep1_old_d32_w128",
+      "repeat": 1,
+      "phase": "old",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 10,
+      "build": {
+        "p50": 1.022,
+        "p95": 4.513,
+        "p99": 30.496
+      },
+      "raster": {
+        "p50": 10.172,
+        "p95": 42.959,
+        "p99": 52.847
+      },
+      "total": {
+        "p50": 29.606,
+        "p95": 70.948,
+        "p99": 71.466
+      }
+    },
+    {
+      "capture": "rep2_old_d32_w128",
+      "repeat": 2,
+      "phase": "old",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 15,
+      "build": {
+        "p50": 1.318,
+        "p95": 1.916,
+        "p99": 2.786
+      },
+      "raster": {
+        "p50": 18.853,
+        "p95": 25.115,
+        "p99": 36.232
+      },
+      "total": {
+        "p50": 25.87,
+        "p95": 35.174,
+        "p99": 46.741
+      }
+    },
+    {
+      "capture": "rep2_new_d32_w128",
+      "repeat": 2,
+      "phase": "new",
+      "density": 32,
+      "wetLength": 128,
+      "frameCount": 24,
+      "jank60Hz": 14,
+      "build": {
+        "p50": 1.231,
+        "p95": 1.888,
+        "p99": 14.065
+      },
+      "raster": {
+        "p50": 17.028,
+        "p95": 38.856,
+        "p99": 41.225
+      },
+      "total": {
+        "p50": 25.85,
+        "p95": 45.312,
+        "p99": 47.849
+      }
+    },
+    {
+      "capture": "rep2_old_d128_w512",
+      "repeat": 2,
+      "phase": "old",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 1.944,
+        "p95": 19.717,
+        "p99": 20.117
+      },
+      "raster": {
+        "p50": 30.795,
+        "p95": 49.836,
+        "p99": 50.328
+      },
+      "total": {
+        "p50": 41.355,
+        "p95": 93.181,
+        "p99": 115.294
+      }
+    },
+    {
+      "capture": "rep2_new_d128_w512",
+      "repeat": 2,
+      "phase": "new",
+      "density": 128,
+      "wetLength": 512,
+      "frameCount": 24,
+      "jank60Hz": 22,
+      "build": {
+        "p50": 2.046,
+        "p95": 26.68,
+        "p99": 37.01
+      },
+      "raster": {
+        "p50": 26.316,
+        "p95": 54.703,
+        "p99": 54.936
+      },
+      "total": {
+        "p50": 37.348,
+        "p95": 97.761,
+        "p99": 100.063
+      }
+    },
+    {
+      "capture": "rep2_old_d256_w2048",
+      "repeat": 2,
+      "phase": "old",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 34.511,
+        "p95": 69.988,
+        "p99": 80.916
+      },
+      "raster": {
+        "p50": 27.943,
+        "p95": 66.588,
+        "p99": 88.666
+      },
+      "total": {
+        "p50": 68.074,
+        "p95": 125.177,
+        "p99": 150.786
+      }
+    },
+    {
+      "capture": "rep2_new_d256_w2048",
+      "repeat": 2,
+      "phase": "new",
+      "density": 256,
+      "wetLength": 2048,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 34.591,
+        "p95": 70.982,
+        "p99": 76.311
+      },
+      "raster": {
+        "p50": 24.357,
+        "p95": 85.286,
+        "p99": 86.022
+      },
+      "total": {
+        "p50": 66.897,
+        "p95": 129.77,
+        "p99": 138.316
+      }
+    },
+    {
+      "capture": "rep2_old_d512_w4096",
+      "repeat": 2,
+      "phase": "old",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 68.261,
+        "p95": 91.744,
+        "p99": 113.537
+      },
+      "raster": {
+        "p50": 52.903,
+        "p95": 127.693,
+        "p99": 189.699
+      },
+      "total": {
+        "p50": 119.956,
+        "p95": 237.167,
+        "p99": 285.401
+      }
+    },
+    {
+      "capture": "rep2_new_d512_w4096",
+      "repeat": 2,
+      "phase": "new",
+      "density": 512,
+      "wetLength": 4096,
+      "frameCount": 24,
+      "jank60Hz": 24,
+      "build": {
+        "p50": 70.949,
+        "p95": 103.395,
+        "p99": 165.272
+      },
+      "raster": {
+        "p50": 58.598,
+        "p95": 144.619,
+        "p99": 195.769
+      },
+      "total": {
+        "p50": 136.023,
+        "p95": 266.491,
+        "p99": 266.929
+      }
+    }
+  ],
+  "memory": [
+    {
+      "phase": "rep0_old_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 10682656,
+        "heapCapacity": 12582912,
+        "externalUsage": 3104
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_old_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 10778016,
+        "heapCapacity": 12582912,
+        "externalUsage": 4640
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_new_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 9565280,
+        "heapCapacity": 11534336,
+        "externalUsage": 4576
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_new_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 9918128,
+        "heapCapacity": 12058624,
+        "externalUsage": 4704
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_old_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8479088,
+        "heapCapacity": 11259904,
+        "externalUsage": 6144
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_old_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8325408,
+        "heapCapacity": 10211328,
+        "externalUsage": 5152
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_new_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 9580960,
+        "heapCapacity": 10735616,
+        "externalUsage": 10720
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_new_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8835248,
+        "heapCapacity": 10211328,
+        "externalUsage": 9696
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_old_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 13468400,
+        "heapCapacity": 15454208,
+        "externalUsage": 21504
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_old_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 7968352,
+        "heapCapacity": 11784192,
+        "externalUsage": 4864
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_new_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 11290704,
+        "heapCapacity": 13357056,
+        "externalUsage": 13184
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_new_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 14294368,
+        "heapCapacity": 15978496,
+        "externalUsage": 29856
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_old_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 7910480,
+        "heapCapacity": 12832768,
+        "externalUsage": 4864
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_old_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8367264,
+        "heapCapacity": 13357056,
+        "externalUsage": 4864
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep0_new_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 21914400,
+        "heapCapacity": 23842816,
+        "externalUsage": 36192
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep0_new_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8353696,
+        "heapCapacity": 12832768,
+        "externalUsage": 4864
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_new_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 17428624,
+        "heapCapacity": 20172800,
+        "externalUsage": 8256
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_new_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 19964208,
+        "heapCapacity": 21221376,
+        "externalUsage": 16352
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_old_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 12978656,
+        "heapCapacity": 15978496,
+        "externalUsage": 7616
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_old_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 18876848,
+        "heapCapacity": 20172800,
+        "externalUsage": 37408
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_new_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 11173920,
+        "heapCapacity": 13881344,
+        "externalUsage": 6592
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_new_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 14361664,
+        "heapCapacity": 15978496,
+        "externalUsage": 30560
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_old_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 13192432,
+        "heapCapacity": 15978496,
+        "externalUsage": 23968
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_old_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 7976128,
+        "heapCapacity": 14929920,
+        "externalUsage": 4864
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_new_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 9286512,
+        "heapCapacity": 10735616,
+        "externalUsage": 11776
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_new_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 10970656,
+        "heapCapacity": 12308480,
+        "externalUsage": 11264
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_old_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 9751904,
+        "heapCapacity": 10735616,
+        "externalUsage": 16448
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_old_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 19434624,
+        "heapCapacity": 20697088,
+        "externalUsage": 20288
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_new_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 10249216,
+        "heapCapacity": 11259904,
+        "externalUsage": 17952
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_new_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 13907408,
+        "heapCapacity": 14929920,
+        "externalUsage": 21792
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep1_old_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8404720,
+        "heapCapacity": 10735616,
+        "externalUsage": 4416
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep1_old_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8030848,
+        "heapCapacity": 10211328,
+        "externalUsage": 3296
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_old_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8657280,
+        "heapCapacity": 10735616,
+        "externalUsage": 5760
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_old_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 12269504,
+        "heapCapacity": 14405632,
+        "externalUsage": 9600
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_new_d32_w128",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8868320,
+        "heapCapacity": 10735616,
+        "externalUsage": 7104
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_new_d32_w128",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 12527152,
+        "heapCapacity": 14405632,
+        "externalUsage": 10944
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_old_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 16608896,
+        "heapCapacity": 18599936,
+        "externalUsage": 10208
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_old_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 14050976,
+        "heapCapacity": 15978496,
+        "externalUsage": 10496
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_new_d128_w512",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 19034128,
+        "heapCapacity": 21221376,
+        "externalUsage": 14624
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_new_d128_w512",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 14299952,
+        "heapCapacity": 16502784,
+        "externalUsage": 6912
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_old_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8565008,
+        "heapCapacity": 9687040,
+        "externalUsage": 21056
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_old_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8898352,
+        "heapCapacity": 10735616,
+        "externalUsage": 36288
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_new_d256_w2048",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 14760560,
+        "heapCapacity": 16502784,
+        "externalUsage": 19168
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_new_d256_w2048",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 19405520,
+        "heapCapacity": 21221376,
+        "externalUsage": 9696
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_old_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 18171888,
+        "heapCapacity": 20697088,
+        "externalUsage": 19104
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_old_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 13291072,
+        "heapCapacity": 13881344,
+        "externalUsage": 36768
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    },
+    {
+      "phase": "rep2_new_d512_w4096",
+      "reset": true,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 8700560,
+        "heapCapacity": 10735616,
+        "externalUsage": 35072
+      },
+      "allocationStatus": "CLASS_STATS_RETURNED_SEE_SELECTION"
+    },
+    {
+      "phase": "rep2_new_d512_w4096",
+      "reset": false,
+      "heap": {
+        "type": "MemoryUsage",
+        "heapUsage": 10971872,
+        "heapCapacity": 12308480,
+        "externalUsage": 19712
+      },
+      "allocationStatus": "UNAVAILABLE_IN_THIS_MODE"
+    }
+  ],
+  "androidPss": [
+    {
+      "phase": "rep0_new_d128_w512",
+      "totalPssKiB": 118738
+    },
+    {
+      "phase": "rep0_new_d256_w2048",
+      "totalPssKiB": 147546
+    },
+    {
+      "phase": "rep0_new_d32_w128",
+      "totalPssKiB": 111526
+    },
+    {
+      "phase": "rep0_new_d512_w4096",
+      "totalPssKiB": 168800
+    },
+    {
+      "phase": "rep0_old_d128_w512",
+      "totalPssKiB": 116143
+    },
+    {
+      "phase": "rep0_old_d256_w2048",
+      "totalPssKiB": 134954
+    },
+    {
+      "phase": "rep0_old_d32_w128",
+      "totalPssKiB": 110051
+    },
+    {
+      "phase": "rep0_old_d512_w4096",
+      "totalPssKiB": 161274
+    },
+    {
+      "phase": "rep1_new_d128_w512",
+      "totalPssKiB": 138105
+    },
+    {
+      "phase": "rep1_new_d256_w2048",
+      "totalPssKiB": 153873
+    },
+    {
+      "phase": "rep1_new_d32_w128",
+      "totalPssKiB": 142313
+    },
+    {
+      "phase": "rep1_new_d512_w4096",
+      "totalPssKiB": 169741
+    },
+    {
+      "phase": "rep1_old_d128_w512",
+      "totalPssKiB": 139993
+    },
+    {
+      "phase": "rep1_old_d256_w2048",
+      "totalPssKiB": 141861
+    },
+    {
+      "phase": "rep1_old_d32_w128",
+      "totalPssKiB": 140057
+    },
+    {
+      "phase": "rep1_old_d512_w4096",
+      "totalPssKiB": 170805
+    },
+    {
+      "phase": "rep2_new_d128_w512",
+      "totalPssKiB": 141738
+    },
+    {
+      "phase": "rep2_new_d256_w2048",
+      "totalPssKiB": 150649
+    },
+    {
+      "phase": "rep2_new_d32_w128",
+      "totalPssKiB": 138777
+    },
+    {
+      "phase": "rep2_new_d512_w4096",
+      "totalPssKiB": 168679
+    },
+    {
+      "phase": "rep2_old_d128_w512",
+      "totalPssKiB": 141757
+    },
+    {
+      "phase": "rep2_old_d256_w2048",
+      "totalPssKiB": 150577
+    },
+    {
+      "phase": "rep2_old_d32_w128",
+      "totalPssKiB": 138421
+    },
+    {
+      "phase": "rep2_old_d512_w4096",
+      "totalPssKiB": 159837
+    }
+  ],
+  "allocationStatusCounts": {
+    "CLASS_STATS_RETURNED_SEE_SELECTION": 24,
+    "UNAVAILABLE_IN_THIS_MODE": 24
+  },
+  "allocationLimitation": "All reset=false getAllocationProfile calls returned Invalid params. Independent heap usage was returned; post-phase class allocation deltas unavailable; no native Path-byte or memory-PASS claim.",
+  "cpuRunCounts": {
+    "geometry": 45,
+    "density": 72
+  },
+  "cpuSource": "test/p06_cpu_test.dart; opt-in P06_MEASURE; raw cpu_baseline.json is local only"
+}
