@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../core/models/note_document.dart';
+import '../core/models/pen_preset.dart';
 import '../core/models/stroke_element.dart';
 import '../core/models/stroke_point.dart';
 import '../core/models/stroke_property.dart';
@@ -24,12 +25,7 @@ enum CanvasTool {
 class CanvasController extends ChangeNotifier {
   NoteDocument _document;
   CanvasTool _tool = CanvasTool.pen;
-  StrokeProperty _penProperty = const StrokeProperty(
-    colorValue: 0xFF1E1E1E,
-    thinning: 0.45,
-    smoothing: 0.55,
-    streamline: 0.40,
-  );
+  StrokeProperty _penProperty = PenPreset.defaults.first.property;
   StrokeProperty? _activeStrokeProperty;
 
   final List<StrokePoint> _activePoints = [];
