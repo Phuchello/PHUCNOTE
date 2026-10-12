@@ -12,6 +12,7 @@ import '../l10n/l10n.dart';
 import 'app_theme.dart';
 import '../core/models/note_document.dart';
 import '../core/storage/note_storage.dart';
+import '../core/storage/input_preferences_store.dart';
 import '../drawing/canvas_controller.dart';
 import 'canvas_view.dart';
 import 'toolbar_widget.dart';
@@ -21,8 +22,9 @@ import 'toolbar_widget.dart';
 /// unsaved change warnings, and switch guards).
 class HomeScreen extends StatefulWidget {
   final NoteStorage noteStorage;
+  final InputPreferencesStore? inputPreferences;
 
-  const HomeScreen({super.key, required this.noteStorage});
+  const HomeScreen({super.key, required this.noteStorage, this.inputPreferences});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -36,13 +38,46 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   DateTime? _lastSavedAt;
   bool _zenMode = false;
   bool _initializedTitle = false;
+  late final InputPreferencesStore _inputPreferences;
+  bool _inputReady = false;
+  bool _inputChoiceChanged = false;
+  bool _restoringInput = false;
+  bool _lastInputMode = true;
 
   @override
   void initState() {
     super.initState();
     _controller = CanvasController();
+    _inputPreferences = widget.inputPreferences ?? InputPreferencesStore(
+      directory: widget.noteStorage.customRootDirectory,
+    );
     _controller.addListener(_onCanvasChanged);
     WidgetsBinding.instance.addObserver(this);
+    unawaited(_restoreInputPreference());
+  }
+
+  Future<void> _restoreInputPreference() async {
+    final saved = await _inputPreferences.load();
+    if (!mounted) return;
+    if (!_inputChoiceChanged) {
+      _restoringInput = true;
+      _lastInputMode = saved;
+      _controller.setStylusOnlyMode(saved);
+      _restoringInput = false;
+    }
+    setState(() => _inputReady = true);
+    if (_inputChoiceChanged) unawaited(_persistInputPreference());
+  }
+
+  Future<void> _persistInputPreference() async {
+    try {
+      await _inputPreferences.save(_controller.stylusOnlyMode);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.noteSaveFailed)),
+      );
+    }
   }
 
   @override
@@ -76,6 +111,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   void _onCanvasChanged() {
+    if (!_restoringInput && _lastInputMode != _controller.stylusOnlyMode) {
+      _lastInputMode = _controller.stylusOnlyMode;
+      _inputChoiceChanged = true;
+      if (_inputReady) unawaited(_persistInputPreference());
+    }
     _autosaveTimer?.cancel();
     if (_controller.isModified) {
       // Debounce autosave: trigger after 1500ms of inking inactivity
@@ -612,10 +652,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 children: [
                   // Canvas View
                   Positioned.fill(
-                    child: CanvasView(
-                      key: const ValueKey('editor-canvas'),
-                      controller: _controller,
-                      paperColor: StudioTokens.paper,
+                    child: AbsorbPointer(
+                      absorbing: !_inputReady,
+                      child: CanvasView(
+                        key: const ValueKey('editor-canvas'),
+                        controller: _controller,
+                        paperColor: StudioTokens.paper,
+                      ),
                     ),
                   ),
 

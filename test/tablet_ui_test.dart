@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:phucnote/core/models/note_document.dart';
 import 'package:phucnote/core/storage/note_storage.dart';
+import 'package:phucnote/core/storage/input_preferences_store.dart';
 import 'package:phucnote/drawing/canvas_controller.dart';
 import 'package:phucnote/ui/canvas_view.dart';
 import 'package:phucnote/ui/home_screen.dart';
@@ -14,6 +15,14 @@ import 'package:phucnote/ui/toolbar_widget.dart';
 import 'support/editor_interactions.dart';
 
 import 'support/localized_app.dart';
+
+class _MemoryInputPreferences extends InputPreferencesStore {
+  @override
+  Future<bool> load() async => true;
+
+  @override
+  Future<void> save(bool stylusOnlyMode) async {}
+}
 
 class _HeldStorage extends NoteStorage {
   final snapshots = <NoteDocument>[];
@@ -42,9 +51,10 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     storage = _HeldStorage();
     await tester.pumpWidget(
-      localizedApp(home: HomeScreen(noteStorage: storage)),
+      localizedApp(home: HomeScreen(noteStorage: storage, inputPreferences: _MemoryInputPreferences())),
     );
     controller = tester.widget<CanvasView>(find.byType(CanvasView)).controller;
+    await tester.pumpAndSettle();
     addTearDown(() async {
       await tester.pumpWidget(const SizedBox.shrink());
       for (final completion in storage.completions) {
@@ -55,11 +65,11 @@ void main() {
   }
 
   void stroke(double x) {
-    controller.handlePointerDown(PointerDownEvent(position: Offset(x, 250)));
+    controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(x, 250)));
     controller.handlePointerMove(
-      PointerMoveEvent(position: Offset(x + 20, 270)),
+      PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(x + 20, 270)),
     );
-    controller.handlePointerUp(PointerUpEvent(position: Offset(x + 20, 270)));
+    controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(x + 20, 270)));
   }
 
   void checkToolbar(WidgetTester tester) {
@@ -246,6 +256,8 @@ void main() {
     controller.zoomAt(const Offset(100, 100), 1.5);
     final zoom = controller.zoomScale;
     final offset = controller.viewportOffset;
+    await tester.pump();
+    expect(tester.widget<AbsorbPointer>(find.ancestor(of: find.byType(CanvasView), matching: find.byType(AbsorbPointer)).first).absorbing, isFalse);
     final gesture = await tester.startGesture(
       tester.getCenter(find.byType(CanvasView)),
     );
@@ -285,10 +297,10 @@ void main() {
       await tapDrawingOption(tester, vi.a4WritingHint);
       expect(controller.showA4Guides, isFalse);
       controller.handlePointerDown(
-        const PointerDownEvent(position: Offset(900, 1200)),
+        const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(900, 1200)),
       );
       controller.handlePointerUp(
-        const PointerUpEvent(position: Offset(900, 1200)),
+        const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(900, 1200)),
       );
       expect(controller.document.strokes, hasLength(1));
     },

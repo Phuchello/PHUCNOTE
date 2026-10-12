@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -27,8 +28,8 @@ class _DelayedStorage extends NoteStorage {
 }
 
 void _draw(CanvasController controller, double x) {
-  controller.handlePointerDown(PointerDownEvent(position: Offset(x, 200)));
-  controller.handlePointerUp(PointerUpEvent(position: Offset(x, 200)));
+  controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(x, 200)));
+  controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(x, 200)));
 }
 
 void main() {

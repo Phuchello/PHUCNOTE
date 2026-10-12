@@ -46,7 +46,7 @@ class CanvasController extends ChangeNotifier {
   final Map<StrokeElement, int> _sessionStrokeIndices = {};
 
   // Stylus and Palm Rejection Settings
-  bool _stylusOnlyMode = false;
+  bool _stylusOnlyMode = true;
   bool _isStylusActive = false;
   int? _activePointerId;
   PointerDeviceKind? _activePointerKind;

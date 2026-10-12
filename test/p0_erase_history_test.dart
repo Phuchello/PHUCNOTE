@@ -54,13 +54,13 @@ void main() {
     addTearDown(controller.dispose);
     controller.setTool(CanvasTool.eraser);
     controller.handlePointerDown(
-      const PointerDownEvent(position: Offset(100, 100)),
+      const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 100)),
     );
     controller.handlePointerMove(
-      const PointerMoveEvent(position: Offset(300, 100)),
+      const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 100)),
     );
     controller.handlePointerUp(
-      const PointerUpEvent(position: Offset(300, 100)),
+      const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 100)),
     );
     expect(_ids(controller), ['a', 'e']);
     for (var cycle = 0; cycle < 3; cycle++) {
@@ -80,9 +80,9 @@ void main() {
     addTearDown(controller.dispose);
     controller.setTool(CanvasTool.eraser);
     controller.handlePointerDown(
-      const PointerDownEvent(position: Offset(100, 100)),
+      const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 100)),
     );
-    controller.handlePointerCancel(const PointerCancelEvent());
+    controller.handlePointerCancel(const PointerCancelEvent(kind: PointerDeviceKind.stylus, ));
     expect(_ids(controller), ['a', 'c']);
     expect(controller.canUndo, isTrue);
     for (var cycle = 0; cycle < 3; cycle++) {
@@ -97,16 +97,16 @@ void main() {
     final controller = CanvasController();
     addTearDown(controller.dispose);
     for (final x in [0.0, 100.0, 200.0]) {
-      controller.handlePointerDown(PointerDownEvent(position: Offset(x, 100)));
-      controller.handlePointerUp(PointerUpEvent(position: Offset(x, 100)));
+      controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(x, 100)));
+      controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(x, 100)));
     }
     final original = _ids(controller);
     controller.setTool(CanvasTool.eraser);
     controller.handlePointerDown(
-      const PointerDownEvent(position: Offset(100, 100)),
+      const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 100)),
     );
     controller.clearCanvas();
-    controller.handlePointerCancel(const PointerCancelEvent());
+    controller.handlePointerCancel(const PointerCancelEvent(kind: PointerDeviceKind.stylus, ));
     for (var cycle = 0; cycle < 3; cycle++) {
       controller.undo();
       expect(_ids(controller), [original[0], original[2]]);

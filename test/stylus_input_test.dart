@@ -9,7 +9,7 @@ import 'package:phucnote/drawing/canvas_controller.dart';
 void main() {
   group('Stylus Input & Palm Rejection Handling', () {
     test('when stylusOnlyMode is false, standard touch produces strokes', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       expect(controller.stylusOnlyMode, isFalse);
 
       // Simulate touch down, move, up
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('when stylusOnlyMode is true, touch events are rejected from inking', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       controller.setStylusOnlyMode(true);
       expect(controller.stylusOnlyMode, isTrue);
 
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('when stylusOnlyMode is true, stylus events are accepted for inking', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       controller.setStylusOnlyMode(true);
 
       // Simulate active stylus drawing
@@ -83,7 +83,7 @@ void main() {
     });
 
     test('palm touch is rejected when active stylus is in contact with screen', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       expect(controller.stylusOnlyMode, isFalse); // Stylus-only off
 
       // Stylus touches screen
@@ -109,7 +109,7 @@ void main() {
     });
 
     test('abnormal palm contact size touch is rejected even when stylusOnlyMode is off', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       expect(controller.stylusOnlyMode, isFalse);
 
       // Touch with large palm radius/size
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('invertedStylus tip routes to eraser mode automatically', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       // Draw stroke first
       controller.handlePointerDown(const PointerDownEvent(
         position: Offset(10, 10),
@@ -155,7 +155,7 @@ void main() {
     });
 
     test('panViewport translates viewport without corrupting stroke document coordinates', () {
-      final controller = CanvasController();
+      final controller = CanvasController()..setStylusOnlyMode(false);
       controller.panViewport(const Offset(50, -30));
       expect(controller.viewportOffset, const Offset(50, -30));
 

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 // Copyright (c) 2026 PhucNote Authors. All rights reserved.
 // Use of this source code is governed by an AGPL-3.0 license that can be
 // found in the LICENSE file.
@@ -58,9 +59,9 @@ void main() {
       const a4Height = CanvasController.a4Height;
 
       // Draw an initial stroke before fit-to-width to verify document coordinate preservation
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(100, 200)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(200, 200)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(200, 200)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 200)));
+      controller.handlePointerMove(const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(200, 200)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(200, 200)));
 
       expect(controller.document.strokes.length, equals(1));
       final initialStrokeDocX = controller.document.strokes.first.points.first.x;

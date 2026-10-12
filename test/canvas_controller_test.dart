@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:phucnote/drawing/canvas_controller.dart';
 
@@ -23,7 +23,7 @@ void main() {
 
       // 1. Pointer Down
       controller.handlePointerDown(
-        const PointerDownEvent(
+        const PointerDownEvent(kind: PointerDeviceKind.stylus,
           position: Offset(10, 10),
           pressure: 0.7,
         ),
@@ -32,7 +32,7 @@ void main() {
 
       // 2. Pointer Move
       controller.handlePointerMove(
-        const PointerMoveEvent(
+        const PointerMoveEvent(kind: PointerDeviceKind.stylus,
           position: Offset(20, 20),
           pressure: 0.8,
         ),
@@ -41,7 +41,7 @@ void main() {
 
       // 3. Pointer Up
       controller.handlePointerUp(
-        const PointerUpEvent(
+        const PointerUpEvent(kind: PointerDeviceKind.stylus,
           position: Offset(20, 20),
         ),
       );
@@ -62,9 +62,9 @@ void main() {
       final controller = CanvasController();
 
       // Draw stroke
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(5, 5)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(10, 10)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(10, 10)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(5, 5)));
+      controller.handlePointerMove(const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(10, 10)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(10, 10)));
 
       expect(controller.document.strokes.length, equals(1));
 
@@ -83,25 +83,25 @@ void main() {
       final controller = CanvasController();
 
       // Draw stroke across (50, 50) -> (60, 60)
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(50, 50)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(60, 60)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(60, 60)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(50, 50)));
+      controller.handlePointerMove(const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(60, 60)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(60, 60)));
 
       expect(controller.document.strokes.length, equals(1));
 
       // Switch to eraser and erase near (55, 55)
       controller.setTool(CanvasTool.eraser);
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(55, 55)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(55, 55)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(55, 55)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(55, 55)));
 
       expect(controller.document.strokes, isEmpty);
     });
 
     test('Clear canvas empties all strokes and marks modified', () {
       final controller = CanvasController();
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(1, 1)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(2, 2)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(2, 2)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(1, 1)));
+      controller.handlePointerMove(const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(2, 2)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(2, 2)));
 
       expect(controller.document.strokes.length, equals(1));
 

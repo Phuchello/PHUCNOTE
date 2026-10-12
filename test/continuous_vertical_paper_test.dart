@@ -58,9 +58,9 @@ void main() {
       final controller = CanvasController();
 
       // Draw stroke at (100, 200) -> (150, 250)
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(100, 200)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(150, 250)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(150, 250)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 200)));
+      controller.handlePointerMove(const PointerMoveEvent(kind: PointerDeviceKind.stylus, position: Offset(150, 250)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(150, 250)));
 
       expect(controller.document.strokes.length, equals(1));
       final stroke = controller.document.strokes.first;
@@ -92,8 +92,8 @@ void main() {
       final controller = CanvasController();
 
       // Draw stroke at (300, 400)
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(300, 400)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(300, 400)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 400)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 400)));
 
       expect(controller.document.strokes.length, equals(1));
       final stroke = controller.document.strokes.first;
@@ -127,8 +127,8 @@ void main() {
       // Screen position (450, 250) should map to canvas:
       // x = (450 - 50) / 2.0 = 200.0
       // y = (250 - (-150)) / 2.0 = 200.0
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(450, 250)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 250)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(450, 250)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(450, 250)));
 
       expect(controller.document.strokes.length, equals(1));
       final stroke = controller.document.strokes.first;
@@ -141,8 +141,8 @@ void main() {
       final controller = CanvasController();
 
       // Draw stroke at canvas (400, 500)
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(400, 500)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(400, 500)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(400, 500)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(400, 500)));
       expect(controller.document.strokes.length, equals(1));
 
       // Zoom to 1.5x and pan viewport by (-100, -200)
@@ -158,13 +158,13 @@ void main() {
 
       // Switch to eraser and tap at a distant point (100, 100) -> should NOT erase
       controller.setTool(CanvasTool.eraser);
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(100, 100)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(100, 100)));
+      controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 100)));
+      controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(100, 100)));
       expect(controller.document.strokes.length, equals(1));
 
       // Tap with eraser directly on stroke screen position (500, 550) -> MUST erase
-      controller.handlePointerDown(PointerDownEvent(position: strokeScreenPos));
-      controller.handlePointerUp(PointerUpEvent(position: strokeScreenPos));
+      controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: strokeScreenPos));
+      controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: strokeScreenPos));
       expect(controller.document.strokes, isEmpty);
     });
 
@@ -400,8 +400,8 @@ void main() {
         expect(controller.zoomScale, equals(testZoom));
 
         // Draw single dot stroke on screen at (300, 300)
-        controller.handlePointerDown(const PointerDownEvent(position: Offset(300, 300)));
-        controller.handlePointerUp(const PointerUpEvent(position: Offset(300, 300)));
+        controller.handlePointerDown(const PointerDownEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 300)));
+        controller.handlePointerUp(const PointerUpEvent(kind: PointerDeviceKind.stylus, position: Offset(300, 300)));
         expect(controller.document.strokes.length, equals(1));
 
         final stroke = controller.document.strokes.first;
@@ -413,15 +413,15 @@ void main() {
 
         // 1. Outside test: Screen touch placed outside visual radius -> NOT erased
         final outsideScreenPos = screenStrokePos + Offset(visualScreenRadius + 8.0 * testZoom, 0);
-        controller.handlePointerDown(PointerDownEvent(position: outsideScreenPos));
-        controller.handlePointerUp(PointerUpEvent(position: outsideScreenPos));
+        controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: outsideScreenPos));
+        controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: outsideScreenPos));
         expect(controller.document.strokes.length, equals(1),
             reason: 'Should not erase outside visual indicator at zoom $testZoom');
 
         // 2. Inside test: Screen touch placed strictly inside visual radius -> MUST erase
         final insideScreenPos = screenStrokePos + Offset(visualScreenRadius - 2.0 * testZoom, 0);
-        controller.handlePointerDown(PointerDownEvent(position: insideScreenPos));
-        controller.handlePointerUp(PointerUpEvent(position: insideScreenPos));
+        controller.handlePointerDown(PointerDownEvent(kind: PointerDeviceKind.stylus, position: insideScreenPos));
+        controller.handlePointerUp(PointerUpEvent(kind: PointerDeviceKind.stylus, position: insideScreenPos));
         expect(controller.document.strokes, isEmpty,
             reason: 'Must erase inside visual indicator at zoom $testZoom');
       }

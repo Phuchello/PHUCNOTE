@@ -206,7 +206,7 @@ void main() {
   test(
     'INPUT-08 finger owns its stroke until release; stylus cannot preempt it',
     () {
-      final c = CanvasController();
+      final c = CanvasController()..setStylusOnlyMode(false);
       addTearDown(c.dispose);
       c.handlePointerDown(
         down(1, const Offset(10, 10), kind: PointerDeviceKind.touch),
