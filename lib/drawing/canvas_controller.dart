@@ -289,6 +289,14 @@ class CanvasController extends ChangeNotifier {
     return Rect.fromLTRB(topLeft.dx, topLeft.dy, bottomRight.dx, bottomRight.dy);
   }
 
+  /// Software contact-size heuristic shared by inking and navigation.
+  /// This does not certify hardware palm rejection.
+  static bool isPalmContact(PointerEvent event) {
+    return event.kind == PointerDeviceKind.touch &&
+        (event.size > 0.5 ||
+            (event.radiusMajor > 35 && event.radiusMinor > 25));
+  }
+
   /// Evaluates whether an incoming pointer event should be accepted for inking.
   bool shouldAcceptPointerForInking(PointerEvent event) {
     final isStylus = event.kind == PointerDeviceKind.stylus ||
@@ -309,10 +317,8 @@ class CanvasController extends ChangeNotifier {
     }
 
     // Software palm rejection: reject touch with large contact area
-    if (event.kind == PointerDeviceKind.touch) {
-      if (event.size > 0.5 || (event.radiusMajor > 35 && event.radiusMinor > 25)) {
-        return false;
-      }
+    if (isPalmContact(event)) {
+      return false;
     }
 
     // Allow mouse (desktop/testing) or standard touch when stylus-only mode is off

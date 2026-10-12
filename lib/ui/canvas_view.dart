@@ -37,14 +37,33 @@ class _CanvasViewState extends State<CanvasView> {
   double? _prevDistance;
   bool _isPinching = false;
 
+  void _syncDocument() {
+    if (!identical(_cachedDocument, widget.controller.document)) {
+      _strokeCache.clear();
+      _clearTouchNavigation();
+      _cachedDocument = widget.controller.document;
+    }
+  }
+
+  void _clearTouchNavigation() {
+    _activeTouchPointers.clear();
+    _isPinching = false;
+    _prevFocalPoint = null;
+    _prevDistance = null;
+  }
+
   bool _isStylus(PointerEvent event) {
     return event.kind == PointerDeviceKind.stylus ||
         event.kind == PointerDeviceKind.invertedStylus;
   }
 
   void _onPointerDown(PointerDownEvent event) {
+    _syncDocument();
     if (_isStylus(event)) {
       widget.controller.handlePointerDown(event);
+      if (widget.controller.isStylusActive) {
+        _clearTouchNavigation();
+      }
       return;
     }
 
@@ -53,6 +72,8 @@ class _CanvasViewState extends State<CanvasView> {
       // Software palm rejection: stylus is actively down, reject touch
       return;
     }
+
+    if (CanvasController.isPalmContact(event)) return;
 
     _activeTouchPointers[event.pointer] = event.localPosition;
 
@@ -72,6 +93,7 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void _onPointerMove(PointerMoveEvent event) {
+    _syncDocument();
     if (_isStylus(event)) {
       widget.controller.handlePointerMove(event);
       return;
@@ -115,6 +137,7 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void _onPointerUp(PointerUpEvent event) {
+    _syncDocument();
     if (_isStylus(event)) {
       widget.controller.handlePointerUp(event);
       return;
@@ -137,6 +160,7 @@ class _CanvasViewState extends State<CanvasView> {
   }
 
   void _onPointerCancel(PointerCancelEvent event) {
+    _syncDocument();
     if (_isStylus(event)) {
       widget.controller.handlePointerCancel(event);
       return;
@@ -175,10 +199,7 @@ class _CanvasViewState extends State<CanvasView> {
     return ListenableBuilder(
       listenable: widget.controller,
       builder: (context, _) {
-        if (!identical(_cachedDocument, widget.controller.document)) {
-          _strokeCache.clear();
-          _cachedDocument = widget.controller.document;
-        }
+        _syncDocument();
         return Semantics(
           label: context.l10n.writingCanvas,
           child: ClipRect(

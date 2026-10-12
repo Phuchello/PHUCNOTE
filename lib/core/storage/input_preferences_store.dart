@@ -7,7 +7,7 @@ class InputPreferencesStore {
   InputPreferencesStore({this.directory});
 
   final Directory? directory;
-  Future<void> _writes = Future<void>.value();
+  static Future<void> _writes = Future<void>.value();
 
   Future<File> _targetFile() async {
     final base = directory ?? await getApplicationSupportDirectory();

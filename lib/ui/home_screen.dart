@@ -57,16 +57,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _restoreInputPreference() async {
-    final saved = await _inputPreferences.load();
-    if (!mounted) return;
-    if (!_inputChoiceChanged) {
-      _restoringInput = true;
-      _lastInputMode = saved;
-      _controller.setStylusOnlyMode(saved);
-      _restoringInput = false;
+    try {
+      final saved = await _inputPreferences.load();
+      if (!mounted) return;
+      if (!_inputChoiceChanged) {
+        _restoringInput = true;
+        _lastInputMode = saved;
+        _controller.setStylusOnlyMode(saved);
+        _restoringInput = false;
+      }
+      setState(() => _inputReady = true);
+      if (_inputChoiceChanged) unawaited(_persistInputPreference());
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.noteSaveFailed)),
+      );
+      setState(() => _inputReady = true);
+      if (_inputChoiceChanged) unawaited(_persistInputPreference());
     }
-    setState(() => _inputReady = true);
-    if (_inputChoiceChanged) unawaited(_persistInputPreference());
   }
 
   Future<void> _persistInputPreference() async {
