@@ -92,11 +92,11 @@ void main() {
       final controller = getController(tester);
       expect(controller.document.strokes, isEmpty);
 
-      // In default mode (stylusOnlyMode == false), pointer drawing works directly
+      // First-run stylus-only mode requires explicitly identified pen input.
       final canvasFinder = find.byType(CanvasView);
       final canvasCenter = tester.getCenter(canvasFinder);
 
-      final gesture = await tester.startGesture(canvasCenter);
+      final gesture = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await tester.pump(const Duration(milliseconds: 16));
       await gesture.moveBy(const Offset(50, 50));
       await tester.pump(const Duration(milliseconds: 16));
@@ -127,7 +127,7 @@ void main() {
 
       // Draw highlighter stroke
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final gesture1 = await tester.startGesture(canvasCenter);
+      final gesture1 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture1.moveBy(const Offset(30, 0));
       await gesture1.up();
       await tester.pumpAndSettle();
@@ -142,7 +142,7 @@ void main() {
       expect(controller.tool, equals(CanvasTool.eraser));
 
       // Drag eraser across stroke
-      final gesture2 = await tester.startGesture(canvasCenter);
+      final gesture2 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture2.moveBy(const Offset(35, 0));
       await gesture2.up();
       await tester.pumpAndSettle();
@@ -166,7 +166,7 @@ void main() {
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
 
       // Draw first stroke
-      final gesture1 = await tester.startGesture(canvasCenter);
+      final gesture1 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture1.moveBy(const Offset(20, 20));
       await gesture1.up();
       await tester.pumpAndSettle();
@@ -198,7 +198,7 @@ void main() {
 
       // Draw stroke
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final gesture = await tester.startGesture(canvasCenter);
+      final gesture = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture.moveBy(const Offset(40, 40));
       await gesture.up();
       await tester.pumpAndSettle();
@@ -240,7 +240,7 @@ void main() {
 
       // Draw stroke
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final gesture = await tester.startGesture(canvasCenter);
+      final gesture = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture.moveBy(const Offset(30, 30));
       await gesture.up();
       await tester.pumpAndSettle();
@@ -267,7 +267,7 @@ void main() {
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
 
       // Draw first stroke and trigger save
-      final g1 = await tester.startGesture(canvasCenter);
+      final g1 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await g1.moveBy(const Offset(20, 20));
       await g1.up();
       await tester.pumpAndSettle();
@@ -277,7 +277,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 5));
 
       // Rapidly draw second stroke while save might be in flight
-      final g2 = await tester.startGesture(canvasCenter + const Offset(50, 50));
+      final g2 = await tester.startGesture(canvasCenter + const Offset(50, 50), kind: PointerDeviceKind.stylus);
       await g2.moveBy(const Offset(30, 30));
       await g2.up();
       await tester.pumpAndSettle();
@@ -300,7 +300,7 @@ void main() {
       controller.renameDocument('Persistent Recovery Doc');
 
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final g1 = await tester.startGesture(canvasCenter);
+      final g1 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await g1.moveBy(const Offset(40, 20));
       await g1.up();
       await tester.pumpAndSettle();
@@ -402,7 +402,7 @@ void main() {
 
       // Drawing
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final gesture = await tester.startGesture(canvasCenter);
+      final gesture = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await gesture.moveBy(const Offset(30, 30));
       await gesture.up();
       await tester.pumpAndSettle();
@@ -425,14 +425,12 @@ void main() {
 
       final controller = getController(tester);
 
-      // Enable stylus-only mode
-      await openDrawingOptions(tester);
-      final stylusToggle = find.byTooltip(vi.fingerInkingAllowed);
-      expect(stylusToggle, findsOneWidget);
-      await tester.tap(stylusToggle);
-      await tester.pumpAndSettle();
-
+      // Stylus-only is already active for a new user's settings directory.
       expect(controller.stylusOnlyMode, isTrue);
+      await openDrawingOptions(tester);
+      expect(find.byTooltip(vi.stylusOnlyActive), findsOneWidget);
+      await tester.tapAt(Offset.zero);
+      await tester.pumpAndSettle();
       final initialOffset = controller.viewportOffset;
 
       // Simulate finger touch pan
@@ -457,12 +455,12 @@ void main() {
 
       final controller = getController(tester);
 
-      // Enable Stylus-Only mode
-      await openDrawingOptions(tester);
-      final stylusToggle = find.byTooltip(vi.fingerInkingAllowed);
-      await tester.tap(stylusToggle);
-      await tester.pumpAndSettle();
+      // Do not toggle the already active first-run default off.
       expect(controller.stylusOnlyMode, isTrue);
+      await openDrawingOptions(tester);
+      expect(find.byTooltip(vi.stylusOnlyActive), findsOneWidget);
+      await tester.tapAt(Offset.zero);
+      await tester.pumpAndSettle();
 
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
 
@@ -504,7 +502,7 @@ void main() {
 
       // Draw stroke near the top
       final canvasCenter = tester.getCenter(find.byType(CanvasView));
-      final g1 = await tester.startGesture(canvasCenter);
+      final g1 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await g1.moveBy(const Offset(30, 30));
       await g1.up();
       await tester.pumpAndSettle();
@@ -517,7 +515,7 @@ void main() {
       expect(controller.viewportOffset.dy, equals(-3000.0));
 
       // Draw stroke further down in continuous paper
-      final g2 = await tester.startGesture(canvasCenter);
+      final g2 = await tester.startGesture(canvasCenter, kind: PointerDeviceKind.stylus);
       await g2.moveBy(const Offset(40, 40));
       await g2.up();
       await tester.pumpAndSettle();

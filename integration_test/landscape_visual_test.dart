@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:phucnote/core/storage/note_storage.dart';
@@ -54,9 +54,9 @@ void main() {
       controller.panViewport(const Offset(0, -1100));
 
       // Draw handwriting stroke on Page 2
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(500, 400)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(500, 400)));
+      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerMove(const PointerMoveEvent(position: Offset(500, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(const PointerUpEvent(position: Offset(500, 400), kind: PointerDeviceKind.stylus));
 
       await tester.pumpAndSettle();
 
@@ -76,9 +76,9 @@ void main() {
       controller.resetViewport();
 
       // 1. Draw stroke with A4 guides enabled
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 300)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(350, 450)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(350, 450)));
+      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 300), kind: PointerDeviceKind.stylus));
+      controller.handlePointerMove(const PointerMoveEvent(position: Offset(350, 450), kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(const PointerUpEvent(position: Offset(350, 450), kind: PointerDeviceKind.stylus));
       expect(controller.document.strokes.length, equals(1));
       final initialStroke = controller.document.strokes.first;
 
@@ -90,8 +90,8 @@ void main() {
       // 3. Erase a stroke and use Undo/Redo
       controller.setTool(CanvasTool.eraser);
       final screenPt = controller.canvasToScreen(Offset(initialStroke.points.first.x, initialStroke.points.first.y));
-      controller.handlePointerDown(PointerDownEvent(position: screenPt));
-      controller.handlePointerUp(PointerUpEvent(position: screenPt));
+      controller.handlePointerDown(PointerDownEvent(position: screenPt, kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(PointerUpEvent(position: screenPt, kind: PointerDeviceKind.stylus));
       expect(controller.document.strokes.isEmpty, isTrue);
 
       controller.undo();
@@ -108,9 +108,9 @@ void main() {
       controller.resetViewport();
 
       // Draw second stroke
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 600)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(550, 600)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(550, 600)));
+      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 600), kind: PointerDeviceKind.stylus));
+      controller.handlePointerMove(const PointerMoveEvent(position: Offset(550, 600), kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(const PointerUpEvent(position: Offset(550, 600), kind: PointerDeviceKind.stylus));
 
       // 4. Save and reopen note
       await noteStorage.saveNote(controller.document);

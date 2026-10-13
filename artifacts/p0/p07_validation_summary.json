@@ -1,0 +1,221 @@
+{
+  "checkpoint": "P0.7 bounded software checkpoint PASS; physical acceptance NOT EXECUTED",
+  "independentAudit": {
+    "reviewId": "deleg_bbcbf973",
+    "passed": true,
+    "blockingFindings": 0,
+    "record": "artifacts/p0/p07_audit.json"
+  },
+  "sourceBase": "3a790b966571b37641a479254ac7ad15251b6799",
+  "productionChangesFromP06": false,
+  "workerModelPolicy": "All subsequent agy -p calls explicitly gemini-3.8-flash-high; no fallback",
+  "fullSuite": {
+    "exit": 0,
+    "passed": 167,
+    "skipped": 3,
+    "failed": 0,
+    "log": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\p07-final-full.log",
+      "bytes": 116147,
+      "sha256": "7eaba5419cfd5eafcf9e45704705fcf1c168b3d4cc2008f2fcffa1b73a650a86"
+    }
+  },
+  "analyze": {
+    "exit": 0,
+    "issues": 0,
+    "log": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\p07-final-analyze2.log",
+      "bytes": 97,
+      "sha256": "32b8470b51df8b94e277ea7ce53a6dbbc535bad05ee424f0040dbc2db9ca435b"
+    }
+  },
+  "androidIntegration": {
+    "exit": 0,
+    "namedCases": 59,
+    "cases": [
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-01: Application launch without crashes",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-02: Create notebook with specified title and template",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-03: Draw and commit strokes to canvas",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-04: Pen, highlighter and eraser switching",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-05: Undo and Redo history stack verification",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-06: Save and reopen notebook from storage",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-07: Autosave triggers after debounce period",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-08: Rapid editing during active save preserves pending changes",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-09: Application restart and data recovery from storage",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-10: Rename and persistence verification",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-11: Responsive layout adaptivity in portrait and landscape",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-12: Offline core operations execute without network dependencies",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-13: Finger navigation and viewport panning in stylus-only mode",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-14: Stylus/touch discrimination gates inking vs panning",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-15: Continuous vertical paper downward navigation and persistence",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-16: Two-finger pinch zoom adjusts scale and resets cleanly",
+      "Existing app regressions PHUCNOTE Automated Emulator Integration Test Suite (TC-01 to TC-14) TC-17: Toggle A4 notebook page guides visual layout",
+      "A4 page-aware regressions A4 writing, fit, navigation and persistence in landscape",
+      "A4 page-aware regressions A4 writing, fit, navigation and persistence in portrait",
+      "Tablet and Zen regressions Tablet editor, Zen and resume in landscape",
+      "Tablet and Zen regressions Tablet editor, Zen and resume in portrait",
+      "Pen Studio regressions Pen Studio, exact saved ink and Zen in landscape",
+      "Pen Studio regressions Pen Studio, exact saved ink and Zen in portrait",
+      "Landscape visual regressions PHUCNOTE A4 Landscape Visual Acceptance (V-05, V-06) V-05: Page 2 and deep scrolling",
+      "Landscape visual regressions PHUCNOTE A4 Landscape Visual Acceptance (V-05, V-06) V-06: Handwriting integrity",
+      "Portrait visual regressions PHUCNOTE A4 Portrait Visual Acceptance (V-03, V-04) V-03: Portrait with fit-to-width",
+      "Portrait visual regressions PHUCNOTE A4 Portrait Visual Acceptance (V-03, V-04) V-04: Portrait at 0.5x",
+      "Premium Vietnamese acceptance Premium Vietnamese editor and preserved flows: light_landscape",
+      "Premium Vietnamese acceptance Premium Vietnamese editor and preserved flows: light_portrait",
+      "Premium Vietnamese acceptance Premium Vietnamese editor and preserved flows: dark_landscape",
+      "Premium Vietnamese acceptance Premium Vietnamese editor and preserved flows: dark_portrait",
+      "Y700 diagnostic observer smoke test Native diagnostic observer/export; ADB touch only",
+      "Touch cancellation regression (synthetic pointers) Touch cancellation preserves stylus (tracked=false)",
+      "Touch cancellation regression (synthetic pointers) Touch cancellation preserves stylus (tracked=true)",
+      "P02 owned input and final UP regressions (synthetic) INPUT-01/04/05 unrelated PointerDeviceKind.touch cannot replace, append, finish or cancel owner",
+      "P02 owned input and final UP regressions (synthetic) INPUT-01/04/05 unrelated PointerDeviceKind.stylus cannot replace, append, finish or cancel owner",
+      "P02 owned input and final UP regressions (synthetic) INPUT-01/04/05 unrelated PointerDeviceKind.invertedStylus cannot replace, append, finish or cancel owner",
+      "P02 owned input and final UP regressions (synthetic) INPUT-02/03 tap or single move (0): identical UP stays unduplicated",
+      "P02 owned input and final UP regressions (synthetic) INPUT-02/03 tap or single move (1): identical UP stays unduplicated",
+      "P02 owned input and final UP regressions (synthetic) INPUT-02 rapid lift uses transformed final location and last accepted axes",
+      "P02 owned input and final UP regressions (synthetic) INPUT-02 lift without move captures endpoint without pressure taper",
+      "P02 owned input and final UP regressions (synthetic) INPUT-06 own cancel discards ink; late moves/up and missing down are inert",
+      "P02 owned input and final UP regressions (synthetic) INPUT-01 duplicate down, wrong kind and older timestamp cannot alter owner",
+      "P02 owned input and final UP regressions (synthetic) INPUT-07 inverted eraser is owned; cancellation keeps undoable erase",
+      "P02 owned input and final UP regressions (synthetic) INPUT-08 finger owns its stroke until release; stylus cannot preempt it",
+      "P02 owned input and final UP regressions (synthetic) Document switch and explicit navigation cancel release pointer ownership",
+      "P02 owned input and final UP regressions (synthetic) INPUT-08 two-finger navigation cancels provisional finger ink and still zooms",
+      "P07 Acceptance Suite P03 Stylus Defaults first-run default stylusOnlyMode is true",
+      "P07 Acceptance Suite P03 Stylus Defaults real touch gesture pans with zero strokes",
+      "P07 Acceptance Suite P03 Stylus Defaults real stylus gesture commits one stroke",
+      "P07 Acceptance Suite P03 Stylus Defaults real pinch zoom changes scale with zero strokes",
+      "P07 Acceptance Suite P05 Navigation stylus gesture locks out lingering touch pan",
+      "P07 Acceptance Suite P05 Navigation palm rejection ignores large touch events",
+      "P07 Acceptance Suite P05 Navigation lingering contact cannot navigate a replacement document",
+      "P07 Acceptance Suite P05 Preference Race write-queue error recovery across instances",
+      "P07 Acceptance Suite P05 Preference Race restoration across instances waits for pending preference write",
+      "P07 Acceptance Suite P05 Restore Error explicit choice is persisted even when delayed restoration fails",
+      "P07 Acceptance Suite P05 Restore Error handles input preferences load failure",
+      "P07 Acceptance Suite P05 Late Preference late restoration preserves explicit choice across document and orientation changes"
+    ],
+    "runnerTotalIncludingTeardown": 60,
+    "pngCount": 54,
+    "log": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\p07-integration-final.log",
+      "bytes": 1223897,
+      "sha256": "aa85156cbd53a683b1986192cfcfd15157f39c266a1fdd0e5af3dbccd2951e4a"
+    }
+  },
+  "nativeDiagnostics": {
+    "model": "Pixel Tablet",
+    "events": 103,
+    "samples": 103,
+    "toolTypes": {
+      "1": 103
+    },
+    "provenance": "ADB-injected touchscreen; not AP501U",
+    "physicalAcceptance": "NOT EXECUTED by software diagnostics alone",
+    "report": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\regression.json",
+      "bytes": 82034,
+      "sha256": "9d4b8e45c19984d64862773de63f60fb2c27e9d09ac1a854e15249b86f2758fd"
+    },
+    "perfetto": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\android_diagnostics.pftrace",
+      "bytes": 2222459,
+      "sha256": "d63fa76919a27c511594ea6932e9715d1a1c1a7b624a31c613dff56ad094ef05"
+    }
+  },
+  "screenshots": {
+    "05_page_2.png": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\05_page_2.png",
+      "bytes": 50727,
+      "sha256": "7bb8d84a4b147f303a37d007995878b80a00947eef38ad125ccc4a56883e7082",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    },
+    "03_portrait_1x.png": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\03_portrait_1x.png",
+      "bytes": 43718,
+      "sha256": "426372398a4ab7bb0245e94c092fedc475dcccf4b9f680273333803499ac1880",
+      "dimensions": [
+        1200,
+        1600
+      ]
+    },
+    "automated_landscape_zen.png": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\automated_landscape_zen.png",
+      "bytes": 26853,
+      "sha256": "2130aa5b7cbdea0a80080496149ece74fb1168ceb7e3e01da4aa09a222aa6c8f",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    },
+    "diagnostics_report.png": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\diagnostics_report.png",
+      "bytes": 170142,
+      "sha256": "7f8aeca913ac1473c38d8ee207f3f216455095b6862b37a684f02a3cab5d103f",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    }
+  },
+  "apk": {
+    "path": "C:\\Users\\lyle3\\Music\\Phucnote\\build\\app\\outputs\\flutter-apk\\app-arm64-v8a-release.apk",
+    "bytes": 21285165,
+    "sha256": "b0bcf472a35e3f6d04d28b3a3d634476e41217e09fe5e5de7f647976eaadab23",
+    "package": "com.phucnote.phucnote",
+    "versionCode": 2001,
+    "versionName": "0.1.0",
+    "abis": [
+      "arm64-v8a"
+    ],
+    "elfMachines": {
+      "lib/arm64-v8a/libapp.so": 183,
+      "lib/arm64-v8a/libdartjni.so": 183,
+      "lib/arm64-v8a/libflutter.so": 183
+    },
+    "signerSHA256": "48d4f7c0bc4715d29c207e571e3c84485c0ba50403ca4ee08d219c6a43bd6ebf",
+    "matchesExistingSigner": true,
+    "buildExit": 0,
+    "buildCommand": [
+      "build",
+      "apk",
+      "--release",
+      "--pub",
+      "-t",
+      "lib/main.dart",
+      "--target-platform",
+      "android-arm64",
+      "--split-per-abi"
+    ],
+    "signedWith": "Existing Android Debug identity, NOT production distribution signing",
+    "signatureEvidence": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\apk_signature.txt",
+      "bytes": 972,
+      "sha256": "86a170b493250aa69dfcd64e4d533a67af1b786b7d26d88188cc735f45e391fe"
+    },
+    "manifestEvidence": {
+      "path": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence\\apk_badging.txt",
+      "bytes": 1128,
+      "sha256": "049c364998740dfc1ba9d0d4f6d7a73aee8449ce12f17b6612001c36f28fbb4a"
+    }
+  },
+  "recovery": [
+    "Explicit intended stylus kinds/default assertions, retaining touch opt-in/zero-ink navigation assertions",
+    "Dismiss options popup before canvas gestures",
+    "Caller-zone delayed-error completer fixture on Android",
+    "Offline locked plugin refresh for integration",
+    "Release --no-pub failed stale dev-plugin Java reference; cached --pub build regenerated release registrant; no tracked dependency/signing/native changes"
+  ],
+  "knownLimits": [
+    "No physical Y700/AP501U connected; handwriting quality remains user-rated2/10",
+    "P04 numbers rejected and exact historical presets restored; no measured frame improvement",
+    "Existing dense-page cache thrashes above128 visible strokes",
+    "Post-phase class allocation deltas unavailable; no memory PASS",
+    "Android debug synthetic gestures/ADB touch, not physical input or release runtime",
+    "54 screenshots are captured evidence, not all manually inspected; four representative screenshots inspected",
+    "Android integration pass predates an import-only analyzer cleanup; final full/analyzer gates cover final source, production unchanged"
+  ],
+  "localEvidenceDirectory": "C:\\Users\\lyle3\\Music\\Phucnote\\artifacts\\p0\\p07_local_evidence",
+  "artifactPublication": false
+}

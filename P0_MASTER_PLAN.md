@@ -6,7 +6,7 @@ Base: develop at 640be788f008809421b1788e957207dbc86950d5. Integration branch: p
 
 Existing toolchain: Flutter 3.47.7 / Dart 3.13.5 at C:/Users/lyle3/.codex/visualizations/2026/10/10/01a12533-6d39-7542-8205-9c33fb77fb75/p0-toolchain/flutter/bin/flutter.bat; Java scratch/toolchain/jdk-17.0.20.1+1; Android SDK scratch/toolchain/android-sdk; Gradle scratch/toolchain/gradle. Use existing caches; no SDK installation. Initial adb devices -l: no connected devices. Existing release build signs with debug configuration; do not create/change keys.
 
-Models discovered from agy 1.3.3: gemini-3.1-pro-high for complex input/persistence/geometry work; gemini-3.8-flash-high for bounded tests/reporting. Exact IDs were returned by agy models. Never enable permission bypass automatically.
+Model policy override from user: all subsequent PHUCNOTE P0 Antigravity calls MUST explicitly use --model gemini-3.8-flash-high, including complex implementation, debugging, measurement and APK builds. No automatic Pro or other-model fallback; if Flash High unavailable, report BLOCKED. Codex retains concise planning/independent audit/exceptional escalation; Antigravity remains primary implementer. Historical earlier model selections are evidence only. Never enable permission bypass automatically.
 
 ## Checkpoints and measurable gates
 
@@ -23,3 +23,7 @@ Task P03-RED: Add minimal failing tests before production changes. Allowed NEW f
 Required assertions: CanvasController default stylusOnlyMode true; actual CanvasView touch down/move/up pans and commits ZERO strokes; actual stylus down/move/up commits one stroke; two touch pointers zoom/pan with zero strokes; planned app-local input preference store absent file defaults true, explicit false survives separate store instance and no .bfly write. Prefer implement the existing-behavior test slices first; if store API is absent, describe its intended contract rather than making the entire test suite uncompilable. Report exact written files and commands/results. Use strict vertical RED/GREEN cycles during later implementation. No commit/push, no arbitrary shell, no dependency/signing changes, no permission changes.
 
 Codex runs RED independently if headless command permission prevents worker tests. Worker must report this honestly, not bypass permissions. Maximum two repair cycles per root cause; then bounded escalation/stop.
+
+## Current checkpoint
+
+P07 software verification2026-10-12: unit/widget167 pass/3 intentional opt-in skips, analyzer0/no issues; Android59 named cases exit0. ARM64 release APK21285165 bytes,0.1.0/code2001, existing signer verified, SHA256b0bcf472a35e3f6d04d28b3a3d634476e41217e09fe5e5de7f647976eaadab23. Fresh independent deleg_bbcbf973 PASS2026-10-13, zero blockers, no rerun of completed gates. Compact p07_validation_summary.json / p07_audit.json; raw durable local-only p07_local_evidence. Only fixtures/reports changed from P06. Final checkpoint ordinary push proof is recorded locally after commit at artifacts/p0/push_p07.json and .git/p0-push-records/p07.json. Remaining target-hardware gate NOT EXECUTED; stop after verified push without claiming physical quality/performance improvement. P04 numbers rejected/restored exactly, P06 dense-page gain unproven; retain forensic evidence.

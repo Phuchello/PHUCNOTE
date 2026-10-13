@@ -14,10 +14,14 @@ class _FailingInputPreferencesStore extends InputPreferencesStore {
 }
 
 class DelayedFailure extends InputPreferencesStore {
-  final pending = Completer<bool>();
+  late final Completer<bool> pending;
   final saves = <bool>[];
   @override
-  Future<bool> load() => pending.future;
+  Future<bool> load() {
+    // Create the failing future in the UI caller's error zone, also on Android.
+    pending = Completer<bool>();
+    return pending.future;
+  }
   @override
   Future<void> save(bool mode) async { saves.add(mode); }
 }

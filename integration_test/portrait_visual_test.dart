@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,9 +80,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Draw handwriting aligned with fitted A4 page
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(450, 400)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 400)));
+      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerMove(const PointerMoveEvent(position: Offset(450, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 400), kind: PointerDeviceKind.stylus));
+      expect(controller.document.strokes, hasLength(1));
       await tester.pumpAndSettle();
 
       expect(controller.showA4Guides, isTrue);
@@ -110,9 +112,10 @@ void main() {
       controller.resetViewport();
 
       // Draw handwriting
-      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400)));
-      controller.handlePointerMove(const PointerMoveEvent(position: Offset(450, 400)));
-      controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 400)));
+      controller.handlePointerDown(const PointerDownEvent(position: Offset(200, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerMove(const PointerMoveEvent(position: Offset(450, 400), kind: PointerDeviceKind.stylus));
+      controller.handlePointerUp(const PointerUpEvent(position: Offset(450, 400), kind: PointerDeviceKind.stylus));
+      expect(controller.document.strokes, hasLength(1));
 
       // Zoom out to 0.5x
       controller.zoomAt(Offset.zero, 0.5);
